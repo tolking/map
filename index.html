@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>map</title>
+    <link href="./css/styles.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet/less" type="text/css" href="./less/styles.less" />
+    <script>
+      less = {
+        env: "development",
+        async: false,
+        fileAsync: false,
+        poll: 1000,
+        functions: {},
+        dumpLineNumbers: "comments",
+        relativeUrls: false,
+        rootpath: "/"
+      };
+    </script>
+    <script src="./less.js"></script> -->
+  </head>
+  <body>
+    <div id="app">
+      <div class="flex-cc title">
+        <p class="font-30 title-text"></p>
+      </div>
+      <canvas id="canvas">canvas都不支持，还用这浏览器干嘛</canvas>
+      <!-- <div class="tip">
+        <div class="font-18">测试</div>
+        <div class="font-18">测试</div>
+        <div class="font-18">测试</div>
+      </div> -->
+    </div>
+    <noscript>
+      <strong>貌似不支持js或者您屏蔽了js，请查看设置，或者换个浏览器试试！</strong>
+    </noscript>
+    <script src="./js/base.js"></script>
+    <script>
+      var _Sys = {}, _s, _ua = navigator.userAgent.toLowerCase();
+      (_s = _ua.match(/rv:([\d.]+)\) like gecko/)) ? _Sys.ie = _s[1] : (_s = _ua.match(/msie ([\d.]+)/)) ? _Sys.ie = _s[1] : (_s = _ua.match(/firefox\/([\d.]+)/)) ? _Sys.firefox = _s[1] : (_s = _ua.match(/chrome\/([\d.]+)/)) ? _Sys.chrome = _s[1] : (_s = _ua.match(/opera.([\d.]+)/)) ? _Sys.opera = _s[1] : (_s = _ua.match(/version\/([\d.]+).*safari/)) ? _Sys.safari = _s[1] : 0;
+      if (_Sys.ie) console.log('IE: ' + _Sys.ie);
+      if (_Sys.firefox) console.log('Firefox: ' + _Sys.firefox);
+      if (_Sys.chrome) console.log('Chrome: ' + _Sys.chrome);
+      if (_Sys.opera) console.log('Opera: ' + _Sys.opera);
+      if (_Sys.safari) console.log('Safari: ' + _Sys.safari);
+      if (parseInt(_Sys.ie) < 11 || parseInt(_Sys.chrome) < 39 || parseInt(_Sys.firefox) < 45 || parseInt(_Sys.safari) < 8);
+    </script>
+  </body>
+</html>
