@@ -154,7 +154,13 @@ let $draw = {
       this.ctx.stroke();
     }
   },
-
+  round (color, width, points) {
+    this.ctx.beginPath();
+    this.ctx.arc(points[points.length - 1].x + this.dx, points[points.length - 1].z + this.dz, width, 0, 360, false);
+    this.ctx.fillStyle = color;
+    this.ctx.fill();
+    this.ctx.closePath();
+  },
   item(item) {
     item.forEach(element => {
       switch (element.type) {
@@ -166,6 +172,9 @@ let $draw = {
           break;
         case "walk":
           this.line(base.red, base.width, element.points);
+          break;
+        case "green":
+          this.round(base.green, base.width * 2, element.points);
           break;
         default:
           break;
