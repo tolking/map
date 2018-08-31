@@ -18,28 +18,60 @@ var base = {
 
 window.onload = () => {
   $draw.getCtx("canvas");
-  $draw.setCanvas(isPhone() ? 3 : 1);
+  $draw.setCanvas(isPhone() ? 1 : 1);
   get(base.type);
-
+  // 鼠标缩放
   mouseWheel("canvas", () => {
-    base.scale = 0.95;
-    $draw.setScale(base.scale);
+    // console.log("缩小");
+    // console.log(getMousePos());
+    
+    base.scale = 0.9 * base.scale;
     drawCanvse();
   }, () => {
-    base.scale = 1.05;
-    $draw.setScale(base.scale);
+    // console.log("放大");
+    // console.log(getMousePos());
+
+    base.scale = 1.1 * base.scale;
     drawCanvse();
   });
-  mouseMove("canvas", () => {
-    $draw.moveCanvas(base.dx, base.dz);
+  // mouseMove("canvas", () => {
+  //   $draw.moveCanvas(base.dx, base.dz);
+  //   drawCanvse();
+  // });
+
+  var hammer = new Hammer(document.getElementById("canvas"));
+  // 手机移动
+  hammer.on("panmove", ev => {
+    $draw.moveCanvas(base.dx + ev.deltaX, base.dz + ev.deltaY);
     drawCanvse();
+  });
+  hammer.on("panend", ev => {
+    base.dx += ev.deltaX;
+    base.dz += ev.deltaY;
+  });
+  // 手机缩放
+  hammer.get("pinch").set({
+    enable: true
+  });
+  hammer.on("Pinchin", ev => {
+    // console.log("靠近");
+    // console.log(ev);
+    
+  });
+  hammer.on("Pinchout", ev => {
+    // console.log("离远");
+    // console.log(ev);
+    
   });
 }
 // 画图
 function drawCanvse(scale = base.scale, dx = base.dx, dz = base.dz, value = base.config) {
-  $draw.bg(base.white);
+  // console.log("draw-canvas");
+  
   $draw.recanvas();
+  $draw.bg(base.white);
   $draw.setRadius(value.radius);
+  $draw.setScale(base.scale);
   $draw.circles(base.gray, base.width);
   $draw.item(value.data);
 }
@@ -81,6 +113,7 @@ let $draw = {
   radius: "",
   canvas: "",
   ctx: "",
+  scale: 1,
   dx: 0,
   dz: 0,
 
@@ -97,7 +130,7 @@ let $draw = {
     this.radius = r;
   },
   setScale(scale) {
-    this.ctx.scale(scale, scale);
+    this.scale = scale;
   },
   moveCanvas(dx, dz) {
     this.dx = dx;
@@ -120,9 +153,9 @@ let $draw = {
     for (let i = 0; i < points.length; i++) {
       const element = points[i];
       if (i === 0) {
-        this.ctx.moveTo(element.x + this.dx, element.z + this.dz);
+        this.ctx.moveTo(element.x * this.scale + this.dx, element.z * this.scale + this.dz);
       } else {
-        this.ctx.lineTo(element.x + this.dx, element.z + this.dz);
+        this.ctx.lineTo(element.x * this.scale + this.dx, element.z * this.scale + this.dz);
       }
     }
     this.ctx.stroke();
@@ -134,13 +167,13 @@ let $draw = {
     this.ctx.font = "bold 28px";
     this.ctx.textBaseline = "middle";
     this.ctx.textAlign = "center";
-    this.ctx.fillText(text, point.x + this.dx, point.z + this.dz);
+    this.ctx.fillText(text, point.x * this.scale + this.dx, point.z * this.scale + this.dz);
     this.ctx.stroke();
     this.ctx.closePath();
   },
   circles (color, width) {
     this.ctx.beginPath();
-    this.ctx.arc(0 + this.dx, 0 + this.dz, this.radius, 0, 360, false);
+    this.ctx.arc(0 + this.dx, 0 + this.dz, this.radius * this.scale, 0, 360, false);
     this.ctx.lineWidth = width;
     this.ctx.strokeStyle = color;
     this.ctx.stroke();
@@ -149,14 +182,14 @@ let $draw = {
     const step = 1 / 180 * Math.PI * 2;
     for (let b = 0, e = step / 2; e <= 360; b += step, e += step) {
       this.ctx.beginPath()
-      this.ctx.arc(0 + this.dx, 0 + this.dz, this.radius, b, e);
+      this.ctx.arc(0 + this.dx, 0 + this.dz, this.radius * this.scale, b, e);
       this.ctx.strokeStyle = base.white;
       this.ctx.stroke();
     }
   },
   round (color, width, points) {
     this.ctx.beginPath();
-    this.ctx.arc(points[points.length - 1].x + this.dx, points[points.length - 1].z + this.dz, width, 0, 360, false);
+    this.ctx.arc(points[points.length - 1].x * this.scale + this.dx, points[points.length - 1].z * this.scale + this.dz, width, 0, 360, false);
     this.ctx.fillStyle = color;
     this.ctx.fill();
     this.ctx.closePath();
@@ -182,9 +215,18 @@ let $draw = {
     });
     // 防止文字被覆盖
     item.forEach(element => {
-      this.text(base.black, element.points[element.points.length - 1], element.name);
+      element.name && this.text(base.black, element.points[element.points.length - 1], element.name);
+      element.namelist && element.namelist.forEach(list => {
+        this.text(base.black, list.point, list.name);
+      });
     });
   }
+}
+
+// 鼠标坐标
+function getMousePos(event) {
+  var e = event || window.event;
+  return {"x": e.clientX, "y": e.clientY}
 }
 // 鼠标滚轮
 function mouseWheel(id, downFn, upFn) {
@@ -213,21 +255,21 @@ function mouseWheel(id, downFn, upFn) {
   }
 }
 // 鼠标移动
-function mouseMove(id, moveFn) {
-  const obj = $(id);
-  obj.onmousedown = ev => {
-    var e = window.event || ev;
-    var fX = e.clientX - base.dx;
-    var fY = e.clientY - base.dz;
-    document.onmousemove = ev => {
-      var e = window.event|| ev;
-      base.dx = e.clientX - fX;
-      base.dz = e.clientY - fY;
-      moveFn && moveFn();
-    }
-    document.onmouseup = () => {
-      document.onmousemove = null;
-      document.onmouseup = null;
-    }
-  }
-}
+// function mouseMove(id, moveFn) {
+//   const obj = $(id);
+//   obj.onmousedown = ev => {
+//     var e = window.event || ev;
+//     var fX = e.clientX - base.dx;
+//     var fY = e.clientY - base.dz;
+//     document.onmousemove = ev => {
+//       var e = window.event|| ev;
+//       base.dx = e.clientX - fX;
+//       base.dz = e.clientY - fY;
+//       moveFn && moveFn();
+//     }
+//     document.onmouseup = () => {
+//       document.onmousemove = null;
+//       document.onmouseup = null;
+//     }
+//   }
+// }
