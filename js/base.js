@@ -18,7 +18,7 @@ var base = {
 
 window.onload = () => {
   $draw.getCtx("canvas");
-  $draw.setCanvas(isPhone() ? 1 : 1);
+  $draw.setCanvas(isPhone() ? 3 : 1, base.width);
   get(base.type);
   // 鼠标缩放
   mouseWheel("canvas", () => {
@@ -42,45 +42,46 @@ window.onload = () => {
   var hammer = new Hammer(document.getElementById("canvas"));
   // 手机移动
   hammer.on("panmove", ev => {
-    $draw.moveCanvas(base.dx + ev.deltaX, base.dz + ev.deltaY);
-    drawCanvse();
+    // 通过 transform 优化拖动性能
+    $("canvas").style.transform = `translate(${ev.deltaX}px, ${ev.deltaY}px)`
   });
   hammer.on("panend", ev => {
     base.dx += ev.deltaX;
     base.dz += ev.deltaY;
+    $draw.moveCanvas(base.dx, base.dz);
+    $("canvas").style.transform = `translate(0px, 0px)`;
+    drawCanvse();
   });
   // 手机缩放
   hammer.get("pinch").set({
     enable: true
   });
-  hammer.on("Pinchin", ev => {
-    // console.log("靠近");
-    // console.log(ev);
+  hammer.on("pinchmove", ev => {
+    // console.log("缩放中");
+    // console.log(ev.scale);
     
+    $("canvas").style.transform = `scale(${ev.scale})`;
   });
-  hammer.on("Pinchout", ev => {
-    // console.log("离远");
-    // console.log(ev);
-    
+  hammer.on("pinchend", ev => {
+    // console.log("缩放结束");
+    // console.log(ev.scale);
+
+    $("canvas").style.transform = `scale(1)`;
+    base.scale = base.scale * ev.scale;
+    drawCanvse();
   });
 }
+
 // 画图
 function drawCanvse(scale = base.scale, dx = base.dx, dz = base.dz, value = base.config) {
-  // console.log("draw-canvas");
+  console.log("draw-canvas");
   
   $draw.recanvas();
   $draw.bg(base.white);
   $draw.setRadius(value.radius);
   $draw.setScale(base.scale);
-  $draw.circles(base.gray, base.width);
+  $draw.circles(base.gray);
   $draw.item(value.data);
-}
-// 初始化map大小
-function initSize(r) {
-  let w = document.body.clientWidth;
-  let h = document.body.clientHeight;
-  base.scale = (w - h ? h : w) / (2 * r) * 0.9;
-  $draw.setScale(base.scale);
 }
 // 获取json文件
 function get(type) {
@@ -91,13 +92,27 @@ function get(type) {
     if (xhr.readyState == 4) {
       if (xhr.status >= 200 && xhr.status < 300) {
         base.config = JSON.parse(xhr.responseText);
-        $("title").innerText = base.config.title;
-        $(".title-text").innerText = base.config.title;
+        changeHtml();
         initSize(base.config.radius);
         drawCanvse();
       };
     };
   }
+}
+// 修改html数据
+function changeHtml() {
+  $("title").innerText = base.config.title;
+  $(".title-text").innerText = base.config.title;
+  $(".version-data .version").innerText = base.config.version;
+  $(".version-data .uptime").innerText = base.config.uptime;
+  $(".version-data .author").innerText = base.config.author;
+}
+// 初始化map大小
+function initSize(r) {
+  let w = document.body.clientWidth;
+  let h = document.body.clientHeight;
+  base.scale = (w - h ? h : w) / (2 * r) * 0.9;
+  $draw.setScale(base.scale);
 }
 // 判断设备
 function isPhone(state, i) {
@@ -113,28 +128,32 @@ let $draw = {
   radius: "",
   canvas: "",
   ctx: "",
-  scale: 1,
-  dx: 0,
-  dz: 0,
+  base: 1, // 整体canva广大倍数，解决手机模糊
+  scale: 1, // 缩放基数
+  width: 2, // 画笔宽度
+  dx: 0, // 移动 x
+  dz: 0, // 移动 y
 
   getCtx(id) {
     this.canvas = $(id);
     this.ctx = canvas.getContext("2d");
   },
-  setCanvas(n = 1) {
-    this.canvas.width = document.body.clientWidth * n;
-    this.canvas.height = document.body.clientHeight * n;
+  setCanvas(base, width) {
+    this.base = base;
+    this.width = width * this.base;
+    this.canvas.width = document.body.clientWidth * this.base;
+    this.canvas.height = document.body.clientHeight * this.base;
     this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2); // 设置中心点
   },
   setRadius(r) {
     this.radius = r;
   },
   setScale(scale) {
-    this.scale = scale;
+    this.scale = scale * this.base;
   },
   moveCanvas(dx, dz) {
-    this.dx = dx;
-    this.dz = dz;
+    this.dx = dx * this.base;
+    this.dz = dz * this.base;
   },
   recanvas() {
     this.ctx.clearRect(-this.canvas.width, -this.canvas.height, this.canvas.width * 2, this.canvas.height * 2);
@@ -164,20 +183,19 @@ let $draw = {
   text(color, point, text) {
     this.ctx.beginPath();
     this.ctx.fillStyle = color;
-    this.ctx.font = "bold 28px";
+    this.ctx.font = `bold ${10 * this.base}px Arial`;
     this.ctx.textBaseline = "middle";
     this.ctx.textAlign = "center";
     this.ctx.fillText(text, point.x * this.scale + this.dx, point.z * this.scale + this.dz);
     this.ctx.stroke();
     this.ctx.closePath();
   },
-  circles (color, width) {
+  circles (color) {
     this.ctx.beginPath();
     this.ctx.arc(0 + this.dx, 0 + this.dz, this.radius * this.scale, 0, 360, false);
-    this.ctx.lineWidth = width;
+    this.ctx.lineWidth = this.width;
     this.ctx.strokeStyle = color;
     this.ctx.stroke();
-    this.ctx.closePath();
     // 变成虚线
     const step = 1 / 180 * Math.PI * 2;
     for (let b = 0, e = step / 2; e <= 360; b += step, e += step) {
@@ -186,6 +204,7 @@ let $draw = {
       this.ctx.strokeStyle = base.white;
       this.ctx.stroke();
     }
+    this.ctx.closePath();
   },
   round (color, width, points) {
     this.ctx.beginPath();
@@ -198,16 +217,16 @@ let $draw = {
     item.forEach(element => {
       switch (element.type) {
         case "ice":
-          this.line(base.blue, base.width * 2, element.points);
+          this.line(base.blue, this.width * 2, element.points);
           break;
         case "rail":
-          this.line(base.yellow, base.width, element.points);
+          this.line(base.yellow, this.width, element.points);
           break;
         case "walk":
-          this.line(base.red, base.width, element.points);
+          this.line(base.red, this.width, element.points);
           break;
         case "green":
-          this.round(base.green, base.width * 2, element.points);
+          this.round(base.green, this.width * 1.5, element.points);
           break;
         default:
           break;

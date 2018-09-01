@@ -10,9 +10,9 @@
     <meta name="author" content="qiang">
     <meta name="description" content="联系方式:qw13131wang@qq.com或qw13131wang@gmail.com">
     <meta name="keywords" content="毛线, 毛线圈物语, MC, 下界交通图, 主世界交通图, 交通图, ououe, 雨无声, tolking, ououe.com, map.ououe.com">
-    <link href="./css/styles.min.css" rel="stylesheet">
+    <!-- <link href="./css/styles.min.css" rel="stylesheet"> -->
     <script src="./js/hammer.min.js"></script>
-    <!-- <link rel="stylesheet/less" type="text/css" href="./less/styles.less" />
+    <link rel="stylesheet/less" type="text/css" href="./less/styles.less" />
     <script>
       less = {
         env: "development",
@@ -25,7 +25,7 @@
         rootpath: "/"
       };
     </script>
-    <script src="./less.js"></script> -->
+    <script src="./less.js"></script>
   </head>
   <body>
     <div id="app">
@@ -33,11 +33,36 @@
         <p class="font-30 title-text"></p>
       </div>
       <canvas id="canvas">canvas都不支持，还用这浏览器干嘛</canvas>
-      <!-- <div class="tip">
-        <div class="font-18">测试</div>
-        <div class="font-18">测试</div>
-        <div class="font-18">测试</div>
-      </div> -->
+      <div class="input-color">
+        <div class="flex-cc color-item">
+          <input type="color" name="" id="" value="#7FDBFF">
+          <span class="font-18">冰道</span>
+        </div>
+        <div class="flex-cc color-item">
+          <input type="color" name="" id="" value="#FFDC00">
+          <span class="font-18">铁路</span>
+        </div>
+        <div class="flex-cc color-item">
+          <input type="color" name="" id="" value="#85144b">
+          <span class="font-18">步道</span>
+        </div>
+        <div class="flex-cc color-item">
+          <input type="color" name="" id="" value="#2ECC40">
+          <span class="font-18">通顶</span>
+        </div>
+        <div class="flex-cc color-item">
+          <input type="color" name="" id="" value="#001f3f">
+          <span class="font-18">文字</span>
+        </div>
+      </div>
+      <div class="version-data">
+        <span class="font-14">当前版本</span>
+        <span class="font-14 version"></span>
+        <span class="font-14">更新时间</span>
+        <span class="font-14 uptime"></span>
+        <span class="font-14">数据维护</span>
+        <span class="font-14 author"></span>
+      </div>
     </div>
     <noscript>
       <strong>貌似不支持js或者您屏蔽了js，请查看设置，或者换个浏览器试试！</strong>
