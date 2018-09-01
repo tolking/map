@@ -1,49 +1,42 @@
-const configList = ["craftV2Nether115"];
 // 基础配置
-var base = {
+const configList = ["craftV2Nether115"];
+let localBase = getLocal();
+let base = {
   type: "craftV2Nether115",
-  blue: "#7FDBFF",
-  yellow: "#FFDC00",
-  red: "#85144b",
+  ice: "#7FDBFF",
+  rail: "#FFDC00",
+  walk: "#85144b",
   green: "#2ECC40",
+  text: "#001f3f",
   white: "#fff",
   gray: "#AAAAAA",
-  black: "#001f3f",
   width: 2,
   config: {},
   scale: 1,
   dx: 0,
   dz: 0
 };
+// 合并配置
+Object.assign(base, localBase);
+// 更新本地储存颜色
+for (const key in localBase) {
+  if (localBase.hasOwnProperty(key)) {
+    const element = localBase[key];
+    if (key !== "type") {
+      changeColor("#" + key, element);
+    }
+  }
+}
 
 window.onload = () => {
-  $draw.getCtx("canvas");
+  $draw.getCtx("#canvas");
   $draw.setCanvas(isPhone() ? 3 : 1, base.width);
   get(base.type);
-  // 鼠标缩放
-  mouseWheel("canvas", () => {
-    // console.log("缩小");
-    // console.log(getMousePos());
-    
-    base.scale = 0.9 * base.scale;
-    drawCanvse();
-  }, () => {
-    // console.log("放大");
-    // console.log(getMousePos());
-
-    base.scale = 1.1 * base.scale;
-    drawCanvse();
-  });
-  // mouseMove("canvas", () => {
-  //   $draw.moveCanvas(base.dx, base.dz);
-  //   drawCanvse();
-  // });
-
-  var hammer = new Hammer(document.getElementById("canvas"));
-  // 手机移动
+  
+  var hammer = new Hammer($("#canvas"));
+  // 手机移动  通过 transform 优化拖动性能
   hammer.on("panmove", ev => {
-    // 通过 transform 优化拖动性能
-    $("canvas").style.transform = `translate(${ev.deltaX}px, ${ev.deltaY}px)`
+    $("canvas").style.transform = `translate(${ev.deltaX}px, ${ev.deltaY}px)`;
   });
   hammer.on("panend", ev => {
     base.dx += ev.deltaX;
@@ -57,31 +50,121 @@ window.onload = () => {
     enable: true
   });
   hammer.on("pinchmove", ev => {
-    // console.log("缩放中");
-    // console.log(ev.scale);
-    
     $("canvas").style.transform = `scale(${ev.scale})`;
   });
   hammer.on("pinchend", ev => {
-    // console.log("缩放结束");
-    // console.log(ev.scale);
+    let cW = $("canvas").offsetWidth;
+    let cH = $("canvas").offsetHeight;
 
     $("canvas").style.transform = `scale(1)`;
     base.scale = base.scale * ev.scale;
+    // base.dx += ev.deltaX;
+    // base.dz += ev.deltaY;
+    base.dx += (ev.center.x - cW / 2) * (1 - base.scale);
+    base.dz += (ev.center.y - cH / 2) * (1 - base.scale);
+    $draw.moveCanvas(base.dx, base.dz);
+    drawCanvse();
+  });
+   // 鼠标缩放
+   mouseWheel("canvas", () => {
+    let m = getMousePos();
+    let cW = $("canvas").offsetWidth;
+    let cH = $("canvas").offsetHeight;
+    
+    base.scale = 0.9 * base.scale;
+    base.dx += (m.x - cW / 2) * (1 - base.scale) - base.dx;
+    base.dz += (m.y - cH / 2) * (1 - base.scale) - base.dz;
+    $draw.moveCanvas(base.dx, base.dz);
+    drawCanvse();
+  }, () => {
+    let m = getMousePos();
+    let cW = $("canvas").offsetWidth;
+    let cH = $("canvas").offsetHeight;
+
+    base.scale = 1.1 * base.scale;
+    base.dx += (m.x - cW / 2) * (1 - base.scale) - base.dx;
+    base.dz += (m.y - cH / 2) * (1 - base.scale) - base.dz;
+    $draw.moveCanvas(base.dx, base.dz);
     drawCanvse();
   });
 }
 
+// 监听颜色更改
+$("#ice").onchange = function() {
+  this.click();
+  base.ice = this.value;
+  drawCanvse();
+  setLocal();
+};
+$("#rail").onchange = function() {
+  this.click();
+  base.rail = this.value;
+  drawCanvse();
+  setLocal();
+};
+$("#walk").onchange = function() {
+  this.click();
+  base.walk = this.value;
+  drawCanvse();
+  setLocal();
+};
+$("#green").onchange = function() {
+  this.click();
+  base.green = this.value;
+  drawCanvse();
+  setLocal();
+};
+$("#text").onchange = function() {
+  this.click();
+  base.text = this.value;
+  drawCanvse();
+  setLocal();
+};
+// 恢复初始颜色
+$(".ice").onclick = () => {
+  changeColor("#ice", "#7FDBFF");
+  base.ice = "#7FDBFF";
+  drawCanvse();
+  setLocal();
+}
+$(".rail").onclick = () => {
+  changeColor("#rail", "#FFDC00");
+  base.rail = "#FFDC00";
+  drawCanvse();
+  setLocal();
+}
+$(".walk").onclick = () => {
+  changeColor("#walk", "#85144b");
+  base.walk = "#85144b";
+  drawCanvse();
+  setLocal();
+}
+$(".green").onclick = () => {
+  changeColor("#green", "#2ECC40");
+  base.green = "#2ECC40";
+  drawCanvse();
+  setLocal();
+}
+$(".text").onclick = () => {
+  changeColor("#text", "#001f3f");
+  base.text = "#001f3f";
+  drawCanvse();
+  setLocal();
+}
+
 // 画图
-function drawCanvse(scale = base.scale, dx = base.dx, dz = base.dz, value = base.config) {
+function drawCanvse() {
   console.log("draw-canvas");
   
   $draw.recanvas();
   $draw.bg(base.white);
-  $draw.setRadius(value.radius);
+  $draw.setRadius(base.config.radius);
   $draw.setScale(base.scale);
   $draw.circles(base.gray);
-  $draw.item(value.data);
+  $draw.item(base.config.data);
+}
+function $(id) {
+  return document.querySelector(id);
 }
 // 获取json文件
 function get(type) {
@@ -103,9 +186,12 @@ function get(type) {
 function changeHtml() {
   $("title").innerText = base.config.title;
   $(".title-text").innerText = base.config.title;
-  $(".version-data .version").innerText = base.config.version;
   $(".version-data .uptime").innerText = base.config.uptime;
   $(".version-data .author").innerText = base.config.author;
+}
+// 修改input[color]颜色
+function changeColor(id, value) {
+  $(id).value = value;
 }
 // 初始化map大小
 function initSize(r) {
@@ -120,15 +206,60 @@ function isPhone(state, i) {
     return navigator.userAgent.match(/(iPhone|Android|ios|Windows Phone)/i);
   }
 }
-function $(id) {
-  return document.querySelector(id);
+// 储存数据
+function setLocal() {
+  let data = {
+    type: base.type,
+    ice: base.ice,
+    rail: base.rail,
+    walk: base.walk,
+    green: base.green,
+    text: base.text
+  };
+  localStorage.setItem("base", JSON.stringify(data));
 }
+// 获取数据
+function getLocal() {
+  return JSON.parse(localStorage.getItem("base"));
+}
+// 鼠标坐标
+function getMousePos(event) {
+  var e = event || window.event;
+  return {"x": e.clientX, "y": e.clientY}
+}
+// 鼠标滚轮
+function mouseWheel(id, downFn, upFn) {
+  const obj = $(id);
+  obj.onmousewheel = fn;
+  if (obj.addEventListener) {
+    obj.addEventListener('DOMMouseScroll', fn, false);
+  }
+  function fn(ev) {
+    var ev = ev || event;
+    var b = true;
+    if (ev.wheelDelta) {
+      b = ev.wheelDelta > 0 ? true : false;
+    } else {
+      b = ev.detail < 0 ? true : false;
+    }
+    if(b) {
+      upFn && upFn();
+    } else {
+      downFn && downFn();
+    }
+    if (ev.preventDefault) {
+      ev.preventDefault();
+    }
+    return false;
+  }
+}
+
 // 绘制主方法
 let $draw = {
   radius: "",
   canvas: "",
   ctx: "",
-  base: 1, // 整体canva广大倍数，解决手机模糊
+  base: 1, // 整体canvas扩大倍数，结合css，解决手机模糊
   scale: 1, // 缩放基数
   width: 2, // 画笔宽度
   dx: 0, // 移动 x
@@ -217,13 +348,13 @@ let $draw = {
     item.forEach(element => {
       switch (element.type) {
         case "ice":
-          this.line(base.blue, this.width * 2, element.points);
+          this.line(base.ice, this.width * 2, element.points);
           break;
         case "rail":
-          this.line(base.yellow, this.width, element.points);
+          this.line(base.rail, this.width, element.points);
           break;
         case "walk":
-          this.line(base.red, this.width, element.points);
+          this.line(base.walk, this.width, element.points);
           break;
         case "green":
           this.round(base.green, this.width * 1.5, element.points);
@@ -234,61 +365,10 @@ let $draw = {
     });
     // 防止文字被覆盖
     item.forEach(element => {
-      element.name && this.text(base.black, element.points[element.points.length - 1], element.name);
+      element.name && this.text(base.text, element.points[element.points.length - 1], element.name);
       element.namelist && element.namelist.forEach(list => {
-        this.text(base.black, list.point, list.name);
+        this.text(base.text, list.point, list.name);
       });
     });
   }
 }
-
-// 鼠标坐标
-function getMousePos(event) {
-  var e = event || window.event;
-  return {"x": e.clientX, "y": e.clientY}
-}
-// 鼠标滚轮
-function mouseWheel(id, downFn, upFn) {
-  const obj = $(id);
-  obj.onmousewheel = fn;
-  if (obj.addEventListener) {
-    obj.addEventListener('DOMMouseScroll', fn, false);
-  }
-  function fn(ev) {
-    var ev = ev || event;
-    var b = true;
-    if (ev.wheelDelta) {
-      b = ev.wheelDelta > 0 ? true : false;
-    } else {
-      b = ev.detail < 0 ? true : false;
-    }
-    if(b) {
-      upFn && upFn();
-    } else {
-      downFn && downFn();
-    }
-    if (ev.preventDefault) {
-      ev.preventDefault();
-    }
-    return false;
-  }
-}
-// 鼠标移动
-// function mouseMove(id, moveFn) {
-//   const obj = $(id);
-//   obj.onmousedown = ev => {
-//     var e = window.event || ev;
-//     var fX = e.clientX - base.dx;
-//     var fY = e.clientY - base.dz;
-//     document.onmousemove = ev => {
-//       var e = window.event|| ev;
-//       base.dx = e.clientX - fX;
-//       base.dz = e.clientY - fY;
-//       moveFn && moveFn();
-//     }
-//     document.onmouseup = () => {
-//       document.onmousemove = null;
-//       document.onmouseup = null;
-//     }
-//   }
-// }
