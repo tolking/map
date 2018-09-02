@@ -1,8 +1,17 @@
 // 基础配置
-const configList = ["craftV2Nether115"];
+const configList = [
+  {
+    name: "毛线—下界交通地图",
+    type: "craftV2Nether115"
+  },
+  {
+    name: "毛线—下界基岩上层萌新通道",
+    type: "craftV2Nether128"
+  }
+];
 let localBase = getLocal();
 let base = {
-  type: "craftV2Nether115",
+  type: "craftV2Nether128",
   ice: "#7FDBFF",
   rail: "#FFDC00",
   walk: "#85144b",
@@ -18,21 +27,13 @@ let base = {
 };
 // 合并配置
 Object.assign(base, localBase);
-// 更新本地储存颜色
-for (const key in localBase) {
-  if (localBase.hasOwnProperty(key)) {
-    const element = localBase[key];
-    if (key !== "type") {
-      changeColor("#" + key, element);
-    }
-  }
-}
 
 window.onload = () => {
+  configHtml();
   $draw.getCtx("#canvas");
   $draw.setCanvas(isPhone() ? 3 : 1, base.width);
   get(base.type);
-  
+
   var hammer = new Hammer($("#canvas"));
   // 手机移动  通过 transform 优化拖动性能
   hammer.on("panmove", ev => {
@@ -89,6 +90,12 @@ window.onload = () => {
   });
 }
 
+// 监听数据源更改
+$(".select-data").onchange = function() {
+  base.type = this.value;
+  get(base.type);
+  setLocal();
+}
 // 监听颜色更改
 $("#ice").onchange = function() {
   this.click();
@@ -154,8 +161,6 @@ $(".text").onclick = () => {
 
 // 画图
 function drawCanvse() {
-  console.log("draw-canvas");
-  
   $draw.recanvas();
   $draw.bg(base.white);
   $draw.setRadius(base.config.radius);
@@ -188,6 +193,26 @@ function changeHtml() {
   $(".title-text").innerText = base.config.title;
   $(".version-data .uptime").innerText = base.config.uptime;
   $(".version-data .author").innerText = base.config.author;
+}
+// 初始配置本地储存select与input[color]值
+function configHtml() {
+  // 初始化select
+  let html = "";
+  configList.forEach(element => {
+    html += `<option value="${element.type}">${element.name}</option>`;
+  });
+  $(".select-data").innerHTML = html;
+  // 更新本地储存颜色与select值
+  for (const key in localBase) {
+    if (localBase.hasOwnProperty(key)) {
+      const element = localBase[key];
+      if (key === "type") {
+        $(".select-data").value = element;
+      } else {
+        changeColor("#" + key, element);
+      }
+    }
+  }
 }
 // 修改input[color]颜色
 function changeColor(id, value) {
@@ -287,7 +312,7 @@ let $draw = {
     this.dz = dz * this.base;
   },
   recanvas() {
-    this.ctx.clearRect(-this.canvas.width, -this.canvas.height, this.canvas.width * 2, this.canvas.height * 2);
+    this.ctx.clearRect(-this.canvas.width, -this.canvas.height, this.canvas.width, this.canvas.height);
   },
   bg (color) {
     this.ctx.fillStyle = color;
@@ -296,16 +321,68 @@ let $draw = {
   line(color, width, points) {
     this.ctx.lineWidth = width;
     this.ctx.strokeStyle = color;
-    this.ctx.beginPath();
     this.ctx.lineJoin = "round";
     this.ctx.lineCap = "round";
+    this.ctx.beginPath();
     // 画线
     for (let i = 0; i < points.length; i++) {
       const element = points[i];
       if (i === 0) {
         this.ctx.moveTo(element.x * this.scale + this.dx, element.z * this.scale + this.dz);
       } else {
-        this.ctx.lineTo(element.x * this.scale + this.dx, element.z * this.scale + this.dz);
+        // 绘制曲线
+        if (element.type) {
+          let before = points[i - 1];
+          switch (element.type) {
+            case "t-l":
+              this.ctx.quadraticCurveTo(
+                (element.ex || (before.x > element.x ? element.x : before.x)) * this.scale + this.dx,
+                (element.ez || (before.z > element.z ? element.z : before.z)) * this.scale + this.dz,
+                element.x * this.scale + this.dx,
+                element.z * this.scale + this.dz
+              );
+              break;
+            case "t-r":
+              this.ctx.quadraticCurveTo(
+                (element.ex || (before.x > element.x ? before.x : element.x)) * this.scale + this.dx,
+                (element.ez || (before.z > element.z ? element.z : before.z)) * this.scale + this.dz,
+                element.x * this.scale + this.dx,
+                element.z * this.scale + this.dz
+              );
+              break;
+            case "b-l":
+              this.ctx.quadraticCurveTo(
+                (element.ex || (before.x > element.x ? element.x : before.x)) * this.scale + this.dx,
+                (element.ez || (before.z > element.z ? before.z : element.z)) * this.scale + this.dz,
+                element.x * this.scale + this.dx,
+                element.z * this.scale + this.dz
+              );
+              break;
+            case "b-r":
+              this.ctx.quadraticCurveTo(
+                (element.ex || (before.x > element.x ? before.x : element.x)) * this.scale + this.dx,
+                (element.ez || (before.z > element.z ? before.z : element.z)) * this.scale + this.dz,
+                element.x * this.scale + this.dx,
+                element.z * this.scale + this.dz
+              );
+              break;
+            default:
+              if (element.ex && element.ez) {
+                this.ctx.quadraticCurveTo(
+                  element.ex * this.scale + this.dx,
+                  element.ez * this.scale + this.dz,
+                  element.x * this.scale + this.dx,
+                  element.z * this.scale + this.dz
+                );
+              } else {
+                console.error("curve-{type or ex or ez}-eorro");
+                console.error(element);
+              }
+              break;
+          }
+        } else {
+          this.ctx.lineTo(element.x * this.scale + this.dx, element.z * this.scale + this.dz);
+        }
       }
     }
     this.ctx.stroke();
@@ -360,6 +437,8 @@ let $draw = {
           this.round(base.green, this.width * 1.5, element.points);
           break;
         default:
+          console.error("data-type-eorro");
+          console.error(element);
           break;
       }
     });
