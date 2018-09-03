@@ -11,7 +11,7 @@ const configList = [
 ];
 let localBase = getLocal();
 let base = {
-  type: "craftV2Nether128",
+  type: "craftV2Nether115",
   ice: "#7FDBFF",
   rail: "#FFDC00",
   walk: "#85144b",
@@ -75,6 +75,8 @@ window.onload = () => {
     base.scale = 0.9 * base.scale;
     base.dx += (m.x - cW / 2) * (1 - base.scale) - base.dx;
     base.dz += (m.y - cH / 2) * (1 - base.scale) - base.dz;
+    // base.dx += ((m.x - base.dx) * base.scale - cW / 2) * (1 - base.scale);
+    // base.dz += ((m.y - base.dz) * base.scale - cH / 2) * (1 - base.scale);
     $draw.moveCanvas(base.dx, base.dz);
     drawCanvse();
   }, () => {
@@ -85,6 +87,8 @@ window.onload = () => {
     base.scale = 1.1 * base.scale;
     base.dx += (m.x - cW / 2) * (1 - base.scale) - base.dx;
     base.dz += (m.y - cH / 2) * (1 - base.scale) - base.dz;
+    // base.dx += ((m.x - base.dx) * base.scale - cW / 2) * (1 - base.scale);
+    // base.dz += ((m.y - base.dz) * base.scale - cH / 2) * (1 - base.scale);
     $draw.moveCanvas(base.dx, base.dz);
     drawCanvse();
   });
