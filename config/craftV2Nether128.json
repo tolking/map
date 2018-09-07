@@ -5,6 +5,7 @@
   "uptime": "2018-9-2",
   "introduce": "基岩层萌新通道",
   "radius": 600,
+  "showradius": true,
   "data": [
     {
       "name": "",

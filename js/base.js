@@ -16,9 +16,9 @@ let base = {
   rail: "#FFDC00",
   walk: "#85144b",
   green: "#2ECC40",
+  frame: "#AAAAAA",
   text: "#001f3f",
   white: "#fff",
-  gray: "#AAAAAA",
   width: 2,
   config: {},
   scale: 1,
@@ -125,6 +125,12 @@ $("#green").onchange = function() {
   drawCanvse();
   setLocal();
 };
+$("#frame").onchange = function() {
+  this.click();
+  base.frame = this.value;
+  drawCanvse();
+  setLocal();
+};
 $("#text").onchange = function() {
   this.click();
   base.text = this.value;
@@ -156,6 +162,12 @@ $(".green").onclick = () => {
   drawCanvse();
   setLocal();
 }
+$(".frame").onclick = () => {
+  changeColor("#frame", "#AAAAAA");
+  base.frame = "#AAAAAA";
+  drawCanvse();
+  setLocal();
+}
 $(".text").onclick = () => {
   changeColor("#text", "#001f3f");
   base.text = "#001f3f";
@@ -169,7 +181,7 @@ function drawCanvse() {
   $draw.bg(base.white);
   $draw.setRadius(base.config.radius);
   $draw.setScale(base.scale);
-  $draw.circles(base.gray);
+  base.config.showradius && $draw.circles(base.frame);
   $draw.item(base.config.data);
 }
 function $(id) {
