@@ -191,6 +191,7 @@ function $(id) {
 function get(type) {
   const xhr = new XMLHttpRequest();
   xhr.open("get", `../config/${type}.json`, true);
+  // xhr.open("get", "../config/craftV2World.json", true);
   xhr.send();
   xhr.onreadystatechange = () => {
     if (xhr.readyState == 4) {
