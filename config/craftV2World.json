@@ -211,8 +211,8 @@
 
     {
       "name": "",
-      "type": "walk",
-      "notes": "车站frame",
+      "type": "frame",
+      "notes": "车站",
       "namelist": [
         {
           "name": "中心车站",

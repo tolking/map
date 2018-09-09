@@ -9,7 +9,6 @@ const configList = [
     type: "craftV2Nether128"
   }
 ];
-let localBase = getLocal();
 let base = {
   type: "craftV2Nether115",
   ice: "#7FDBFF",
@@ -25,8 +24,13 @@ let base = {
   dx: 0,
   dz: 0
 };
+let urlType = getUrlString("type");
+let localBase = getLocal();
+urlType && (localBase ? localBase.type = urlType : localBase = {type: urlType});
+
 // 合并配置
 Object.assign(base, localBase);
+console.log(base);
 
 window.onload = () => {
   configHtml();
@@ -43,7 +47,7 @@ window.onload = () => {
     base.dx += ev.deltaX;
     base.dz += ev.deltaY;
     $draw.moveCanvas(base.dx, base.dz);
-    $("canvas").style.transform = `translate(0px, 0px)`;
+    $("canvas").style.transform = "translate(0px, 0px)";
     drawCanvse();
   });
   // 手机缩放
@@ -57,7 +61,7 @@ window.onload = () => {
     let cW = $("canvas").offsetWidth;
     let cH = $("canvas").offsetHeight;
 
-    $("canvas").style.transform = `scale(1)`;
+    $("canvas").style.transform = "scale(1)";
     base.scale = base.scale * ev.scale;
     // base.dx += ev.deltaX;
     // base.dz += ev.deltaY;
@@ -77,8 +81,11 @@ window.onload = () => {
     base.dz += (m.y - cH / 2) * (1 - base.scale) - base.dz;
     // base.dx += ((m.x - base.dx) * base.scale - cW / 2) * (1 - base.scale);
     // base.dz += ((m.y - base.dz) * base.scale - cH / 2) * (1 - base.scale);
+    // $draw.setPoint(m.x, m.y);
     $draw.moveCanvas(base.dx, base.dz);
     drawCanvse();
+    console.log(base);
+    
   }, () => {
     let m = getMousePos();
     let cW = $("canvas").offsetWidth;
@@ -87,8 +94,9 @@ window.onload = () => {
     base.scale = 1.1 * base.scale;
     base.dx += (m.x - cW / 2) * (1 - base.scale) - base.dx;
     base.dz += (m.y - cH / 2) * (1 - base.scale) - base.dz;
-    // base.dx += ((m.x - base.dx) * base.scale - cW / 2) * (1 - base.scale);
-    // base.dz += ((m.y - base.dz) * base.scale - cH / 2) * (1 - base.scale);
+    // base.dx += (m.x - cW / 2) * (1 - base.scale);
+    // base.dz += (m.y - cH / 2) * (1 - base.scale);
+    // $draw.setPoint(m.x, m.y);
     $draw.moveCanvas(base.dx, base.dz);
     drawCanvse();
   });
@@ -191,18 +199,26 @@ function $(id) {
 function get(type) {
   const xhr = new XMLHttpRequest();
   xhr.open("get", `../config/${type}.json`, true);
-  // xhr.open("get", "../config/craftV2World.json", true);
   xhr.send();
   xhr.onreadystatechange = () => {
-    if (xhr.readyState == 4) {
+    if (xhr.readyState === 4) {
       if (xhr.status >= 200 && xhr.status < 300) {
         base.config = JSON.parse(xhr.responseText);
         changeHtml();
         initSize(base.config.radius);
         drawCanvse();
-      };
+      } else {
+        console.error("configList -> type or url -> type error");
+        console.error(type);
+      }
     };
   }
+}
+// 获取地址传参
+function getUrlString(name) {
+  let reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+  let r = window.location.search.substr(1).match(reg);
+  return r !== null ? unescape(r[2]) : null;
 }
 // 修改html数据
 function changeHtml() {
@@ -244,7 +260,7 @@ function initSize(r) {
 }
 // 判断设备
 function isPhone(state, i) {
-  if (!window.location.hash.match('fromapp')) {
+  if (!window.location.hash.match("fromapp")) {
     return navigator.userAgent.match(/(iPhone|Android|ios|Windows Phone)/i);
   }
 }
@@ -256,6 +272,7 @@ function setLocal() {
     rail: base.rail,
     walk: base.walk,
     green: base.green,
+    frame: base.frame,
     text: base.text
   };
   localStorage.setItem("base", JSON.stringify(data));
@@ -318,18 +335,30 @@ let $draw = {
     this.canvas.height = document.body.clientHeight * this.base;
     this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2); // 设置中心点
   },
+  // setPoint(px, pz) {
+  //   // this.ctx.save();
+  //   // this.ctx.translate(px * this.base || this.canvas.width / 2, pz * this.base || this.canvas.height / 2); // 设置中心点
+  //   this.ctx.translate(px * this.base - this.canvas.width / 2, pz * this.base - this.canvas.height / 2); // 设置中心点
+
+  //   console.log(px + ": " + pz);
+  //   // this.ctx.restore();
+  // },
   setRadius(r) {
     this.radius = r;
   },
   setScale(scale) {
+    this.ctx.save();
     this.scale = scale * this.base;
+    this.ctx.restore();
   },
   moveCanvas(dx, dz) {
+    this.ctx.save();
     this.dx = dx * this.base;
     this.dz = dz * this.base;
+    this.ctx.restore();
   },
   recanvas() {
-    this.ctx.clearRect(-this.canvas.width, -this.canvas.height, this.canvas.width, this.canvas.height);
+    this.ctx.clearRect(-this.canvas.width / 2, -this.canvas.height / 2, this.canvas.width, this.canvas.height);
   },
   bg (color) {
     this.ctx.fillStyle = color;
@@ -416,6 +445,7 @@ let $draw = {
     this.ctx.closePath();
   },
   circles (color) {
+    this.ctx.save();
     this.ctx.beginPath();
     this.ctx.arc(0 + this.dx, 0 + this.dz, this.radius * this.scale, 0, 360, false);
     this.ctx.lineWidth = this.width;
@@ -430,15 +460,24 @@ let $draw = {
       this.ctx.stroke();
     }
     this.ctx.closePath();
+    this.ctx.restore();
   },
   round (color, width, points) {
     this.ctx.beginPath();
-    this.ctx.arc(points[points.length - 1].x * this.scale + this.dx, points[points.length - 1].z * this.scale + this.dz, width, 0, 360, false);
+    this.ctx.arc(
+      points[points.length - 1].x * this.scale + this.dx,
+      points[points.length - 1].z * this.scale + this.dz,
+      width,
+      0,
+      360,
+      false
+    );
     this.ctx.fillStyle = color;
     this.ctx.fill();
     this.ctx.closePath();
   },
   item(item) {
+    this.ctx.save();
     item.forEach(element => {
       switch (element.type) {
         case "ice":
@@ -453,6 +492,9 @@ let $draw = {
         case "green":
           this.round(base.green, this.width * 1.5, element.points);
           break;
+        case "frame":
+          this.line(base.frame, this.width, element.points);
+          break;
         default:
           console.error("data-type-eorro");
           console.error(element);
@@ -466,5 +508,6 @@ let $draw = {
         this.text(base.text, list.point, list.name);
       });
     });
+    this.ctx.restore();
   }
 }
