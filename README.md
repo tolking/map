@@ -32,6 +32,7 @@
   "version": 1.0,
   "uptime": "2018-2-18",
   "introduce": "",
+  "center": {"x": 0, "z": 0},
   "radius": 600,
   "showradius": true,
   "data": []
@@ -42,6 +43,7 @@
 - version —— 当前版本号（可选）
 - uptime —— 数据更新时间，由于在页面底部显示
 - introduce —— 当前版本说明（可选，如果想显示内容需要指定 version 值，大于之前值才可以显示更新内容），用于初次打开数据页面显示内容
+- center  —— 修正地图的中心点
 - radius —— 当前数据边界，用于初次缩放计算
 - showradius —— 如果不想显示边界虚线圆指定值为 false
 - data —— 所有的线路数据
