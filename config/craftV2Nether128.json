@@ -4,6 +4,7 @@
   "version": 0.1,
   "uptime": "2018-9-2",
   "introduce": "基岩层萌新通道",
+  "center": {"x": 0, "z": 0},
   "radius": 600,
   "showradius": true,
   "data": [

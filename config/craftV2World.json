@@ -4,6 +4,7 @@
   "version": 0.1,
   "uptime": "2018-9-9",
   "introduce": "主世界交通地图",
+  "center": {"x": 0, "z": 0},
   "radius": 4800,
   "showradius": true,
   "data": [
