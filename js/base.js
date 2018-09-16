@@ -1,12 +1,16 @@
 // 基础配置
 const configList = [
   {
-    name: "毛线—下界交通地图",
+    name: "毛线V2—下界交通地图",
     type: "craftV2Nether115"
   },
   {
-    name: "毛线—下界基岩上层萌新通道",
+    name: "毛线V2—下界基岩上层萌新通道",
     type: "craftV2Nether128"
+  },
+  {
+    name: "毛线V2—主世界通地图",
+    type: "craftV2World"
   }
 ];
 let base = {
@@ -25,12 +29,11 @@ let base = {
   dz: 0
 };
 let urlType = getUrlString("type");
-let localBase = getLocal();
+let localBase = getLocal("base");
 urlType && (localBase ? localBase.type = urlType : localBase = {type: urlType});
 
 // 合并配置
 Object.assign(base, localBase);
-console.log(base);
 
 window.onload = () => {
   configHtml();
@@ -84,8 +87,6 @@ window.onload = () => {
     // $draw.setPoint(m.x, m.y);
     $draw.moveCanvas(base.dx, base.dz);
     drawCanvse();
-    console.log(base);
-    
   }, () => {
     let m = getMousePos();
     let cW = $("canvas").offsetWidth;
@@ -106,81 +107,87 @@ window.onload = () => {
 $(".select-data").onchange = function() {
   base.type = this.value;
   get(base.type);
-  setLocal();
+  setLocal("base");
 }
 // 监听颜色更改
 $("#ice").onchange = function() {
   this.click();
   base.ice = this.value;
   drawCanvse();
-  setLocal();
+  setLocal("base");
 };
 $("#rail").onchange = function() {
   this.click();
   base.rail = this.value;
   drawCanvse();
-  setLocal();
+  setLocal("base");
 };
 $("#walk").onchange = function() {
   this.click();
   base.walk = this.value;
   drawCanvse();
-  setLocal();
+  setLocal("base");
 };
 $("#green").onchange = function() {
   this.click();
   base.green = this.value;
   drawCanvse();
-  setLocal();
+  setLocal("base");
 };
 $("#frame").onchange = function() {
   this.click();
   base.frame = this.value;
   drawCanvse();
-  setLocal();
+  setLocal("base");
 };
 $("#text").onchange = function() {
   this.click();
   base.text = this.value;
   drawCanvse();
-  setLocal();
+  setLocal("base");
 };
 // 恢复初始颜色
 $(".ice").onclick = () => {
   changeColor("#ice", "#7FDBFF");
   base.ice = "#7FDBFF";
   drawCanvse();
-  setLocal();
+  setLocal("base");
 }
 $(".rail").onclick = () => {
   changeColor("#rail", "#FFDC00");
   base.rail = "#FFDC00";
   drawCanvse();
-  setLocal();
+  setLocal("base");
 }
 $(".walk").onclick = () => {
   changeColor("#walk", "#85144b");
   base.walk = "#85144b";
   drawCanvse();
-  setLocal();
+  setLocal("base");
 }
 $(".green").onclick = () => {
   changeColor("#green", "#2ECC40");
   base.green = "#2ECC40";
   drawCanvse();
-  setLocal();
+  setLocal("base");
 }
 $(".frame").onclick = () => {
   changeColor("#frame", "#AAAAAA");
   base.frame = "#AAAAAA";
   drawCanvse();
-  setLocal();
+  setLocal("base");
 }
 $(".text").onclick = () => {
   changeColor("#text", "#001f3f");
   base.text = "#001f3f";
   drawCanvse();
-  setLocal();
+  setLocal("base");
+}
+// 关闭弹窗
+$(".tip-btn").onclick = () => {
+  $("#canvas").className = null;
+  $(".tip").style.display = "none";
+  setLocal(base.type);
 }
 
 // 画图
@@ -206,6 +213,7 @@ function get(type) {
         base.config = JSON.parse(xhr.responseText);
         changeHtml();
         initSize(base.config.radius);
+        $draw.moveCenter(base.config.center);
         drawCanvse();
       } else {
         console.error("configList -> type or url -> type error");
@@ -226,6 +234,17 @@ function changeHtml() {
   $(".title-text").innerText = base.config.title;
   $(".version-data .uptime").innerText = base.config.uptime;
   $(".version-data .author").innerText = base.config.author;
+
+  let old = getLocal(base.type) || 0;
+  let oldVersion = old.version || 0;
+
+  $("#canvas").className = null;
+  $(".tip").style.display = "none";
+  if (base.config.version && (oldVersion === null || oldVersion < base.config.version)) {
+    $(".tip-text").innerHTML = base.config.introduce;
+    $(".tip").style.display = "flex";
+    $("#canvas").className = "canvas-mask";
+  }
 }
 // 初始配置本地储存select与input[color]值
 function configHtml() {
@@ -265,21 +284,29 @@ function isPhone(state, i) {
   }
 }
 // 储存数据
-function setLocal() {
-  let data = {
-    type: base.type,
-    ice: base.ice,
-    rail: base.rail,
-    walk: base.walk,
-    green: base.green,
-    frame: base.frame,
-    text: base.text
-  };
-  localStorage.setItem("base", JSON.stringify(data));
+function setLocal(item) {
+  let data;
+  if (item === "base") {
+    data = {
+      type: base.type,
+      ice: base.ice,
+      rail: base.rail,
+      walk: base.walk,
+      green: base.green,
+      frame: base.frame,
+      text: base.text
+    };
+  } else {
+    data = {
+      type: base.type,
+      version: base.config.version
+    }
+  }
+  localStorage.setItem(item, JSON.stringify(data));
 }
 // 获取数据
-function getLocal() {
-  return JSON.parse(localStorage.getItem("base"));
+function getLocal(item) {
+  return JSON.parse(localStorage.getItem(item));
 }
 // 鼠标坐标
 function getMousePos(event) {
@@ -318,6 +345,7 @@ let $draw = {
   radius: "",
   canvas: "",
   ctx: "",
+  center: {x: 0, y: 0},
   base: 1, // 整体canvas扩大倍数，结合css，解决手机模糊
   scale: 1, // 缩放基数
   width: 2, // 画笔宽度
@@ -351,6 +379,9 @@ let $draw = {
     this.scale = scale * this.base;
     this.ctx.restore();
   },
+  moveCenter(center) {
+    this.center = center;
+  },
   moveCanvas(dx, dz) {
     this.ctx.save();
     this.dx = dx * this.base;
@@ -374,7 +405,10 @@ let $draw = {
     for (let i = 0; i < points.length; i++) {
       const element = points[i];
       if (i === 0) {
-        this.ctx.moveTo(element.x * this.scale + this.dx, element.z * this.scale + this.dz);
+        this.ctx.moveTo(
+          (element.x - this.center.x) * this.scale + this.dx, 
+          (element.z - this.center.z) * this.scale + this.dz
+        );
       } else {
         // 绘制曲线
         if (element.type) {
@@ -382,43 +416,43 @@ let $draw = {
           switch (element.type) {
             case "t-l":
               this.ctx.quadraticCurveTo(
-                (element.ex || (before.x > element.x ? element.x : before.x)) * this.scale + this.dx,
-                (element.ez || (before.z > element.z ? element.z : before.z)) * this.scale + this.dz,
-                element.x * this.scale + this.dx,
-                element.z * this.scale + this.dz
+                ((element.ex || (before.x > element.x ? element.x : before.x)) - this.center.x) * this.scale + this.dx,
+                ((element.ez || (before.z > element.z ? element.z : before.z)) - this.center.z) * this.scale + this.dz,
+                (element.x - this.center.x) * this.scale + this.dx,
+                (element.z - this.center.z) * this.scale + this.dz
               );
               break;
             case "t-r":
               this.ctx.quadraticCurveTo(
-                (element.ex || (before.x > element.x ? before.x : element.x)) * this.scale + this.dx,
-                (element.ez || (before.z > element.z ? element.z : before.z)) * this.scale + this.dz,
-                element.x * this.scale + this.dx,
-                element.z * this.scale + this.dz
+                ((element.ex || (before.x > element.x ? before.x : element.x)) - this.center.x) * this.scale + this.dx,
+                ((element.ez || (before.z > element.z ? element.z : before.z)) - this.center.z) * this.scale + this.dz,
+                (element.x - this.center.x) * this.scale + this.dx,
+                (element.z - this.center.z) * this.scale + this.dz
               );
               break;
             case "b-l":
               this.ctx.quadraticCurveTo(
-                (element.ex || (before.x > element.x ? element.x : before.x)) * this.scale + this.dx,
-                (element.ez || (before.z > element.z ? before.z : element.z)) * this.scale + this.dz,
-                element.x * this.scale + this.dx,
-                element.z * this.scale + this.dz
+                ((element.ex || (before.x > element.x ? element.x : before.x)) - this.center.x) * this.scale + this.dx,
+                ((element.ez || (before.z > element.z ? before.z : element.z)) - this.center.z) * this.scale + this.dz,
+                (element.x - this.center.x) * this.scale + this.dx,
+                (element.z - this.center.z) * this.scale + this.dz
               );
               break;
             case "b-r":
               this.ctx.quadraticCurveTo(
-                (element.ex || (before.x > element.x ? before.x : element.x)) * this.scale + this.dx,
-                (element.ez || (before.z > element.z ? before.z : element.z)) * this.scale + this.dz,
-                element.x * this.scale + this.dx,
-                element.z * this.scale + this.dz
+                ((element.ex || (before.x > element.x ? before.x : element.x)) - this.center.x) * this.scale + this.dx,
+                ((element.ez || (before.z > element.z ? before.z : element.z)) - this.center.z) * this.scale + this.dz,
+                (element.x - this.center.x) * this.scale + this.dx,
+                (element.z - this.center.z) * this.scale + this.dz
               );
               break;
             default:
               if (element.ex && element.ez) {
                 this.ctx.quadraticCurveTo(
-                  element.ex * this.scale + this.dx,
-                  element.ez * this.scale + this.dz,
-                  element.x * this.scale + this.dx,
-                  element.z * this.scale + this.dz
+                  (element.ex - this.center.x) * this.scale + this.dx,
+                  (element.ez - this.center.z) * this.scale + this.dz,
+                  (element.x -this.center.x) * this.scale + this.dx,
+                  (element.z -this.center.z) * this.scale + this.dz
                 );
               } else {
                 console.error("curve-{type or ex or ez}-eorro");
@@ -427,7 +461,10 @@ let $draw = {
               break;
           }
         } else {
-          this.ctx.lineTo(element.x * this.scale + this.dx, element.z * this.scale + this.dz);
+          this.ctx.lineTo(
+            (element.x - this.center.x) * this.scale + this.dx, 
+            (element.z - this.center.z) * this.scale + this.dz
+          );
         }
       }
     }
@@ -440,14 +477,18 @@ let $draw = {
     this.ctx.font = `bold ${10 * this.base}px Arial`;
     this.ctx.textBaseline = "middle";
     this.ctx.textAlign = "center";
-    this.ctx.fillText(text, point.x * this.scale + this.dx, point.z * this.scale + this.dz);
+    this.ctx.fillText(
+      text, 
+      (point.x - this.center.x) * this.scale + this.dx, 
+      (point.z - this.center.z) * this.scale + this.dz
+    );
     this.ctx.stroke();
     this.ctx.closePath();
   },
   circles (color) {
     this.ctx.save();
     this.ctx.beginPath();
-    this.ctx.arc(0 + this.dx, 0 + this.dz, this.radius * this.scale, 0, 360, false);
+    this.ctx.arc(this.dx,  this.dz,  this.radius * this.scale,  0,  360,  false);
     this.ctx.lineWidth = this.width;
     this.ctx.strokeStyle = color;
     this.ctx.stroke();
@@ -455,7 +496,7 @@ let $draw = {
     const step = 1 / 180 * Math.PI * 2;
     for (let b = 0, e = step / 2; e <= 360; b += step, e += step) {
       this.ctx.beginPath()
-      this.ctx.arc(0 + this.dx, 0 + this.dz, this.radius * this.scale, b, e);
+      this.ctx.arc(this.dx, this.dz, this.radius * this.scale, b, e);
       this.ctx.strokeStyle = base.white;
       this.ctx.stroke();
     }
@@ -465,8 +506,8 @@ let $draw = {
   round (color, width, points) {
     this.ctx.beginPath();
     this.ctx.arc(
-      points[points.length - 1].x * this.scale + this.dx,
-      points[points.length - 1].z * this.scale + this.dz,
+      (points[points.length - 1].x - this.center.x) * this.scale + this.dx,
+      (points[points.length - 1].z - this.center.z) * this.scale + this.dz,
       width,
       0,
       360,
