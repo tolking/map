@@ -1,9 +1,9 @@
 {
-  "title": "毛线—下界交通地图",
+  "title": "毛线V2—下界交通地图",
   "author": "ououe",
   "version": 0.2,
   "uptime": "2018-9-2",
-  "introduce": "测试版交通图，很多的功能还未实现，耐心等候！数据搜集主要分布在115层与由次通往的部分。外层圆圈为目前主世界边界",
+  "introduce": "毛线V2下界交通地图，<a target='_blank' href='https://github.com/tolking/map'>点我去论坛看看详情</a>。主要搜集分布在115层与由次通往的部分,已经收集大部分数据。<br>如果你对收集数据感兴趣欢迎加入<br><a target='_blank' href='https://github.com/tolking/map'>点我去看看源码及数据结构</a>",
   "center": {"x": 0, "z": 0},
   "radius": 600,
   "showradius": true,
