@@ -11,6 +11,10 @@ const configList = [
   {
     name: "毛线V2—主世界通地图",
     type: "craftV2World"
+  },
+  {
+    name: "喵窝—下界交通地图(测试版)",
+    type: "nyaaNether"
   }
 ];
 let base = {
