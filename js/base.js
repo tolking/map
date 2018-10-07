@@ -2,23 +2,23 @@
 const configList = [
   {
     name: "毛线V2—下界交通地图",
-    type: "craftV2Nether115"
+    type: "kedamaV2Nether115"
   },
   {
     name: "毛线V2—下界基岩上层萌新通道",
-    type: "craftV2Nether128"
+    type: "kedamaV2Nether128"
   },
   {
     name: "毛线V2—主世界通地图",
-    type: "craftV2World"
+    type: "kedamaV2World"
   },
   {
-    name: "喵窝—下界交通地图(测试版)",
+    name: "喵窝—下界交通地图",
     type: "nyaaNether"
   }
 ];
 let base = {
-  type: "craftV2Nether115",
+  type: "kedamaV2Nether115",
   ice: "#7FDBFF",
   rail: "#FFDC00",
   walk: "#85144b",

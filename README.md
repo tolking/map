@@ -14,9 +14,9 @@
 - 使用驼峰命名
 - 根据数据，使用合适的名称
 - 主要命名规则：服务器 + 版本 + 记录世界 + 其它自定义（根据实际情况增减）
-- 使用：craft 表示毛线、nyaa 表示喵窝...
+- 使用：kedama 表示毛线、nyaa 表示喵窝...
 - 使用：World 表示主世界、Nether 表示下界、End 表示末地
-- 例如：craftV2Nether115.json（craft —— 毛线、V2 —— 当前版本、Nether —— 下界、115 —— 所在层数 y值）
+- 例如：kedamaV2Nether115.json（kedama —— 毛线、V2 —— 当前版本、Nether —— 下界、115 —— 所在层数 y值）
 
 ### 线路数据参数
 
@@ -156,7 +156,7 @@ function get(type) {
 
 - 通过 url 传参实现分享地图
 - 在域名后面加入 type 参数（?type=需要分享的文件名）
-- 如：https://map.ououe.com?type=craftV2World
+- 如：https://map.ououe.com?type=kedamaV2World
 - 这样也可预览一些还没有正式公开的地图
 
 ### 待编辑
