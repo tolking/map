@@ -156,7 +156,7 @@ function get(type) {
 
 - 通过 url 传参实现分享地图
 - 在域名后面加入 type 参数（?type=需要分享的文件名）
-- 如：https://map.ououe.com?type=kedamaV2World
+- 如：https://map.ououe.com?type=nyaaWorld
 - 这样也可预览一些还没有正式公开的地图
 
 ### 待编辑
