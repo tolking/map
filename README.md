@@ -115,31 +115,6 @@
 - 可以直接记录数据
 - 使用本地服务器更好地发现数据变化
 
-#### 没有环境仅可实现简单的预览
-
-- 前提你的 json 已经上传过了
-- 这样对初始的数据录入极不友
-- 有条件最好搭个本地服务器环境
-- 正式提交前请改回原来内容
-```js
-function get(type) {
-  const xhr = new XMLHttpRequest();
-  // xhr.open("get", `../config/${type}.json`, true);
-  xhr.open("get", "https://map.ououe.com/config/需要加载的文件名.json", true);
-  xhr.send();
-  xhr.onreadystatechange = () => {
-    if (xhr.readyState == 4) {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        base.config = JSON.parse(xhr.responseText);
-        changeHtml();
-        initSize(base.config.radius);
-        drawCanvse();
-      };
-    };
-  }
-}
-```
-
 ### 上线数据
 
 -  上线需要在 js 目录下的 base.js 文件中 configList 中加入以下参数
