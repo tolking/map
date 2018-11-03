@@ -52,13 +52,13 @@ window.onload = () => {
   var hammer = new Hammer($("#canvas"));
   // 手机移动  通过 transform 优化拖动性能
   hammer.on("panmove", ev => {
-    $("canvas").style.transform = `translate(${ev.deltaX}px, ${ev.deltaY}px)`;
+    $("canvas").style.transform = `translate3d(${ev.deltaX}px, ${ev.deltaY}px, 0px)`;
   });
   hammer.on("panend", ev => {
     base.dx += ev.deltaX;
     base.dz += ev.deltaY;
     $draw.moveCanvas(base.dx, base.dz);
-    $("canvas").style.transform = "translate(0px, 0px)";
+    $("canvas").style.transform = `translate3d(0px, 0px, 0px)`;
     drawCanvse();
   });
   // 手机缩放
@@ -66,13 +66,13 @@ window.onload = () => {
     enable: true
   });
   hammer.on("pinchmove", ev => {
-    $("canvas").style.transform = `scale(${ev.scale})`;
+    $("canvas").style.transform = `scale3d(${ev.scale}, ${ev.scale}, 1)`;
   });
   hammer.on("pinchend", ev => {
     let cW = $("canvas").offsetWidth;
     let cH = $("canvas").offsetHeight;
 
-    $("canvas").style.transform = "scale(1)";
+    $("canvas").style.transform = "scale3d(1, 1, 1)";
     base.scale = base.scale * ev.scale;
     // base.dx += ev.deltaX;
     // base.dz += ev.deltaY;
@@ -93,8 +93,10 @@ window.onload = () => {
     // base.dx += ((m.x - base.dx) * base.scale - cW / 2) * (1 - base.scale);
     // base.dz += ((m.y - base.dz) * base.scale - cH / 2) * (1 - base.scale);
     // $draw.setPoint(m.x, m.y);
+    $("canvas").style.transform = `scale3d(${base.scale}, ${base.scale}, 1)`;
     $draw.moveCanvas(base.dx, base.dz);
     drawCanvse();
+    $("canvas").style.transform = `scale3d(1, 1, 1)`;
   }, () => {
     let m = getMousePos();
     let cW = $("canvas").offsetWidth;
@@ -106,8 +108,10 @@ window.onload = () => {
     // base.dx += (m.x - cW / 2) * (1 - base.scale);
     // base.dz += (m.y - cH / 2) * (1 - base.scale);
     // $draw.setPoint(m.x, m.y);
+    $("canvas").style.transform = `scale3d(${base.scale}, ${base.scale}, 1)`;
     $draw.moveCanvas(base.dx, base.dz);
     drawCanvse();
+    $("canvas").style.transform = `scale3d(1, 1, 1)`;
   });
 }
 
