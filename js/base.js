@@ -2,7 +2,7 @@
 const configList = [
   {
     name: "毛线V3—下界交通地图",
-    type: "kedamaV3Nether118"
+    type: "kedamaV3Nether117"
   },
   {
     name: "毛线V2—下界交通地图",
@@ -27,7 +27,7 @@ const configList = [
 ];
 // 初始配置
 let base = {
-  type: "kedamaV3Nether118",
+  type: "kedamaV3Nether117",
   ice: "#7FDBFF",
   rail: "#FFDC00",
   walk: "#85144b",
