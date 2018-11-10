@@ -1,9 +1,5 @@
-// 统计地图目录配置
+// 基础配置
 const configList = [
-  {
-    name: "毛线V3—下界交通地图",
-    type: "kedamaV3Nether118"
-  },
   {
     name: "毛线V2—下界交通地图",
     type: "kedamaV2Nether115"
@@ -25,9 +21,8 @@ const configList = [
   //   type: "nyaaWorld"
   // }
 ];
-// 初始配置
 let base = {
-  type: "kedamaV3Nether118",
+  type: "kedamaV2Nether115",
   ice: "#7FDBFF",
   rail: "#FFDC00",
   walk: "#85144b",
@@ -41,17 +36,13 @@ let base = {
   dx: 0,
   dz: 0
 };
-// 获取地址传参
 let urlType = getUrlString("type");
-// 获取本地配置
 let localBase = getLocal("base");
-// 优先加载通过地址传参的地图
 urlType && (localBase ? localBase.type = urlType : localBase = {type: urlType});
 
-// 合并各种配置到 base
+// 合并配置
 Object.assign(base, localBase);
 
-// 页面加载玩执行
 window.onload = () => {
   configHtml();
   $draw.getCtx("#canvas");
@@ -220,7 +211,6 @@ function drawCanvse() {
   base.config.showradius && $draw.circles(base.frame);
   $draw.item(base.config.data);
 }
-// 封装选择器（jquery风味）
 function $(id) {
   return document.querySelector(id);
 }
