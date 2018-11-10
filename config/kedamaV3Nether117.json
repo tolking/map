@@ -3,7 +3,7 @@
   "author": "ououe",
   "version": 0.1,
   "uptime": "2018-11-10",
-  "introduce": "毛线V3下界交通地图，<a target='_blank' href='https://github.com/tolking/map'>点我去论坛看看详情</a>。kedamaV3 开荒啦！！！，开始搜集V3的数据了，现在默认为kedamaV3下届，需要切换到其他，请点击右上角的选择框。<br>如果你对收集数据感兴趣欢迎加入<br><a target='_blank' href='https://github.com/tolking/map'>点我去看看源码及数据结构</a>",
+  "introduce": "毛线V3下界交通地图，<a target='_blank' href='https://github.com/tolking/map'>点我去论坛看看详情</a>。毛线V3 开荒啦！！！，开始搜集V3的数据了，现在默认为毛线V3下届，需要切换到其他，请点击右上角的选择框。<br>如果你对收集数据感兴趣欢迎加入<br><a target='_blank' href='https://github.com/tolking/map'>点我去看看源码及数据结构</a>",
   "center": {"x": 0, "z": 0},
   "radius": 560,
   "showradius": false,
@@ -31,31 +31,31 @@
       "notes": "北线",
       "points": [
         {"x": -38, "y": 117, "z": -33},
-        {"x": -38, "y": 117, "z": 552}
+        {"x": -38, "y": 117, "z": -552}
       ]
     },
     {
-      "name": "东线",
+      "name": "",
       "type": "ice",
-      "notes": "",
+      "notes": "东线",
       "points": [
         {"x": -18, "y": 117, "z": -15},
         {"x": 503, "y": 117, "z": -15}
       ]
     },
     {
-      "name": "南线",
+      "name": "",
       "type": "ice",
-      "notes": "",
+      "notes": "南线",
       "points": [
         {"x": -36, "y": 117, "z": 5},
         {"x": -36, "y": 117, "z": 524}
       ]
     },
     {
-      "name": "西线",
+      "name": "",
       "type": "ice",
-      "notes": "",
+      "notes": "西线",
       "points": [
         {"x": -56, "y": 117, "z": -13},
         {"x": -575, "y": 117, "z": -13}
