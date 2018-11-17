@@ -83,8 +83,6 @@ window.onload = () => {
 
     $("canvas").style.transform = "scale3d(1, 1, 1)";
     base.scale = base.scale * ev.scale;
-    // base.dx += ev.deltaX;
-    // base.dz += ev.deltaY;
     base.dx += (ev.center.x - cW / 2) * (1 - base.scale);
     base.dz += (ev.center.y - cH / 2) * (1 - base.scale);
     $draw.moveCanvas(base.dx, base.dz);
@@ -99,9 +97,6 @@ window.onload = () => {
     base.scale = 0.9 * base.scale;
     base.dx += (m.x - cW / 2) * (1 - base.scale) - base.dx;
     base.dz += (m.y - cH / 2) * (1 - base.scale) - base.dz;
-    // base.dx += ((m.x - base.dx) * base.scale - cW / 2) * (1 - base.scale);
-    // base.dz += ((m.y - base.dz) * base.scale - cH / 2) * (1 - base.scale);
-    // $draw.setPoint(m.x, m.y);
     $("canvas").style.transform = `scale3d(${base.scale}, ${base.scale}, 1)`;
     $draw.moveCanvas(base.dx, base.dz);
     drawCanvse();
@@ -114,9 +109,6 @@ window.onload = () => {
     base.scale = 1.1 * base.scale;
     base.dx += (m.x - cW / 2) * (1 - base.scale) - base.dx;
     base.dz += (m.y - cH / 2) * (1 - base.scale) - base.dz;
-    // base.dx += (m.x - cW / 2) * (1 - base.scale);
-    // base.dz += (m.y - cH / 2) * (1 - base.scale);
-    // $draw.setPoint(m.x, m.y);
     $("canvas").style.transform = `scale3d(${base.scale}, ${base.scale}, 1)`;
     $draw.moveCanvas(base.dx, base.dz);
     drawCanvse();
@@ -385,30 +377,18 @@ let $draw = {
     this.canvas.height = document.body.clientHeight * this.base;
     this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2); // 设置中心点
   },
-  // setPoint(px, pz) {
-  //   // this.ctx.save();
-  //   // this.ctx.translate(px * this.base || this.canvas.width / 2, pz * this.base || this.canvas.height / 2); // 设置中心点
-  //   this.ctx.translate(px * this.base - this.canvas.width / 2, pz * this.base - this.canvas.height / 2); // 设置中心点
-
-  //   console.log(px + ": " + pz);
-  //   // this.ctx.restore();
-  // },
   setRadius(r) {
     this.radius = r;
   },
   setScale(scale) {
-    this.ctx.save();
     this.scale = scale * this.base;
-    this.ctx.restore();
   },
   moveCenter(center) {
     this.center = center;
   },
   moveCanvas(dx, dz) {
-    this.ctx.save();
     this.dx = dx * this.base;
     this.dz = dz * this.base;
-    this.ctx.restore();
   },
   recanvas() {
     this.ctx.clearRect(-this.canvas.width / 2, -this.canvas.height / 2, this.canvas.width, this.canvas.height);
@@ -508,7 +488,6 @@ let $draw = {
     this.ctx.closePath();
   },
   circles (color) {
-    this.ctx.save();
     this.ctx.beginPath();
     this.ctx.arc(this.dx,  this.dz,  this.radius * this.scale,  0,  360,  false);
     this.ctx.lineWidth = this.width;
@@ -522,8 +501,7 @@ let $draw = {
       this.ctx.strokeStyle = base.white;
       this.ctx.stroke();
     }
-    this.ctx.closePath();
-    this.ctx.restore();
+    this.ctx.closePath(); 
   },
   round (color, width, points) {
     this.ctx.beginPath();
@@ -540,8 +518,8 @@ let $draw = {
     this.ctx.closePath();
   },
   item(item) {
-    this.ctx.save();
     item.forEach(element => {
+      this.ctx.save();
       switch (element.type) {
         case "ice":
           this.line(base.ice, this.width * 2, element.points);
@@ -563,14 +541,16 @@ let $draw = {
           console.error(element);
           break;
       }
+      this.ctx.restore();
     });
     // 防止文字被覆盖
     item.forEach(element => {
+      this.ctx.save();
       element.name && this.text(base.text, element.points[element.points.length - 1], element.name);
       element.namelist && element.namelist.forEach(list => {
         this.text(base.text, list.point, list.name);
       });
+      this.ctx.restore();
     });
-    this.ctx.restore();
   }
 }
