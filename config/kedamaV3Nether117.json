@@ -2,8 +2,8 @@
   "title": "毛线V3—下界交通地图",
   "author": "ououe",
   "version": 0.1,
-  "uptime": "2018-11-10",
-  "introduce": "毛线V3下界交通地图，<a target='_blank' href='https://github.com/tolking/map'>点我去论坛看看详情</a>。毛线V3 开荒啦！！！，开始搜集V3的数据了，现在默认为毛线V3下届，需要切换到其他，请点击右上角的选择框。<br>如果你对收集数据感兴趣欢迎加入<br><a target='_blank' href='https://github.com/tolking/map'>点我去看看源码及数据结构</a>",
+  "uptime": "2018-11-24",
+  "introduce": "毛线V3下界交通地图，<a target='_blank' href='https://github.com/tolking/map'>点我去论坛看看详情</a>。毛线V3 开荒啦！！！开始搜集V3的数据了，现在默认为毛线V3下届，需要切换到其他，请点击右上角的选择框。<br>如果你对收集数据感兴趣欢迎加入<br><a target='_blank' href='https://github.com/tolking/map'>点我去看看源码及数据结构</a>",
   "center": {"x": 0, "z": 0},
   "radius": 560,
   "showradius": false,
@@ -42,14 +42,6 @@
       ]
     },
     {
-      "name": "不死院",
-      "type": "walk",
-      "points": [
-        {"x": -36, "y": 117, "z": 151},
-        {"x": -3, "y": 117, "z": 151}
-      ]
-    },
-    {
       "name": "",
       "type": "walk",
       "points": [
@@ -65,6 +57,14 @@
         {"x": -60, "y": 117, "z": -13},
         {"x": -60, "y": 117, "z": 54},
         {"x": -49, "y": 117, "z": 54}
+      ]
+    },
+    {
+      "name": "新宝岛",
+      "type": "walk",
+      "points": [
+        {"x": -60, "y": 117, "z": 42},
+        {"x": -65, "y": 117, "z": 42}
       ]
     },
     {
@@ -155,6 +155,14 @@
       "points": [
         {"x": -36, "y": 117, "z": 244},
         {"x": 137, "y": 117, "z": 244}
+      ]
+    },
+    {
+      "name": "UndeadAsylun",
+      "type": "ice",
+      "points": [
+        {"x": -36, "y": 118, "z": 151},
+        {"x": -2, "y": 118, "z": 151}
       ]
     },
     {
