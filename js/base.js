@@ -209,7 +209,7 @@ function drawCanvse() {
   $draw.bg(base.white);
   $draw.setRadius(base.config.radius);
   $draw.setScale(base.scale);
-  base.config.showradius && $draw.circles(base.frame);
+  $draw.border(base.config.borderStyle);
   $draw.item(base.config.data);
 }
 // 封装选择器（jquery风味）
@@ -291,7 +291,7 @@ function initSize(r) {
   base.scale = (w - h ? h : w) / (2 * r) * 0.9;
   $draw.setScale(base.scale);
 }
-// 判断设备
+// 判断手机
 function isPhone(state, i) {
   if (!window.location.hash.match("fromapp")) {
     return navigator.userAgent.match(/(iPhone|Android|ios|Windows Phone)/i);
@@ -397,7 +397,10 @@ let $draw = {
     this.ctx.fillStyle = color;
     this.ctx.fillRect(-this.canvas.width / 2, -this.canvas.height / 2, this.canvas.width, this.canvas.height);
   },
-  line(color, width, points) {
+  line(color, width, points, type) {
+    if (type === "dotted") {
+      this.ctx.setLineDash([10, 15]);
+    }
     this.ctx.lineWidth = width;
     this.ctx.strokeStyle = color;
     this.ctx.lineJoin = "round";
@@ -487,6 +490,20 @@ let $draw = {
     this.ctx.stroke();
     this.ctx.closePath();
   },
+  round (color, width, points) {
+    this.ctx.beginPath();
+    this.ctx.arc(
+      (points[points.length - 1].x - this.center.x) * this.scale + this.dx,
+      (points[points.length - 1].z - this.center.z) * this.scale + this.dz,
+      width,
+      0,
+      360,
+      false
+    );
+    this.ctx.fillStyle = color;
+    this.ctx.fill();
+    this.ctx.closePath();
+  },
   circles (color) {
     this.ctx.beginPath();
     this.ctx.arc(this.dx,  this.dz,  this.radius * this.scale,  0,  360,  false);
@@ -503,19 +520,25 @@ let $draw = {
     }
     this.ctx.closePath(); 
   },
-  round (color, width, points) {
-    this.ctx.beginPath();
-    this.ctx.arc(
-      (points[points.length - 1].x - this.center.x) * this.scale + this.dx,
-      (points[points.length - 1].z - this.center.z) * this.scale + this.dz,
-      width,
-      0,
-      360,
-      false
-    );
-    this.ctx.fillStyle = color;
-    this.ctx.fill();
-    this.ctx.closePath();
+  border (value) {
+    this.ctx.save();
+    if (value instanceof Array) {
+      this.line(base.frame, this.width, value, "dotted");
+    } else if (value === "circles") {
+      this.circles(base.frame);
+    } else if (value === "square") {
+      const _value = [
+        { x: -this.radius, z: -this.radius },
+        { x: this.radius, z: -this.radius },
+        { x: this.radius, z: this.radius },
+        { x: -this.radius, z: this.radius },
+        { x: -this.radius, z: -this.radius }
+      ];
+      this.line(base.frame, this.width, _value, "dotted");
+    } else {
+      return;
+    }
+    this.ctx.restore();
   },
   item(item) {
     item.forEach(element => {

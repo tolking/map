@@ -6,7 +6,7 @@
   "introduce": "主世界交通地图，目前仅统计部分内容。如果你对收集数据感兴趣欢迎加入<br><a target='_blank' href='https://github.com/tolking/map'>点我去看看源码及数据结构</a>",
   "center": {"x": 0, "z": 0},
   "radius": 4800,
-  "showradius": true,
+  "borderStyle": "circles",
   "data": [
     {
       "name": "朧塚商店街",

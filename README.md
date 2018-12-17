@@ -34,7 +34,7 @@
   "introduce": "",
   "center": {"x": 0, "z": 0},
   "radius": 600,
-  "showradius": true,
+  "borderStyle": "circles",
   "data": []
 }
 ```
@@ -44,8 +44,8 @@
 - uptime —— 数据更新时间，由于在页面底部显示
 - introduce —— 当前版本说明（可选，如果想显示内容需要指定 version 值且大于之前值才可以显示更新内容），用于初次打开数据页面显示内容
 - center  —— 修正地图的中心点为统计数据的中心点
-- radius —— 当前数据边界，用于初次缩放计算
-- showradius —— 如果不想显示边界虚线圆指定值为 false
+- radius —— 当前数据边界，用于初次缩放计算和边界大小计算
+- borderStyle —— 边界形状（circles -- 正圆形、square -- 正方形、false或"" -- 不显示虚线边框、points数组 -- 自定义任意形状，需手动闭合路径）
 - data —— 所有的线路数据
 
 #### data 结构
