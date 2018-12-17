@@ -6,7 +6,7 @@
   "introduce": "基岩层萌新通道位于基岩顶层，可以通过图上的绿色圆点安全上去",
   "center": {"x": 0, "z": 0},
   "radius": 600,
-  "showradius": true,
+  "borderStyle": "circles",
   "data": [
     {
       "name": "",
