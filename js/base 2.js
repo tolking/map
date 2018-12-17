@@ -1,5 +1,9 @@
-// 基础配置
+// 统计地图目录配置
 const configList = [
+  {
+    name: "毛线V3—下界交通地图",
+    type: "kedamaV3Nether117"
+  },
   {
     name: "毛线V2—下界交通地图",
     type: "kedamaV2Nether115"
@@ -21,8 +25,9 @@ const configList = [
   //   type: "nyaaWorld"
   // }
 ];
+// 初始配置
 let base = {
-  type: "kedamaV2Nether115",
+  type: "kedamaV3Nether117",
   ice: "#7FDBFF",
   rail: "#FFDC00",
   walk: "#85144b",
@@ -36,13 +41,17 @@ let base = {
   dx: 0,
   dz: 0
 };
+// 获取地址传参
 let urlType = getUrlString("type");
+// 获取本地配置
 let localBase = getLocal("base");
+// 优先加载通过地址传参的地图
 urlType && (localBase ? localBase.type = urlType : localBase = {type: urlType});
 
-// 合并配置
+// 合并各种配置到 base
 Object.assign(base, localBase);
 
+// 页面加载玩执行
 window.onload = () => {
   configHtml();
   $draw.getCtx("#canvas");
@@ -74,8 +83,6 @@ window.onload = () => {
 
     $("canvas").style.transform = "scale3d(1, 1, 1)";
     base.scale = base.scale * ev.scale;
-    // base.dx += ev.deltaX;
-    // base.dz += ev.deltaY;
     base.dx += (ev.center.x - cW / 2) * (1 - base.scale);
     base.dz += (ev.center.y - cH / 2) * (1 - base.scale);
     $draw.moveCanvas(base.dx, base.dz);
@@ -90,9 +97,6 @@ window.onload = () => {
     base.scale = 0.9 * base.scale;
     base.dx += (m.x - cW / 2) * (1 - base.scale) - base.dx;
     base.dz += (m.y - cH / 2) * (1 - base.scale) - base.dz;
-    // base.dx += ((m.x - base.dx) * base.scale - cW / 2) * (1 - base.scale);
-    // base.dz += ((m.y - base.dz) * base.scale - cH / 2) * (1 - base.scale);
-    // $draw.setPoint(m.x, m.y);
     $("canvas").style.transform = `scale3d(${base.scale}, ${base.scale}, 1)`;
     $draw.moveCanvas(base.dx, base.dz);
     drawCanvse();
@@ -105,9 +109,6 @@ window.onload = () => {
     base.scale = 1.1 * base.scale;
     base.dx += (m.x - cW / 2) * (1 - base.scale) - base.dx;
     base.dz += (m.y - cH / 2) * (1 - base.scale) - base.dz;
-    // base.dx += (m.x - cW / 2) * (1 - base.scale);
-    // base.dz += (m.y - cH / 2) * (1 - base.scale);
-    // $draw.setPoint(m.x, m.y);
     $("canvas").style.transform = `scale3d(${base.scale}, ${base.scale}, 1)`;
     $draw.moveCanvas(base.dx, base.dz);
     drawCanvse();
@@ -208,9 +209,11 @@ function drawCanvse() {
   $draw.bg(base.white);
   $draw.setRadius(base.config.radius);
   $draw.setScale(base.scale);
-  base.config.showradius && $draw.circles(base.frame);
+  // base.config.showradius && $draw.circles(base.frame);
+  $draw.border(base.config.borderStyle);
   $draw.item(base.config.data);
 }
+// 封装选择器（jquery风味）
 function $(id) {
   return document.querySelector(id);
 }
@@ -375,30 +378,18 @@ let $draw = {
     this.canvas.height = document.body.clientHeight * this.base;
     this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2); // 设置中心点
   },
-  // setPoint(px, pz) {
-  //   // this.ctx.save();
-  //   // this.ctx.translate(px * this.base || this.canvas.width / 2, pz * this.base || this.canvas.height / 2); // 设置中心点
-  //   this.ctx.translate(px * this.base - this.canvas.width / 2, pz * this.base - this.canvas.height / 2); // 设置中心点
-
-  //   console.log(px + ": " + pz);
-  //   // this.ctx.restore();
-  // },
   setRadius(r) {
     this.radius = r;
   },
   setScale(scale) {
-    this.ctx.save();
     this.scale = scale * this.base;
-    this.ctx.restore();
   },
   moveCenter(center) {
     this.center = center;
   },
   moveCanvas(dx, dz) {
-    this.ctx.save();
     this.dx = dx * this.base;
     this.dz = dz * this.base;
-    this.ctx.restore();
   },
   recanvas() {
     this.ctx.clearRect(-this.canvas.width / 2, -this.canvas.height / 2, this.canvas.width, this.canvas.height);
@@ -407,7 +398,10 @@ let $draw = {
     this.ctx.fillStyle = color;
     this.ctx.fillRect(-this.canvas.width / 2, -this.canvas.height / 2, this.canvas.width, this.canvas.height);
   },
-  line(color, width, points) {
+  line(color, width, points, type) {
+    if (type === "dotted") {
+      this.ctx.setLineDash([7 * width, 7 * width]);
+    }
     this.ctx.lineWidth = width;
     this.ctx.strokeStyle = color;
     this.ctx.lineJoin = "round";
@@ -497,24 +491,6 @@ let $draw = {
     this.ctx.stroke();
     this.ctx.closePath();
   },
-  circles (color) {
-    this.ctx.save();
-    this.ctx.beginPath();
-    this.ctx.arc(this.dx,  this.dz,  this.radius * this.scale,  0,  360,  false);
-    this.ctx.lineWidth = this.width;
-    this.ctx.strokeStyle = color;
-    this.ctx.stroke();
-    // 变成虚线
-    const step = 1 / 180 * Math.PI * 2;
-    for (let b = 0, e = step / 2; e <= 360; b += step, e += step) {
-      this.ctx.beginPath()
-      this.ctx.arc(this.dx, this.dz, this.radius * this.scale, b, e);
-      this.ctx.strokeStyle = base.white;
-      this.ctx.stroke();
-    }
-    this.ctx.closePath();
-    this.ctx.restore();
-  },
   round (color, width, points) {
     this.ctx.beginPath();
     this.ctx.arc(
@@ -529,9 +505,45 @@ let $draw = {
     this.ctx.fill();
     this.ctx.closePath();
   },
-  item(item) {
+  circles (color) {
+    this.ctx.beginPath();
+    this.ctx.arc(this.dx,  this.dz,  this.radius * this.scale,  0,  360,  false);
+    this.ctx.lineWidth = this.width;
+    this.ctx.strokeStyle = color;
+    this.ctx.stroke();
+    // 变成虚线
+    const step = 1 / 180 * Math.PI * 2;
+    for (let b = 0, e = step / 2; e <= 360; b += step, e += step) {
+      this.ctx.beginPath()
+      this.ctx.arc(this.dx, this.dz, this.radius * this.scale, b, e);
+      this.ctx.strokeStyle = base.white;
+      this.ctx.stroke();
+    }
+    this.ctx.closePath(); 
+  },
+  border (value) {
     this.ctx.save();
+    if (value instanceof Array) {
+      this.line(base.frame, this.width, value, "dotted");
+    } else if (value === "circles") {
+      this.circles(base.frame);
+    } else if (value === "square") {
+      const _value = [
+        { x: -this.radius, z: -this.radius },
+        { x: this.radius, z: -this.radius },
+        { x: -this.radius, z: -this.radius },
+        { x: -this.radius, z: this.radius },
+        { x: -this.radius, z: -this.radius }
+      ];
+      this.line(base.frame, this.width, _value, "dotted");
+    } else {
+      return;
+    }
+    this.ctx.restore();
+  },
+  item(item) {
     item.forEach(element => {
+      this.ctx.save();
       switch (element.type) {
         case "ice":
           this.line(base.ice, this.width * 2, element.points);
@@ -553,14 +565,16 @@ let $draw = {
           console.error(element);
           break;
       }
+      this.ctx.restore();
     });
     // 防止文字被覆盖
     item.forEach(element => {
+      this.ctx.save();
       element.name && this.text(base.text, element.points[element.points.length - 1], element.name);
       element.namelist && element.namelist.forEach(list => {
         this.text(base.text, list.point, list.name);
       });
+      this.ctx.restore();
     });
-    this.ctx.restore();
   }
 }
