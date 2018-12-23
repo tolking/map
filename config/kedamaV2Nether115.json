@@ -6,7 +6,7 @@
   "introduce": "毛线V2下界交通地图，<a target='_blank' href='https://github.com/tolking/map'>点我去论坛看看详情</a>。主要搜集分布在115层与由次通往的部分,已经收集大部分数据。<br>如果你对收集数据感兴趣欢迎加入<br><a target='_blank' href='https://github.com/tolking/map'>点我去看看源码及数据结构</a>",
   "center": {"x": 0, "z": 0},
   "radius": 600,
-  "borderStyle": "circles",
+  "borderstyle": "circles",
   "data": [
     {
       "name": "雪峰乡",

@@ -209,7 +209,7 @@ function drawCanvse() {
   $draw.bg(base.white);
   $draw.setRadius(base.config.radius);
   $draw.setScale(base.scale);
-  $draw.border(base.config.borderStyle);
+  $draw.border(base.config.borderstyle);
   $draw.item(base.config.data);
 }
 // 封装选择器（jquery风味）
