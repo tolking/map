@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="msapplication-tap-highlight" content="no">
     <title>map</title>
@@ -62,7 +63,8 @@
     <noscript>
       <strong>貌似不支持js或者您屏蔽了js，请查看设置，或者换个浏览器试试！</strong>
     </noscript>
-    <script src="./js/base.js"></script>
+    <script src="./js/index.js" type="module"></script>
+    <!-- <script src="./js/base.js"></script> -->
     <script>
       var _Sys = {}, _s, _ua = navigator.userAgent.toLowerCase();
       (_s = _ua.match(/rv:([\d.]+)\) like gecko/)) ? _Sys.ie = _s[1] : (_s = _ua.match(/msie ([\d.]+)/)) ? _Sys.ie = _s[1] : (_s = _ua.match(/firefox\/([\d.]+)/)) ? _Sys.firefox = _s[1] : (_s = _ua.match(/chrome\/([\d.]+)/)) ? _Sys.chrome = _s[1] : (_s = _ua.match(/opera.([\d.]+)/)) ? _Sys.opera = _s[1] : (_s = _ua.match(/version\/([\d.]+).*safari/)) ? _Sys.safari = _s[1] : 0;
