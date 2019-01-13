@@ -51,8 +51,14 @@ export const getSize = radius => {
   return scale
 }
 
+// 鼠标坐标
+export const getMousePos = event => {
+  const e = event || window.event
+  return { 'x': e.clientX, 'y': e.clientY }
+}
+
 // 储存数据
-export const setLocal = (item) => {
+export const setLocal = (item, base) => {
   let data
   if (item === 'base') {
     data = {
@@ -82,7 +88,7 @@ export const configHtml = item => {
   })
   $('.select-data').innerHTML = html
   // 更新本地储存颜色与select值
-  let localBase = getLocal('base')
+  const localBase = getLocal('base')
   for (const key in localBase) {
     if (localBase.hasOwnProperty(key)) {
       const element = localBase[key]
@@ -119,38 +125,23 @@ export const changeColor = (id, value) => {
   $(id).value = value
 }
 
-
-
-
-// 鼠标坐标
-export const getMousePos = (event) => {
-  var e = event || window.event
-  return {'x': e.clientX, 'y': e.clientY}
-}
-
-// 鼠标滚轮
-export const mouseWheel = (id, downFn, upFn) => {
-  const obj = $(id)
-  obj.onmousewheel = fn
-  if (obj.addEventListener) {
-    obj.addEventListener('DOMMouseScroll', fn, false)
-  }
-  function fn(ev) {
-    var ev = ev || event
-    var b = true
+// 鼠标滚轮方向
+export const direction = (ev) => {
+  return new Promise((resolve, reject) => {
+    let direction = true
+    ev = ev || event
     if (ev.wheelDelta) {
-      b = ev.wheelDelta > 0 ? true : false
+      direction = ev.wheelDelta > 0 ? true : false
     } else {
-      b = ev.detail < 0 ? true : false
-    }
-    if(b) {
-      upFn && upFn()
-    } else {
-      downFn && downFn()
+      direction = ev.detail < 0 ? true : false
     }
     if (ev.preventDefault) {
       ev.preventDefault()
     }
-    return false
-  }
+    if (direction) {
+      resolve(direction)
+    } else {
+      reject(direction)
+    }
+  })
 }

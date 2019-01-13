@@ -45,7 +45,7 @@ export const getBase = () => {
     dz: 0
   }
   // 获取地址传参
-  let urlType = getUrlString('type')
+  const urlType = getUrlString('type')
   // 获取本地配置
   let localBase = getLocal('base')
   // 优先加载通过地址传参的地图
