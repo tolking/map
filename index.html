@@ -11,13 +11,13 @@
     <meta name="author" content="tolking">
     <meta name="description" content="a map for kedama/nyaa Minecraft sercer">
     <meta name="keywords" content="毛线, 毛线圈物语, MC, 下界交通图, 主世界交通图, 交通图, ououe, 雨无声, tolking, ououe.com, map.ououe.com">
-    <link as="style" href="./css/styles.min.css" rel="preload">
-    <link as="script" href="./js/hammer.min.js" rel="preload">
-    <link href="./js/index.js" rel="modulepreload">
-    <link href="./js/config.js" rel="modulepreload">
-    <link href="./js/draw.js" rel="modulepreload">
-    <link href="./js/public.js" rel="modulepreload">
-    <link href="./css/styles.min.css" rel="stylesheet">
+    <link rel="preload" as="style" href="./css/styles.min.css">
+    <link rel="preload" as="script" href="./js/hammer.min.js">
+    <link rel="modulepreload" href="./js/index.js">
+    <link rel="modulepreload" href="./js/config.js">
+    <link rel="modulepreload" href="./js/draw.js">
+    <link rel="modulepreload" href="./js/public.js">
+    <link rel="stylesheet" href="./css/styles.min.css">
     <script src="./js/hammer.min.js"></script>
   </head>
   <body>
@@ -52,6 +52,13 @@
           <input id="text" type="color" value="#001f3f">
           <span class="font-18 text">文字</span>
         </div>
+      </div>
+      <div class="point-tip">
+        <span class="font-12">点击坐标</span>
+        <span class="font-12">X: </span>
+        <span class="font-12 point-x"></span>
+        <span class="font-12">Z: </span>
+        <span class="font-12 point-z"></span>
       </div>
       <div class="version-data">
         <span class="font-12">更新时间</span>

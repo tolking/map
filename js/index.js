@@ -9,13 +9,14 @@ import {
   direction,
   configHtml,
   changeHtml,
+  changePointTip,
   setLocal
 } from './public.js'
 
 const $draw = new Draw
 const hammer = new Hammer($('#canvas'))
-let mapConfig
 let base = getBase() // 引入基础配置
+let mapConfig
 
 configHtml(mapList) // 初始地图下拉选择框
 $draw.getCtx($('#canvas')) // 初始 canvas
@@ -37,6 +38,7 @@ function londMap(item) {
 
 // 画图
 function drawCanvse() {
+  changePointTip() // 清除坐标提示
   $draw.recanvas() // 清空画布
   $draw.bg(base.white) // 绘制背景
   $draw.setScale(base.scale) // 设置缩放
@@ -64,15 +66,21 @@ hammer.on('pinchmove', ev => {
   $('canvas').style.transform = `scale3d(${ev.scale}, ${ev.scale}, 1)`
 })
 hammer.on('pinchend', ev => {
-  const cW = $('canvas').offsetWidth
-  const cH = $('canvas').offsetHeight
-
   $('canvas').style.transform = 'scale3d(1, 1, 1)'
   base.scale = base.scale * ev.scale
-  base.dx += (ev.center.x - cW / 2) * (1 - base.scale)
-  base.dz += (ev.center.y - cH / 2) * (1 - base.scale)
+  base.dx += (ev.center.x - base.cW / 2) * (1 - base.scale)
+  base.dz += (ev.center.y - base.cH / 2) * (1 - base.scale)
   $draw.moveCanvas(base.dx, base.dz)
   drawCanvse()
+})
+
+// 点击
+hammer.on('tap', ev => {
+  const point = {
+    x: ~~((ev.center.x - base.dx - base.cW / 2) / base.scale + mapConfig.center.x),
+    z: ~~((ev.center.y - base.dz - base.cH / 2) / base.scale + mapConfig.center.z)
+  }
+  changePointTip(point)
 })
 
  // 鼠标缩放
@@ -81,26 +89,11 @@ if ($('canvas').addEventListener) {
   $('canvas').addEventListener('DOMMouseScroll', mouseWheel, false)
 }
 function mouseWheel() {
-  direction().then(() => {
+  direction().then(direction => {
     const m = getMousePos()
-    const cW = $('canvas').offsetWidth
-    const cH = $('canvas').offsetHeight
-
-    base.scale = 0.9 * base.scale
-    base.dx += (m.x - cW / 2) * (1 - base.scale) - base.dx
-    base.dz += (m.y - cH / 2) * (1 - base.scale) - base.dz
-    $('canvas').style.transform = `scale3d(${base.scale}, ${base.scale}, 1)`
-    $draw.moveCanvas(base.dx, base.dz)
-    $('canvas').style.transform = `scale3d(1, 1, 1)`
-    drawCanvse()
-  }).catch(() => {
-    const m = getMousePos()
-    const cW = $('canvas').offsetWidth
-    const cH = $('canvas').offsetHeight
-
-    base.scale = 1.1 * base.scale
-    base.dx += (m.x - cW / 2) * (1 - base.scale) - base.dx
-    base.dz += (m.y - cH / 2) * (1 - base.scale) - base.dz
+    base.scale = base.scale * (direction ? 0.9 : 1.1)
+    base.dx += (m.x - base.cW / 2) * (1 - base.scale) - base.dx
+    base.dz += (m.y - base.cH / 2) * (1 - base.scale) - base.dz
     $('canvas').style.transform = `scale3d(${base.scale}, ${base.scale}, 1)`
     $draw.moveCanvas(base.dx, base.dz)
     $('canvas').style.transform = `scale3d(1, 1, 1)`

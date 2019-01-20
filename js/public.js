@@ -32,14 +32,14 @@ export const get = item => {
 }
 
 // 获取地址传参
-export const getUrlString = (name) => {
+export const getUrlString = name => {
   let reg = new RegExp('(^|&)'+ name +'=([^&]*)(&|$)')
   let r = window.location.search.substr(1).match(reg)
   return r !== null ? unescape(r[2]) : null
 }
 
 // 获取数据
-export const getLocal = (item) => {
+export const getLocal = item => {
   return JSON.parse(localStorage.getItem(item))
 }
 
@@ -120,14 +120,25 @@ export const changeHtml = (item, type) => {
   }
 }
 
+// 修改坐标提示信息
+export const changePointTip = item => {
+  if (item) {
+    $('.point-tip').style.display = 'block'
+    $('.point-x').innerText = item.x
+    $('.point-z').innerText = item.z
+  } else {
+    $('.point-tip').style.display = 'none'
+  }
+}
+
 // 修改input[color]颜色
 export const changeColor = (id, value) => {
   $(id).value = value
 }
 
 // 鼠标滚轮方向
-export const direction = (ev) => {
-  return new Promise((resolve, reject) => {
+export const direction = ev => {
+  return new Promise(resolve => {
     let direction = true
     ev = ev || event
     if (ev.wheelDelta) {
@@ -138,10 +149,6 @@ export const direction = (ev) => {
     if (ev.preventDefault) {
       ev.preventDefault()
     }
-    if (direction) {
-      resolve(direction)
-    } else {
-      reject(direction)
-    }
+    resolve(direction)
   })
 }
