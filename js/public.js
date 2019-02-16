@@ -58,7 +58,7 @@ export const getMousePos = event => {
 }
 
 // 储存数据
-export const setLocal = (item, base) => {
+export const setLocal = (item, base, version) => {
   let data
   if (item === 'base') {
     data = {
@@ -73,7 +73,7 @@ export const setLocal = (item, base) => {
   } else {
     data = {
       type: base.type,
-      version: base.config.version
+      version: version
     }
   }
   localStorage.setItem(item, JSON.stringify(data))

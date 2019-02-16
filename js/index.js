@@ -186,5 +186,5 @@ $('.text').onclick = () => {
 $('.tip-btn').onclick = () => {
   $('#canvas').className = null
   $('.tip').style.display = 'none'
-  setLocal(base.type, base)
+  setLocal(base.type, base, mapConfig.version)
 }
