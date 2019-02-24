@@ -21,11 +21,11 @@ export const mapList = [
   {
     name: '喵窝—下界交通地图',
     type: 'nyaaNether'
+  },
+  {
+    name: '喵窝—主世界通地图',
+    type: 'nyaaWorld'
   }
-  // {
-  //   name: '喵窝—主世界通地图',
-  //   type: 'nyaaWorld'
-  // }
 ];
 
 // 初始配置
