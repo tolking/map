@@ -5,6 +5,10 @@ const configList = [
     type: "kedamaV3Nether117"
   },
   {
+    name: '毛线V3—主世界交通地图',
+    type: 'kedamaV3World'
+  },
+  {
     name: "毛线V2—下界交通地图",
     type: "kedamaV2Nether115"
   },
@@ -19,11 +23,11 @@ const configList = [
   {
     name: "喵窝—下界交通地图",
     type: "nyaaNether"
+  },
+  {
+    name: "喵窝—主世界通地图",
+    type: "nyaaWorld"
   }
-  // {
-  //   name: "喵窝—主世界通地图",
-  //   type: "nyaaWorld"
-  // }
 ];
 // 初始配置
 let base = {

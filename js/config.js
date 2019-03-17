@@ -7,6 +7,10 @@ export const mapList = [
     type: 'kedamaV3Nether117'
   },
   {
+    name: '毛线V3—主世界交通地图',
+    type: 'kedamaV3World'
+  },
+  {
     name: '毛线V2—下界交通地图',
     type: 'kedamaV2Nether115'
   },
