@@ -91,7 +91,7 @@ if ($('canvas').addEventListener) {
 function mouseWheel() {
   direction().then(direction => {
     const m = getMousePos()
-    base.scale = base.scale * (direction ? 0.9 : 1.1)
+    base.scale = base.scale * (direction ? 1.1 : 0.9)
     base.dx += (m.x - base.cW / 2) * (1 - base.scale) - base.dx
     base.dz += (m.y - base.cH / 2) * (1 - base.scale) - base.dz
     $('canvas').style.transform = `scale3d(${base.scale}, ${base.scale}, 1)`

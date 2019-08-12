@@ -98,7 +98,7 @@ window.onload = () => {
     let cW = $("canvas").offsetWidth;
     let cH = $("canvas").offsetHeight;
     
-    base.scale = 0.9 * base.scale;
+    base.scale = 1.1 * base.scale;
     base.dx += (m.x - cW / 2) * (1 - base.scale) - base.dx;
     base.dz += (m.y - cH / 2) * (1 - base.scale) - base.dz;
     $("canvas").style.transform = `scale3d(${base.scale}, ${base.scale}, 1)`;
@@ -110,7 +110,7 @@ window.onload = () => {
     let cW = $("canvas").offsetWidth;
     let cH = $("canvas").offsetHeight;
 
-    base.scale = 1.1 * base.scale;
+    base.scale = 0.9 * base.scale;
     base.dx += (m.x - cW / 2) * (1 - base.scale) - base.dx;
     base.dz += (m.y - cH / 2) * (1 - base.scale) - base.dz;
     $("canvas").style.transform = `scale3d(${base.scale}, ${base.scale}, 1)`;

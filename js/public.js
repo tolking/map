@@ -14,18 +14,14 @@ export const isPhone = i => {
 // 获取json文件
 export const get = item => {
   var request = new XMLHttpRequest()
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     request.open('get', `../config/${item}.json`)
     request.send()
     request.onreadystatechange = () => {
-      if (request.readyState === 4) {
-        if (request.status === 200) {
-          resolve(JSON.parse(request.responseText))
-        } else {
-          console.error('configList -> type or url -> type error')
-          console.error(item)
-          reject(request.status)
-        }
+      if (request.readyState === 4 && request.status === 200) {
+        resolve(JSON.parse(request.responseText))
+      }else {
+        console.error('configList -> type or url -> type error', item)
       }
     }
   })
