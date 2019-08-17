@@ -18,10 +18,12 @@ export const get = item => {
     request.open('get', `../config/${item}.json`)
     request.send()
     request.onreadystatechange = () => {
-      if (request.readyState === 4 && request.status === 200) {
-        resolve(JSON.parse(request.responseText))
-      }else {
-        console.error('configList -> type or url -> type error', item)
+      if (request.readyState === 4) {
+        if (request.status === 200) {
+          resolve(JSON.parse(request.responseText))
+        } else {
+          console.error('configList -> type or url -> type error', item)
+        }
       }
     }
   })

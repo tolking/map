@@ -10,6 +10,7 @@ import {
   configHtml,
   changeHtml,
   changePointTip,
+  changeColor,
   setLocal
 } from './public.js'
 
