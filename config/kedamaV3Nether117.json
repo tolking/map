@@ -2,7 +2,7 @@
   "title": "毛线V3—下界交通地图",
   "author": "ououe",
   "version": 0.5,
-  "uptime": "2019-8-17",
+  "uptime": "2019-8-31",
   "introduce": "毛线V3下界交通地图，<a target='_blank' href='https://github.com/tolking/map'>点我去论坛看看详情</a>。<br>不建议直接在主干道上放置非冰方块，阻碍交通；不建议直接在通道内放置实体方块，影响飞行和划船。<br>交通你我他，文明靠大家。<br>如果你对收集数据感兴趣欢迎加入<br><a target='_blank' href='https://github.com/tolking/map'>点我去看看源码及数据结构</a>",
   "center": {"x": 0, "z": 0},
   "radius": 512,
@@ -297,6 +297,22 @@
       "points": [
         {"x": -272, "y": 117, "z": 75},
         {"x": -265, "y": 117, "z": 75}
+      ]
+    },
+    {
+      "name": "落叶村",
+      "type": "walk",
+      "points": [
+        {"x": 287, "y": 117, "z": -15},
+        {"x": 287, "y": 117, "z": -375}
+      ]
+    },
+    {
+      "name": "永远亭",
+      "type": "walk",
+      "points": [
+        {"x": -36, "y": 117, "z": 334},
+        {"x": -13, "y": 117, "z": 334}
       ]
     },
 
