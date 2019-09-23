@@ -74,7 +74,7 @@ export default class Draw {
         if (element.type) {
           let before = points[i - 1] 
           switch (element.type) {
-            case 't-l':
+            case 'n-w':
               this.ctx.quadraticCurveTo(
                 ((element.ex || (before.x > element.x ? element.x : before.x)) - this.center.x) * this.scale + this.dx,
                 ((element.ez || (before.z > element.z ? element.z : before.z)) - this.center.z) * this.scale + this.dz,
@@ -82,7 +82,7 @@ export default class Draw {
                 (element.z - this.center.z) * this.scale + this.dz
               )
               break
-            case 't-r':
+            case 'n-e':
               this.ctx.quadraticCurveTo(
                 ((element.ex || (before.x > element.x ? before.x : element.x)) - this.center.x) * this.scale + this.dx,
                 ((element.ez || (before.z > element.z ? element.z : before.z)) - this.center.z) * this.scale + this.dz,
@@ -90,7 +90,7 @@ export default class Draw {
                 (element.z - this.center.z) * this.scale + this.dz
               )
               break
-            case 'b-l':
+            case 's-w':
               this.ctx.quadraticCurveTo(
                 ((element.ex || (before.x > element.x ? element.x : before.x)) - this.center.x) * this.scale + this.dx,
                 ((element.ez || (before.z > element.z ? before.z : element.z)) - this.center.z) * this.scale + this.dz,
@@ -98,7 +98,7 @@ export default class Draw {
                 (element.z - this.center.z) * this.scale + this.dz
               )
               break
-            case "b-r":
+            case "s-e":
               this.ctx.quadraticCurveTo(
                 ((element.ex || (before.x > element.x ? before.x : element.x)) - this.center.x) * this.scale + this.dx,
                 ((element.ez || (before.z > element.z ? before.z : element.z)) - this.center.z) * this.scale + this.dz,
