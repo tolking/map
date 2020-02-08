@@ -1,30 +1,13 @@
 {
   "title": "喵窝—下界交通地图",
   "author": "ououe",
-  "version": 0.1,
-  "uptime": "2018-12-21",
-  "introduce": "测试版本。。。。。如果你对收集数据感兴趣欢迎加入<br><a target='_blank' href='https://github.com/tolking/map'>点我去看看源码及数据结构</a>",
+  "version": 0.2,
+  "uptime": "2020-2-8",
+  "introduce": "如果你对收集数据感兴趣欢迎加入<br><a target='_blank' href='https://github.com/tolking/map'>点我去看看源码</a>",
   "center": {"x": 0, "z": 0},
   "radius": 1920,
   "borderstyle": "circles",
   "data": [
-    {
-      "name": "",
-      "type": "rail",
-      "points": [
-        {"x": 0, "y": 7, "z": 310},
-        {"x": 0, "y": 7, "z": 957}
-      ]
-    },
-
-    {
-      "name": "",
-      "type": "walk",
-      "points": [
-        {"x": 565, "y": 7, "z": 46},
-        {"x": 565, "y": 14, "z": 33}
-      ]
-    },
     {
       "name": "",
       "type": "walk",
@@ -35,16 +18,16 @@
     },
 
     {
-      "name": "琥珀川北沼站",
+      "name": "北沼",
       "type": "ice",
       "notes": "北线",
       "namelist": [
         {
-          "name": "北城站",
+          "name": "北风城",
           "point": {"x": 0, "y": 7, "z": -290}
         },
         {
-          "name": "新北站",
+          "name": "新北市",
           "point": {"x": 0, "y": 7, "z": -427}
         }
       ],
@@ -56,21 +39,21 @@
       ]
     },
     {
-      "name": "极东站",
+      "name": "极东",
       "type": "ice",
       "notes": "东线",
       "namelist": [
         {
-          "name": "筑梦庄园站",
+          "name": "筑梦庄园",
           "point": {"x": 195, "y": 7, "z": 49}
         },
         {
-          "name": "东城站",
+          "name": "阿库亚斯",
           "point": {"x": 287, "y": 7, "z": 49}
         },
         {
-          "name": "永恒霜风站",
-          "point": {"x": 565, "y": 14, "z": 33}
+          "name": "永恒霜风",
+          "point": {"x": 565, "y": 14, "z": 49}
         }
       ],
       "points": [
@@ -80,12 +63,18 @@
       ]
     },
     {
-      "name": "南城站",
+      "name": "长方洲",
       "type": "ice",
       "notes": "南线",
+      "namelist": [
+        {
+          "name": "浪花町",
+          "point": {"x": 0, "y": 7, "z": 304}
+        }
+      ],
       "points": [
         {"x": 0, "y": 7, "z": 58},
-        {"x": 0, "y": 7, "z": 304}
+        {"x": 0, "y": 7, "z": 960}
       ]
     },
     {
@@ -102,11 +91,11 @@
       "notes": "西线",
       "namelist": [
         {
-          "name": "西城站",
+          "name": "柚木小镇",
           "point": {"x": -306, "y": 7, "z": 49}
         },
         {
-          "name": "红魔城站",
+          "name": "红魔城",
           "point": {"x": -478, "y": 7, "z": 49}
         }
       ],
@@ -118,11 +107,18 @@
       ]
     },
     {
-      "name": "月望谷站",
+      "name": "南沙港",
       "type": "ice",
+      "namelist": [
+        {
+          "name": "月望谷",
+          "point": {"x": -306, "y": 14, "z": 389}
+        }
+      ],
       "points": [
         {"x": -306, "y": 7, "z": 54},
-        {"x": -306, "y": 14, "z": 389}
+        {"x": -306, "y": 14, "z": 430},
+        {"x": -366, "y": 14, "z": 430}
       ]
     },
 
@@ -132,7 +128,7 @@
       "notes": "车站",
       "namelist": [
         {
-          "name": "樱华町中心站",
+          "name": "樱华町",
           "point": {"x": 0, "y": 7, "z": 50}
         }
       ],

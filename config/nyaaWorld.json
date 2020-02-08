@@ -1,9 +1,9 @@
 {
   "title": "喵窝—主世界交通地图",
   "author": "ououe",
-  "version": 0.1,
-  "uptime": "2019-12-21",
-  "introduce": "测试版本。。。。。如果你对收集数据感兴趣欢迎加入<br><a target='_blank' href='https://github.com/tolking/map'>点我去看看源码及数据结构</a>",
+  "version": 0.2,
+  "uptime": "2020-2-8",
+  "introduce": "如果你对收集数据感兴趣欢迎加入<br><a target='_blank' href='https://github.com/tolking/map'>点我去看看源码</a>",
   "center": {"x": 0, "z": 0},
   "radius": 15360,
   "borderstyle": "circles",
@@ -98,7 +98,7 @@
     },
 
     {
-      "name": "北城",
+      "name": "北风城",
       "type": "rail",
       "notes": "北线",
       "points": [
@@ -107,7 +107,7 @@
       ]
     },
     {
-      "name": "东城",
+      "name": "阿库亚斯",
       "type": "rail",
       "notes": "东线",
       "points": [
@@ -116,7 +116,7 @@
       ]
     },
     {
-      "name": "南城",
+      "name": "浪花町",
       "type": "rail",
       "notes": "南线",
       "points": [
@@ -125,7 +125,7 @@
       ]
     },
     {
-      "name": "西城",
+      "name": "柚木小镇",
       "type": "rail",
       "notes": "西线",
       "points": [
