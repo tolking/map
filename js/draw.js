@@ -66,7 +66,7 @@ export default class Draw {
       const element = points[i]
       if (i === 0) {
         this.ctx.moveTo(
-          (element.x - this.center.x) * this.scale + this.dx, 
+          (element.x - this.center.x) * this.scale + this.dx,
           (element.z - this.center.z) * this.scale + this.dz
         )
       } else {

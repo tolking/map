@@ -43,6 +43,7 @@ function drawCanvse() {
   $draw.recanvas() // 清空画布
   $draw.bg(base.white) // 绘制背景
   $draw.setScale(base.scale) // 设置缩放
+  $draw.moveCanvas(base.dx, base.dz)
   $draw.border(mapConfig.borderstyle, base.frame, base.white) // 绘制边界
   $draw.item(mapConfig.data, base) // 绘制地图
 }
@@ -54,7 +55,6 @@ hammer.on('panmove', ev => {
 hammer.on('panend', ev => {
   base.dx += ev.deltaX
   base.dz += ev.deltaY
-  $draw.moveCanvas(base.dx, base.dz)
   $('canvas').style.transform = `translate3d(0px, 0px, 0px)`
   drawCanvse()
 })
@@ -69,9 +69,8 @@ hammer.on('pinchmove', ev => {
 hammer.on('pinchend', ev => {
   $('canvas').style.transform = 'scale3d(1, 1, 1)'
   base.scale = base.scale * ev.scale
-  base.dx += (ev.center.x - base.cW / 2) * (1 - base.scale)
-  base.dz += (ev.center.y - base.cH / 2) * (1 - base.scale)
-  $draw.moveCanvas(base.dx, base.dz)
+  base.dx += (ev.center.x - base.cW / 2 - base.dx) * (1 - ev.scale)
+  base.dz += (ev.center.y - base.cH / 2 - base.dz) * (1 - ev.scale)
   drawCanvse()
 })
 
@@ -93,11 +92,8 @@ function mouseWheel() {
   direction().then(direction => {
     const m = getMousePos()
     base.scale = base.scale * (direction ? 1.1 : 0.9)
-    base.dx += (m.x - base.cW / 2) * (1 - base.scale) - base.dx
-    base.dz += (m.y - base.cH / 2) * (1 - base.scale) - base.dz
-    $('canvas').style.transform = `scale3d(${base.scale}, ${base.scale}, 1)`
-    $draw.moveCanvas(base.dx, base.dz)
-    $('canvas').style.transform = `scale3d(1, 1, 1)`
+    base.dx += (m.x - base.cW / 2 - base.dx) * (direction ? -0.1 : 0.1)
+    base.dz += (m.y - base.cH / 2 - base.dz) * (direction ? -0.1 : 0.1)
     drawCanvse()
   })
 }
