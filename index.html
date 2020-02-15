@@ -22,8 +22,18 @@
   </head>
   <body>
     <div id="app">
-      <div class="flex-cc title">
-        <p class="font-30 title-text"></p>
+      <div class="title">
+        <div class="flex-cc map-title">
+          <p class="font-30 title-text"></p>
+        </div>
+        <div class="flex-cc btn-search">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 13">
+            <g stroke-width="2" stroke="#111" fill="none">
+              <path d="M11.29 11.71l-4-4"/>
+              <circle cx="5" cy="5" r="4"/>
+            </g>
+          </svg>
+        </div>
         <select class="select-data font-14"></select>
       </div>
       <canvas id="canvas">canvas都不支持，还用这浏览器干嘛</canvas>
@@ -54,11 +64,14 @@
         </div>
       </div>
       <div class="point-tip">
-        <span class="font-12">点击坐标</span>
-        <span class="font-12">X: </span>
-        <span class="font-12 point-x"></span>
-        <span class="font-12">Z: </span>
-        <span class="font-12 point-z"></span>
+        <p class="point-text">
+          <span class="font-14">X: </span>
+          <span class="font-14 point-x"></span>
+        </p>
+        <p class="point-text">
+          <span class="font-14">Z: </span>
+          <span class="font-14 point-z"></span>
+        </p>
       </div>
       <div class="version-data">
         <span class="font-12">更新时间</span>
@@ -70,6 +83,16 @@
         <div class="flex-ccc tip-content">
           <div class="font-24 tip-text"></div>
           <div class="tip-btn">了解</div>
+        </div>
+      </div>
+      <div class="flex-cc search-box">
+        <div class="flex-ccc search-content">
+          <div class="btn-close font-24">X</div>
+          <div class="search-input">
+            <input class="search-value font-14" type="text" placeholder="请输入搜索内容">
+            <button class="search font-14">搜索</button>
+          </div>
+          <div class="search-list"></div>
         </div>
       </div>
     </div>

@@ -1,4 +1,3 @@
-
 // 封装选择器（jquery风味）
 export const $ = item => {
   return document.querySelector(item)
@@ -109,21 +108,37 @@ export const changeHtml = (item, type) => {
   let old = getLocal(type) || 0
   let oldVersion = old.version || 0
 
-  $('#canvas').className = null
   $('.tip').style.display = 'none'
   if (item.version && (oldVersion === null || oldVersion < item.version)) {
     $('.tip-text').innerHTML = item.introduce
     $('.tip').style.display = 'flex'
-    $('#canvas').className = 'canvas-mask'
   }
 }
 
 // 修改坐标提示信息
 export const changePointTip = item => {
   if (item) {
-    $('.point-tip').style.display = 'block'
+    $('.point-tip').style.top = item.center.y + 'px'
+    $('.point-tip').style.left = item.center.x + 'px'
+    $('.point-tip').style.borderRadius = '0 1.2rem 1.2rem 1.2rem'
     $('.point-x').innerText = item.x
     $('.point-z').innerText = item.z
+    $('.point-tip').style.display = 'block'
+
+    const w = $('.point-tip').offsetWidth
+    const h = $('.point-tip').offsetHeight
+
+    if ($('canvas').offsetWidth - item.center.x < w) {
+      $('.point-tip').style.left = item.center.x - w + 'px'
+      $('.point-tip').style.borderRadius = '1.2rem 0 1.2rem 1.2rem'
+    }
+    if ($('canvas').offsetHeight - item.center.y < h) {
+      $('.point-tip').style.top = item.center.y - h + 'px'
+      $('.point-tip').style.borderRadius = '1.2rem 1.2rem 1.2rem 0'
+    }
+    if ($('canvas').offsetWidth - item.center.x < w && $('canvas').offsetHeight - item.center.y < h) {
+      $('.point-tip').style.borderRadius = '1.2rem 1.2rem 0 1.2rem'
+    }
   } else {
     $('.point-tip').style.display = 'none'
   }

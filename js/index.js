@@ -28,6 +28,8 @@ londMap(base.type) // 加载默认地图数据
 function londMap(item) {
   get(item).then(res => {
     mapConfig = res
+    base.dx = 0
+    base.dz = 0
     base.scale = getSize(mapConfig.radius) // 初始地图缩放大小数据
     changeHtml(mapConfig, base.type) // 修改网页中的地图信息数据
     $draw.setScale(base.scale) // 初始 canvas 缩放
@@ -39,7 +41,6 @@ function londMap(item) {
 
 // 画图
 function drawCanvse() {
-  changePointTip() // 清除坐标提示
   $draw.recanvas() // 清空画布
   $draw.bg(base.white) // 绘制背景
   $draw.setScale(base.scale) // 设置缩放
@@ -50,6 +51,7 @@ function drawCanvse() {
 
 // 手机移动  通过 transform 优化拖动性能
 hammer.on('panmove', ev => {
+  changePointTip()
   $('canvas').style.transform = `translate3d(${ev.deltaX}px, ${ev.deltaY}px, 0px)`
 })
 hammer.on('panend', ev => {
@@ -64,6 +66,7 @@ hammer.get('pinch').set({
   enable: true
 })
 hammer.on('pinchmove', ev => {
+  changePointTip()
   $('canvas').style.transform = `scale3d(${ev.scale}, ${ev.scale}, 1)`
 })
 hammer.on('pinchend', ev => {
@@ -78,7 +81,8 @@ hammer.on('pinchend', ev => {
 hammer.on('tap', ev => {
   const point = {
     x: ~~((ev.center.x - base.dx - base.cW / 2) / base.scale + mapConfig.center.x),
-    z: ~~((ev.center.y - base.dz - base.cH / 2) / base.scale + mapConfig.center.z)
+    z: ~~((ev.center.y - base.dz - base.cH / 2) / base.scale + mapConfig.center.z),
+    center: ev.center
   }
   changePointTip(point)
 })
@@ -90,6 +94,7 @@ if ($('canvas').addEventListener) {
 }
 function mouseWheel() {
   direction().then(direction => {
+    changePointTip()
     const m = getMousePos()
     base.scale = base.scale * (direction ? 1.1 : 0.9)
     base.dx += (m.x - base.cW / 2 - base.dx) * (direction ? -0.1 : 0.1)
@@ -181,7 +186,48 @@ $('.text').onclick = () => {
 }
 // 关闭弹窗
 $('.tip-btn').onclick = () => {
-  $('#canvas').className = null
   $('.tip').style.display = 'none'
   setLocal(base.type, base, mapConfig.version)
+}
+
+// 搜索
+$('.btn-search').onclick = () => {
+  $('.search-box').style.display = 'flex'
+}
+$('.search').onclick = () => {
+  const value = $('.search-value').value
+  if (value) {
+    const nameList = $draw.getNameList()
+    const searchList = nameList.filter(item => item.name.includes(value.trim()))
+
+    if (searchList.length) {
+      let html = ''
+      for (let i = 0; i < searchList.length; i++) {
+        const item = searchList[i]
+        html += `<p class="list-item font-14" data-x="${item.point.x}" data-z="${item.point.z}">${item.name}</p>`
+      }
+      $('.search-box .search-list').innerHTML = html
+    } else {
+      $('.search-box .search-list').innerHTML = '<p class="list-item font-14">无相关数据</p>'
+    }
+    $('.search-box .search-list').style.display = 'block'
+  }
+}
+$('.search-list').onclick = (e) => {
+  if (e.target.nodeName === 'P') {
+    const x = e.target.dataset.x
+    const z = e.target.dataset.z
+
+    if (x !== undefined && z !== undefined) {
+      base.dx = -(x - mapConfig.center.x) * base.scale
+      base.dz = -(z - mapConfig.center.z) * base.scale
+      $('.search-box').style.display = 'none'
+      $('.search-box .search-list').style.display = 'none'
+      drawCanvse()
+    }
+  }
+}
+$('.btn-close').onclick = () => {
+  $('.search-box').style.display = 'none'
+  $('.search-box .search-list').style.display = 'none'
 }

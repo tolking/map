@@ -10,10 +10,15 @@ export default class Draw {
     this.width = 2 // 画笔宽度
     this.dx = 0 // 移动 x
     this.dz = 0 // 移动 y
+    this.namelist = [] // 储存名称列表
+    this.isFirst = true // 记录是否是第一次绘制
   }
   getCtx(dom) {
     this.canvas = dom
     this.ctx = canvas.getContext('2d')
+  }
+  getNameList() {
+    return this.namelist
   }
   setCanvas(base, width) {
     this.base = base
@@ -30,6 +35,8 @@ export default class Draw {
   }
   moveCenter(center) {
     this.center = center
+    this.namelist = []
+    this.isFirst = true
   }
   moveCanvas(dx, dz) {
     this.dx = dx * this.base
@@ -134,7 +141,7 @@ export default class Draw {
   text(color, point, text) {
     this.ctx.beginPath()
     this.ctx.fillStyle = color
-    this.ctx.font = `bold ${10 * this.base}px Arial`
+    this.ctx.font = `bold ${14 * this.base}px Arial`
     this.ctx.textBaseline = "middle"
     this.ctx.textAlign = "center"
     this.ctx.fillText(
@@ -198,7 +205,16 @@ export default class Draw {
     this.ctx.restore()
   }
   item(item, base) {
-    item.forEach(element => {
+    for (let i = 0; i < item.length; i++) {
+      const element = item[i]
+      if (this.isFirst) {
+        if (element.name) {
+          this.namelist.push({ name: element.name, point: element.points[element.points.length - 1] })
+        }
+        if (element.namelist) {
+          this.namelist = this.namelist.concat(element.namelist) 
+        }
+      }
       this.ctx.save()
       switch (element.type) {
         case "ice":
@@ -222,15 +238,13 @@ export default class Draw {
           break
       }
       this.ctx.restore()
-    })
+    }
     // 防止文字被覆盖
-    item.forEach(element => {
+    for (let i = 0; i < this.namelist.length; i++) {
       this.ctx.save()
-      element.name && this.text(base.text, element.points[element.points.length - 1], element.name)
-      element.namelist && element.namelist.forEach(list => {
-        this.text(base.text, list.point, list.name)
-      })
+      this.text(base.text, this.namelist[i].point, this.namelist[i].name)
       this.ctx.restore()
-    })
+    }
+    this.isFirst = false
   }
 }

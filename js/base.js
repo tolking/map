@@ -87,8 +87,8 @@ window.onload = () => {
 
     $("canvas").style.transform = "scale3d(1, 1, 1)";
     base.scale = base.scale * ev.scale;
-    base.dx += (ev.center.x - cW / 2) * (1 - base.scale);
-    base.dz += (ev.center.y - cH / 2) * (1 - base.scale);
+    base.dx += (ev.center.x - cW / 2 - base.dx) * (1 - ev.scale);
+    base.dz += (ev.center.y - cH / 2 - base.dz) * (1 - ev.scale);
     $draw.moveCanvas(base.dx, base.dz);
     drawCanvse();
   });
@@ -99,8 +99,8 @@ window.onload = () => {
     let cH = $("canvas").offsetHeight;
     
     base.scale = 1.1 * base.scale;
-    base.dx += (m.x - cW / 2) * (1 - base.scale) - base.dx;
-    base.dz += (m.y - cH / 2) * (1 - base.scale) - base.dz;
+    base.dx += (m.x - cW / 2 - base.dx) * -0.1;
+    base.dz += (m.y - cH / 2 - base.dz) * -0.1;
     $("canvas").style.transform = `scale3d(${base.scale}, ${base.scale}, 1)`;
     $draw.moveCanvas(base.dx, base.dz);
     drawCanvse();
@@ -111,8 +111,8 @@ window.onload = () => {
     let cH = $("canvas").offsetHeight;
 
     base.scale = 0.9 * base.scale;
-    base.dx += (m.x - cW / 2) * (1 - base.scale) - base.dx;
-    base.dz += (m.y - cH / 2) * (1 - base.scale) - base.dz;
+    base.dx += (m.x - cW / 2 - base.dx) * 0.1;
+    base.dz += (m.y - cH / 2 - base.dz) * 0.1;
     $("canvas").style.transform = `scale3d(${base.scale}, ${base.scale}, 1)`;
     $draw.moveCanvas(base.dx, base.dz);
     drawCanvse();
