@@ -195,10 +195,11 @@ $('.btn-search').onclick = () => {
   $('.search-box').style.display = 'flex'
 }
 $('.search').onclick = () => {
-  const value = $('.search-value').value
+  $('.search-box .search-list').innerHTML = ''
+  const value = $('.search-value').value.toLocaleLowerCase()
   if (value) {
     const nameList = $draw.getNameList()
-    const searchList = nameList.filter(item => item.name.includes(value.trim()))
+    const searchList = nameList.filter(item => item.name.toLocaleLowerCase().includes(value.trim()))
 
     if (searchList.length) {
       let html = ''
@@ -224,6 +225,7 @@ $('.search-list').onclick = (e) => {
       $('.search-box').style.display = 'none'
       $('.search-box .search-list').style.display = 'none'
       drawCanvse()
+      changePointTip({ x, z, center: { x: base.cW / 2, y: base.cH / 2}})
     }
   }
 }
