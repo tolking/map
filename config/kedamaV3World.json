@@ -2,7 +2,7 @@
   "title": "毛线V3—主世界交通地图",
   "author": "ououe",
   "version": 0.1,
-  "uptime": "2020-3-7",
+  "uptime": "2020-7-26",
   "introduce": "如果你对收集数据感兴趣欢迎加入<br><a target='_blank' href='https://github.com/tolking/map'>点我去看看源码及数据结构</a>",
   "center": {"x": 0, "z": 0},
   "radius": 6144,
