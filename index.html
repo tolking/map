@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh_CN">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -11,124 +11,12 @@
     <meta name="author" content="tolking">
     <meta name="description" content="a map for kedama/nyaa Minecraft sercer">
     <meta name="keywords" content="毛线, 毛线圈物语, MC, 下界交通图, 主世界交通图, 交通图, ououe, 雨无声, tolking, ououe.com, map.ououe.com">
-    <link rel="preload" as="style" href="./css/styles.min.css">
-    <link rel="preload" as="script" href="./js/hammer.min.js">
-    <link rel="modulepreload" href="./js/index.js">
-    <link rel="modulepreload" href="./js/config.js">
-    <link rel="modulepreload" href="./js/draw.js">
-    <link rel="modulepreload" href="./js/public.js">
-    <link rel="stylesheet" href="./css/styles.min.css">
-    <script src="./js/hammer.min.js"></script>
   </head>
   <body>
-    <div id="app">
-      <div class="title">
-        <div class="flex-cc map-title">
-          <p class="font-30 title-text"></p>
-        </div>
-        <div class="flex-cc btn-search">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 13">
-            <g stroke-width="2" stroke="#111" fill="none">
-              <path d="M11.29 11.71l-4-4"/>
-              <circle cx="5" cy="5" r="4"/>
-            </g>
-          </svg>
-        </div>
-        <select class="select-data font-14"></select>
-      </div>
-      <canvas id="canvas">canvas都不支持，还用这浏览器干嘛</canvas>
-      <div class="input-color">
-        <div class="flex-cc color-item">
-          <input id="ice" type="color" value="#7FDBFF">
-          <span class="font-18 ice">冰道</span>
-        </div>
-        <div class="flex-cc color-item">
-          <input id="rail" type="color" value="#FFDC00">
-          <span class="font-18 rail">铁路</span>
-        </div>
-        <div class="flex-cc color-item">
-          <input id="walk" type="color" value="#85144b">
-          <span class="font-18 walk">步道</span>
-        </div>
-        <div class="flex-cc color-item">
-          <input id="green" type="color" value="#2ECC40">
-          <span class="font-18 green">通顶</span>
-        </div>
-        <div class="flex-cc color-item">
-          <input id="frame" type="color" value="#AAAAAA">
-          <span class="font-18 frame">边框</span>
-        </div>
-        <div class="flex-cc color-item">
-          <input id="text" type="color" value="#001f3f">
-          <span class="font-18 text">文字</span>
-        </div>
-      </div>
-      <div class="point-tip">
-        <p class="point-text">
-          <span class="font-14">X: </span>
-          <span class="font-14 point-x"></span>
-        </p>
-        <p class="point-text">
-          <span class="font-14">Z: </span>
-          <span class="font-14 point-z"></span>
-        </p>
-      </div>
-      <div class="version-data">
-        <span class="font-12">更新时间</span>
-        <span class="font-12 uptime"></span>
-        <span class="font-12">数据维护</span>
-        <span class="font-12 author"></span>
-      </div>
-      <div class="flex-cc tip">
-        <div class="flex-ccc tip-content">
-          <div class="font-24 tip-text"></div>
-          <div class="tip-btn">了解</div>
-        </div>
-      </div>
-      <div class="flex-cc search-box">
-        <div class="flex-ccc search-content">
-          <div class="btn-close font-24">X</div>
-          <div class="search-input">
-            <input class="search-value font-14" type="text" placeholder="请输入搜索内容">
-            <button class="search font-14">搜索</button>
-          </div>
-          <div class="search-list"></div>
-        </div>
-      </div>
-    </div>
+    <div id="app"></div>
     <noscript>
       <strong>貌似不支持js或者您屏蔽了js，请查看设置，或者换个浏览器试试！</strong>
     </noscript>
-    <script src="./js/index.js" type="module"></script>
-    <script>
-      (function() {
-        var check = document.createElement('script')
-        if (!('noModule' in check) && 'onbeforeload' in check) {
-          var support = false
-          document.addEventListener('beforeload', function(e) {
-            if (e.target === check) {
-              support = true
-            } else if (!e.target.hasAttribute('nomodule') || !support) {
-              return
-            }
-            e.preventDefault()
-          }, true)
-          check.type = 'module'
-          check.src = '.'
-          document.head.appendChild(check)
-          check.remove()
-        }
-      }())
-    </script>
-    <script src="./js/base.js" nomodule></script>
-    <script>
-      var _Sys = {}, _s, _ua = navigator.userAgent.toLowerCase();
-      (_s = _ua.match(/rv:([\d.]+)\) like gecko/)) ? _Sys.ie = _s[1] : (_s = _ua.match(/msie ([\d.]+)/)) ? _Sys.ie = _s[1] : (_s = _ua.match(/firefox\/([\d.]+)/)) ? _Sys.firefox = _s[1] : (_s = _ua.match(/chrome\/([\d.]+)/)) ? _Sys.chrome = _s[1] : (_s = _ua.match(/opera.([\d.]+)/)) ? _Sys.opera = _s[1] : (_s = _ua.match(/version\/([\d.]+).*safari/)) ? _Sys.safari = _s[1] : 0
-      if (_Sys.ie) console.log('IE: ' + _Sys.ie)
-      if (_Sys.firefox) console.log('Firefox: ' + _Sys.firefox)
-      if (_Sys.chrome) console.log('Chrome: ' + _Sys.chrome)
-      if (_Sys.opera) console.log('Opera: ' + _Sys.opera)
-      if (_Sys.safari) console.log('Safari: ' + _Sys.safari)
-    </script>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

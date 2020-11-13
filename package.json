@@ -1,0 +1,19 @@
+{
+  "name": "map",
+  "version": "1.0.0",
+  "home": "https://github.com/tolking/map",
+  "repository": "https://github.com/tolking/map",
+  "author": "tolking <qw13131wang@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "vue": "^3.0.2"
+  },
+  "devDependencies": {
+    "@vue/compiler-sfc": "^3.0.2",
+    "vite": "^1.0.0-rc.9"
+  }
+}
