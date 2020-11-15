@@ -82,7 +82,7 @@ export default {
       emit('nameList', nameList.value)
     })
 
-    function setPath(points) {
+    function setPath(points) { //TODO: 处理 center
       const list = toRaw(points)
       let path = ''
 
