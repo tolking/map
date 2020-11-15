@@ -5,19 +5,19 @@
         v-if="borderstyle === 'square'"
         :width="radius * 2"
         :height="radius * 2"
-        class="path frame"
+        class="path border"
       />
       <circle
         v-else-if="borderstyle === 'circles'"
         :cx="radius"
         :cy="radius"
         :r="radius"
-        class="path frame"
+        class="path border"
       />
       <path
         v-else-if="Array.isArray(borderstyle)"
         :d="setPath(borderstyle)"
-        class="path frame"
+        class="path border"
       />
     </g>
     <g>
@@ -134,8 +134,9 @@ export default {
 .svg {
   width: 100%;
   height: 100%;
+  transform-origin: center center;
 }
-.svg .frame {
+.svg .border {
   stroke-dasharray: 20, 20;
 }
 .svg .path {
