@@ -43,7 +43,9 @@ export default {
     })
 
     onMounted(() => {
-      const square = document.getElementById('app');
+      const square = document.getElementById('app')
+      const screeWidth = square.offsetWidth
+      const screeHeight = square.offsetHeight
       const hammer = new Manager(square)
       const pan = new Pan()
       const pinch = new Pinch()
@@ -52,23 +54,23 @@ export default {
       hammer.add([pan, pinch, tap])
       hammer.get('pinch').set({ enable: true })
       hammer.on('panmove', ({ deltaX, deltaY }) => {
-        style.value.transform = `translate3d(${x.value + deltaX}px, ${y.value + deltaY}px, 0px)`
+        setTransform(x.value + deltaX, y.value + deltaY, s.value)
       })
       hammer.on('panend', ({ deltaX, deltaY }) => {
         x.value += deltaX
         y.value += deltaY
       })
-      hammer.on('pinchmove', ({ scale }) => {
-        console.log(scale);
-
-        style.value.transform = `scale3d(${s.value * scale}, ${s.value * scale}, 1)`
+      hammer.on('pinchmove', ({ scale, center }) => {
+        setTransform(
+          x.value + (center.x - screeWidth / 2 - x.value) * (1 - scale),
+          y.value + (center.y - screeHeight / 2 - y.value) * (1 - scale),
+          s.value * scale
+        )
       })
       hammer.on('pinchend', ({ scale, center }) => {
-        console.log(center);
-        
         s.value *= scale
-        x.value += (center.x - x.value) * (1 - scale) //TODO: 验证结果
-        y.value += (center.y - y.value) * (1 - scale)
+        x.value += (center.x - screeWidth / 2 - x.value) * (1 - scale)
+        y.value += (center.y - screeHeight / 2 - y.value) * (1 - scale)
       })
       // hammer.on('tap', ev => {
         // console.log(ev);
@@ -78,17 +80,21 @@ export default {
       if (square.addEventListener) {
         square.addEventListener('DOMMouseScroll', mouseWheel, false)
       }
+
+      function mouseWheel(e) {
+        direction(e).then(direction => {
+          const m = getMousePos()
+          s.value *= (direction ? 1.1 : 0.9)
+          x.value += (m.x - screeWidth / 2 - x.value) * (direction ? -0.1 : 0.1)
+          y.value += (m.y - screeHeight / 2 - y.value) * (direction ? -0.1 : 0.1)
+          setTransform(x.value, y.value, s.value)
+        })
+      }
     })
 
-    function mouseWheel(e) {
-      direction(e).then(direction => {
-        const m = getMousePos()
-        s.value *= (direction ? 1.1 : 0.9)
-        x.value += (m.x - x.value) * (direction ? -0.1 : 0.1) // TODO: 重新计算位置
-        y.value += (m.y - y.value) * (direction ? -0.1 : 0.1)
-        style.value.transform = `translate3d(${x.value}px, ${y.value}px, 0px) scale3d(${s.value}, ${s.value}, 1)`
-      })
-    }
+    function setTransform(x: number, y: number, s: number) {
+      style.value.transform = `translate3d(${x}px, ${y}px, 0px) scale3d(${s}, ${s}, 1)`
+    } 
 
     function setNameList(value: MapNameItem[]) {
       nameList.value = value
