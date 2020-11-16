@@ -11,6 +11,16 @@ export function getMousePos(event) {
   return { x: e.clientX, y: e.clientY }
 }
 
+/**
+ * 获取地址传参
+ * @param key 
+ */
+export function getUrlString (key: string) {
+  const reg = new RegExp('(^|&)'+ key +'=([^&]*)(&|$)')
+  const r = window.location.search.substr(1).match(reg)
+  return r !== null ? unescape(r[2]) : null
+}
+
 /** 鼠标滚轮方向 */
 export function direction(ev) {
   return new Promise(resolve => {

@@ -29,16 +29,24 @@ export default {
   setup () {
     const type = ref('')
     const path = computed(() => `/config/${type.value}.json`)
-    const mapData = ref({})
+    const mapData = ref<MapData>({})
     const nameList = ref<MapNameItem[]>([])
     const x = ref(0)
     const y = ref(0)
     const s = ref(1)
-    const style = ref({
-      transform: ''
-    })
+    const leastWidth = ref(0)
+    const transform = ref('')
+    const style = computed(() => ({
+      '--size-stroke': mapData.value.radius / leastWidth.value / s.value,
+      transform: transform.value
+    }))
+
 
     watch(type, async () => {
+      x.value = 0
+      y.value = 0
+      s.value = 1
+      transform.value = ''
       mapData.value = await get<MapData>(path.value)
     })
 
@@ -50,6 +58,9 @@ export default {
       const pan = new Pan()
       const pinch = new Pinch()
       const tap = new Tap()
+
+      leastWidth.value =
+        window.matchMedia('(orientation: portrait)').matches ? screeWidth : screeHeight
 
       hammer.add([pan, pinch, tap])
       hammer.get('pinch').set({ enable: true })
@@ -82,7 +93,7 @@ export default {
       }
 
       function mouseWheel(e) {
-        direction(e).then(direction => {
+        direction(e).then(direction => { //TODO: 处理节流
           const m = getMousePos()
           s.value *= (direction ? 1.1 : 0.9)
           x.value += (m.x - screeWidth / 2 - x.value) * (direction ? -0.1 : 0.1)
@@ -93,7 +104,7 @@ export default {
     })
 
     function setTransform(x: number, y: number, s: number) {
-      style.value.transform = `translate3d(${x}px, ${y}px, 0px) scale3d(${s}, ${s}, 1)`
+      transform.value = `translate3d(${x}px, ${y}px, 0px) scale3d(${s}, ${s}, 1)`
     } 
 
     function setNameList(value: MapNameItem[]) {

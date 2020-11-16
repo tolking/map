@@ -13,6 +13,7 @@
 <script>
 import { reactive, ref, toRefs } from 'vue'
 import { mapList } from './../config.ts'
+import { getUrlString } from './../utils/index.ts'
 
 export default {
   name: 'SelectSource',
@@ -24,7 +25,9 @@ export default {
     const data = reactive(mapList)
 
     if (data.length) {
-      emit('update:modelValue', data[0].type)
+      const urlType = getUrlString('type')
+
+      emit('update:modelValue', urlType || data[0].type) //TODO: 本地储存参数
     }
 
     function selectItem(e) {
