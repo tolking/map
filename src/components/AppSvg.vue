@@ -31,10 +31,10 @@
     </g>
     <g>
       <text
-        v-for="item in nameList"
-        :key="item.name"
-        :x="item.point.x + radius"
-        :y="item.point.z + radius"
+        v-for="(item, index) in nameList"
+        :key="index"
+        :x="item.point.x + radius - center.x"
+        :y="item.point.z + radius - center.z"
         class="text"
       >
         {{ item.name }}
@@ -56,6 +56,7 @@ export default {
     const { data } = toRefs<{ data: MapData }>(props)
     const borderstyle = computed(() => data.value.borderstyle || false)
     const radius = computed(() => data.value.radius || 0)
+    const center = computed(() => data.value.center || { x: 0, z: 0 })
     const viewBox = computed(() => `0 0 ${radius.value * 2} ${radius.value * 2}`)
     const dataList = computed(() => data.value.data || [])
     const nameList = computed(() => {
@@ -82,23 +83,23 @@ export default {
       emit('nameList', nameList.value)
     })
 
-    function setPath(points) { //TODO: 处理 center
+    function setPath(points) {
       const list = toRaw(points)
       let path = ''
 
       for (let i = 0; i < list.length; i++) {
         const item = list[i];
-        const x = item.x + radius.value
-        const z = item.z + radius.value
+        const x = item.x + radius.value - center.value.x
+        const z = item.z + radius.value - center.value.z
 
         if (i === 0) {
           path += `M${x} ${z} `
         } else if (item.type) {
           const before = points[i - 1]
-          const bx = before.x + radius.value
-          const bz = before.z + radius.value
-          const ex = (item.ex || 0) + radius.value
-          const ez = (item.ez || 0) + radius.value
+          const bx = before.x + radius.value - center.value.x
+          const bz = before.z + radius.value - center.value.z
+          const ex = (item.ex || 0) + radius.value - center.value.x
+          const ez = (item.ez || 0) + radius.value - center.value.z
 
           if (item.type === 'n-w') {
             path += `Q${x > bx ? bx : x} ${z > bz ? bz: z} ${x} ${z} `
@@ -121,6 +122,7 @@ export default {
     return {
       borderstyle,
       radius,
+      center,
       viewBox,
       dataList,
       nameList,
@@ -132,19 +134,25 @@ export default {
 
 <style>
 .svg {
-  width: 100%;
-  height: 100%;
+  width: 90%;
+  height: 90%;
+  overflow: visible;
   transform-origin: center center;
 }
 .svg .border {
-  stroke-dasharray: 20, 20;
+  stroke-dasharray: calc(var(--size-stroke) * 20), calc(var(--size-stroke) * 20);
 }
 .svg .path {
   fill: transparent;
-  stroke-width: 4;
   stroke: #333;
+  stroke-width: max(calc(var(--size-stroke) * 3), 1);
+  stroke-linecap: round;
+}
+.svg .path.ice {
+  stroke-width: max(calc(var(--size-stroke) * 3), 1.5);
 }
 .svg .text {
+  font-size: max(calc(var(--size-stroke) * 28px), 16px);
   stroke-width: 0;
   text-anchor: middle;
   dominant-baseline: middle;
