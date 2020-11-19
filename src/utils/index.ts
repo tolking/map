@@ -1,7 +1,6 @@
 /** 获取json文件 */
 export async function get<T>(url: string): Promise<T> {
   const res = await fetch(url)
-
   return res.json()
 }
 
@@ -13,7 +12,7 @@ export function getMousePos(event) {
 
 /**
  * 获取地址传参
- * @param key 
+ * @param key 键值
  */
 export function getUrlString (key: string) {
   const reg = new RegExp('(^|&)'+ key +'=([^&]*)(&|$)')
@@ -22,13 +21,14 @@ export function getUrlString (key: string) {
 }
 
 /** 鼠标滚轮方向 */
-export function direction(ev) {
-  return new Promise(resolve => {
+export function direction(event) {
+  return new Promise<boolean>(resolve => {
+    const ev = event || window.event
     let direction = true
     if (ev.wheelDelta) {
-      direction = ev.wheelDelta > 0 ? true : false
+      direction = ev.wheelDelta > 0
     } else {
-      direction = ev.detail < 0 ? true : false
+      direction = ev.detail < 0
     }
     if (ev.preventDefault) {
       ev.preventDefault()
