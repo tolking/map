@@ -3,7 +3,13 @@ interface MapItem {
   type: string
 }
 
-/** 统计地图目录配置 */ 
+interface ColorItem {
+  key: string
+  value: string
+  name: string
+}
+
+/** 统计地图目录配置 */
 export const mapList: MapItem[] = [
   {
     name: '毛线V3—下界交通地图',
@@ -32,5 +38,34 @@ export const mapList: MapItem[] = [
   {
     name: '喵窝—主世界通地图',
     type: 'nyaaWorld'
+  }
+]
+
+/** 颜色配置 */
+export const colorList: ColorItem[] = [
+  {
+    key: '--color-ice',
+    value: '#7FDBFF',
+    name: '冰道'
+  },
+  {
+    key: '--color-rail',
+    value: '#FFDC00',
+    name: '铁路'
+  },
+  {
+    key: '--color-walk',
+    value: '#85144b',
+    name: '步道'
+  },
+  {
+    key: '--color-green',
+    value: '#2ECC40',
+    name: '通顶'
+  },
+  {
+    key: '--color-frame',
+    value: '#AAAAAA',
+    name: '边框'
   }
 ]

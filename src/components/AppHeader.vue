@@ -7,7 +7,7 @@
   </header>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: 'AppHeader',
   props: {
@@ -22,6 +22,8 @@ export default {
   top: 0;
   left: 0;
   z-index: 10;
+  font-size: 26px;
+  color: var(--color-text);
 }
 .header .fun-content {
   position: fixed;

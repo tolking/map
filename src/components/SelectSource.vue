@@ -1,7 +1,7 @@
 <template>
   <select :value="modelValue" class="select-source" @change="selectItem">
     <option
-      v-for="item in data"
+      v-for="item in mapList"
       :key="item.type"
       :value="item.type"
     >
@@ -10,10 +10,9 @@
   </select>
 </template>
 
-<script>
-import { reactive, ref, toRefs } from 'vue'
+<script lang="ts">
+import { toRefs } from 'vue'
 import { mapList } from './../config.ts'
-import { getUrlString } from './../utils/index.ts'
 
 export default {
   name: 'SelectSource',
@@ -21,24 +20,23 @@ export default {
     modelValue: String,
   },
   setup(props, { emit }) {
-    const { modelValue } = toRefs(props)
-    const data = reactive(mapList)
+    const { modelValue } = toRefs<{ modelValue: string }>(props)
 
-    if (data.length) {
-      const urlType = getUrlString('type')
-
-      emit('update:modelValue', urlType || data[0].type) //TODO: 本地储存参数
-    }
-
-    function selectItem(e) {
-      emit('update:modelValue', e.target.value)
+    function selectItem({ target }: { target: { value: string }}) {
+      emit('update:modelValue', target.value)
     }
 
     return {
+      mapList,
       modelValue,
-      data,
       selectItem,
     }
   }
 }
 </script>
+
+<style>
+.select-source {
+  display: inline-block;
+}
+</style>

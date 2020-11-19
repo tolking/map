@@ -1,13 +1,13 @@
 <template>
   <footer class="footer">
-    <span class="font-12">更新时间</span>
-    <span class="font-12 uptime">{{ uptime }}</span>
-    <span class="font-12">数据维护</span>
-    <span class="font-12 author">{{ author }}</span>
+    <span class="text">更新时间</span>
+    <span class="text">{{ uptime }}</span>
+    <span class="text">数据维护</span>
+    <span class="text">{{ author }}</span>
   </footer>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: 'AppFooter',
   props: {
@@ -22,5 +22,13 @@ export default {
   position: fixed;
   bottom: 0;
   left: 0;
+}
+.footer .text {
+  margin-right: 6px;
+  font-size: 14px;
+  color: var(--color-text);
+}
+.footer .text:last-child {
+  margin-right: 0;
 }
 </style>

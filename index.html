@@ -10,10 +10,46 @@
     <link rel="icon" href="./favicon.ico">
     <meta name="author" content="tolking">
     <meta name="description" content="a map for kedama/nyaa Minecraft sercer">
-    <meta name="keywords" content="毛线, 毛线圈物语, MC, 下界交通图, 主世界交通图, 交通图, ououe, 雨无声, tolking, ououe.com, map.ououe.com">
+    <meta name="keywords" content="喵窝, 毛线, 毛线圈物语, MC, 下界交通图, 主世界交通图, 交通图">
+    <style>
+      :root {
+        --color-text: #001f3f;
+        --color-bg: #ffffff;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --color-text: #fefefe;
+          --color-bg: #1F1F1F;
+        }
+      }
+      body {
+        margin: 0;
+        background: var(--color-bg);
+      }
+      .loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+      .loading svg {
+        width: 50px;
+        height: 50px;
+        fill: var(--color-text);
+      }
+    </style>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <div class="loading">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+          <path d="M16 0 A16 16 0 0 0 16 32 A16 16 0 0 0 16 0 M16 4 A12 12 0 0 1 16 28 A12 12 0 0 1 16 4" opacity=".25"/>
+          <path d="M16 0 A16 16 0 0 1 32 16 L28 16 A12 12 0 0 0 16 4z">
+            <animateTransform attributeName="transform" type="rotate" from="0 16 16" to="360 16 16" dur="0.8s" repeatCount="indefinite" />
+          </path>
+        </svg>
+      </div>
+    </div>
     <noscript>
       <strong>貌似不支持js或者您屏蔽了js，请查看设置，或者换个浏览器试试！</strong>
     </noscript>

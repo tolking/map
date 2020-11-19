@@ -1,59 +1,70 @@
 <template>
-  <svg :viewBox="viewBox" class="svg" xmlns="http://www.w3.org/2000/svg">
-    <g>
-      <rect
-        v-if="borderstyle === 'square'"
-        :width="radius * 2"
-        :height="radius * 2"
-        class="path border"
-      />
-      <circle
-        v-else-if="borderstyle === 'circles'"
-        :cx="radius"
-        :cy="radius"
-        :r="radius"
-        class="path border"
-      />
-      <path
-        v-else-if="Array.isArray(borderstyle)"
-        :d="setPath(borderstyle)"
-        class="path border"
-      />
-    </g>
-    <g>
-      <path
-        v-for="(item, index) in dataList"
-        :key="index"
-        :d="setPath(item.points)"
-        :class="item.type"
-        class="path"
-      />
-    </g>
-    <g>
-      <text
-        v-for="(item, index) in nameList"
-        :key="index"
-        :x="item.point.x + radius - center.x"
-        :y="item.point.z + radius - center.z"
-        class="text"
-      >
-        {{ item.name }}
-      </text>
-    </g>
-  </svg>
+  <transition name="mode-fade" mode="out-in">
+    <div v-if="loading" key="true" class="loading">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+        <path d="M16 0 A16 16 0 0 0 16 32 A16 16 0 0 0 16 0 M16 4 A12 12 0 0 1 16 28 A12 12 0 0 1 16 4" opacity=".25"/>
+        <path d="M16 0 A16 16 0 0 1 32 16 L28 16 A12 12 0 0 0 16 4z">
+          <animateTransform attributeName="transform" type="rotate" from="0 16 16" to="360 16 16" dur="0.8s" repeatCount="indefinite" />
+        </path>
+      </svg>
+    </div>
+    <svg v-else key="flase" :viewBox="viewBox" class="svg" xmlns="http://www.w3.org/2000/svg">
+      <g>
+        <rect
+          v-if="borderstyle === 'square'"
+          :width="radius * 2"
+          :height="radius * 2"
+          class="path border"
+        />
+        <circle
+          v-else-if="borderstyle === 'circles'"
+          :cx="radius"
+          :cy="radius"
+          :r="radius"
+          class="path border"
+        />
+        <path
+          v-else-if="Array.isArray(borderstyle)"
+          :d="setPath(borderstyle)"
+          class="path border"
+        />
+      </g>
+      <g>
+        <path
+          v-for="(item, index) in dataList"
+          :key="index"
+          :d="setPath(item.points)"
+          :class="item.type"
+          class="path"
+        />
+      </g>
+      <g>
+        <text
+          v-for="(item, index) in nameList"
+          :key="index"
+          :x="item.point.x + radius - center.x"
+          :y="item.point.z + radius - center.z"
+          class="text"
+        >
+          {{ item.name }}
+        </text>
+      </g>
+    </svg>
+  </transition>
 </template>
 
 <script lang="ts">
 import { computed, toRaw, toRefs, watch } from 'vue';
-import { MapData } from './../types/index.d.ts'
+import { MapData, MapNameItem, MapPoint } from './../types/index.d.ts'
 
 export default {
   name: 'AppSvg',
   props: {
-    data: Object
+    data: Object,
+    loading: Boolean,
   },
   setup(props, { emit }) {
-    const { data } = toRefs<{ data: MapData }>(props)
+    const { data, loading } = toRefs<{ data: MapData, loading: boolean }>(props)
     const borderstyle = computed(() => data.value.borderstyle || false)
     const radius = computed(() => data.value.radius || 0)
     const center = computed(() => data.value.center || { x: 0, z: 0 })
@@ -61,7 +72,7 @@ export default {
     const dataList = computed(() => data.value.data || [])
     const nameList = computed(() => {
       const list = toRaw(dataList.value)
-      let nameList = []
+      let nameList: MapNameItem[] = []
 
       for (let i = 0; i < list.length; i++) {
         const item = list[i];
@@ -73,7 +84,7 @@ export default {
           })
         }
         if (item.namelist) {
-          nameList = nameList.concat(item.namelist) 
+          nameList = nameList.concat(item.namelist)
         }
       }
       return nameList
@@ -83,7 +94,7 @@ export default {
       emit('nameList', nameList.value)
     })
 
-    function setPath(points) {
+    function setPath(points: MapPoint[]) {
       const list = toRaw(points)
       let path = ''
 
@@ -118,8 +129,9 @@ export default {
       }
       return path
     }
-    
+
     return {
+      loading,
       borderstyle,
       radius,
       center,
@@ -137,24 +149,46 @@ export default {
   width: 90%;
   height: 90%;
   overflow: visible;
+  background: var(--color-bg);
   transform-origin: center center;
-}
-.svg .border {
-  stroke-dasharray: calc(var(--size-stroke) * 20), calc(var(--size-stroke) * 20);
 }
 .svg .path {
   fill: transparent;
-  stroke: #333;
   stroke-width: max(calc(var(--size-stroke) * 3), 1);
   stroke-linecap: round;
 }
+.svg .path.border {
+  stroke: var(--color-frame, #AAAAAA);
+  stroke-dasharray: calc(var(--size-stroke) * 20), calc(var(--size-stroke) * 20);
+}
 .svg .path.ice {
+  stroke: var(--color-ice, #7FDBFF);
   stroke-width: max(calc(var(--size-stroke) * 3), 1.5);
 }
+.svg .path.rail {
+  stroke: var(--color-rail, #FFDC00);
+}
+.svg .path.walk {
+  stroke: var(--color-walk, #85144b);
+}
+.svg .path.green {
+  stroke: var(--color-green, #2ECC40);
+}
+.svg .path.frame {
+  stroke: var(--color-frame, #AAAAAA);
+}
 .svg .text {
+  fill: var(--color-text);
   font-size: max(calc(var(--size-stroke) * 28px), 16px);
   stroke-width: 0;
   text-anchor: middle;
   dominant-baseline: middle;
+}
+
+.mode-fade-enter-active, .mode-fade-leave-active {
+  transition: opacity .5s ease
+}
+.mode-fade-enter-from, .mode-fade-leave-to {
+  opacity: 0
 }
 </style>
