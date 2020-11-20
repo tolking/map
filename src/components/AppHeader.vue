@@ -22,13 +22,19 @@ export default {
   top: 0;
   left: 0;
   z-index: 10;
+  margin-left: 20px;
   font-size: 26px;
-  color: var(--color-text);
 }
 .header .fun-content {
   position: fixed;
   top: 0;
   right: 0;
   z-index: 11;
+  padding: 10px;
+}
+@media screen and (max-width:500px) {
+  .header .title {
+    font-size: 18px;
+  }
 }
 </style>

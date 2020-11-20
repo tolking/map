@@ -6,3 +6,55 @@
   height: 100vh;
   overflow: hidden;
 }
+
+.icon-button {
+  display: inline-block;
+  margin-right: 10px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  fill: var(--color-text);
+}
+
+.mask {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  overflow: auto;
+  background: rgba(0, 0, 0, .3);
+}
+.mask .content {
+  margin: 15vh auto 50px;
+  padding: 20px;
+  width: 30%;
+  min-width: 300px;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+  background: var(--color-bg);
+  transform-origin: top;
+}
+
+.mask-zoom-enter-active,
+.mask-zoom-leave-active {
+  transition: opacity .3s ease-out;
+}
+.mask-zoom-enter-from,
+.mask-zoom-leave-to {
+  opacity: 0;
+}
+.zoom-enter-active,
+.zoom-leave-active,
+.mask-zoom-enter-active .content,
+.mask-zoom-leave-active .content {
+  transition: transform .3s ease-out;
+}
+.zoom-enter-from,
+.zoom-leave-to,
+.mask-zoom-enter-from .content,
+.mask-zoom-leave-to .content {
+  opacity: 1;
+  transform: scale(0);
+}
