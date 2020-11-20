@@ -63,8 +63,11 @@ export default {
     data: Object,
     loading: Boolean,
   },
-  setup(props, { emit }) {
-    const { data, loading } = toRefs<{ data: MapData, loading: boolean }>(props)
+  setup(
+    props: { data: MapData, loading: boolean },
+    { emit }: { emit: (event: string, ...args: unknown[]) => void}
+  ) {
+    const { data, loading } = toRefs(props)
     const borderstyle = computed(() => data.value.borderstyle || false)
     const radius = computed(() => data.value.radius || 0)
     const center = computed(() => data.value.center || { x: 0, z: 0 })
@@ -186,9 +189,9 @@ export default {
 }
 
 .mode-fade-enter-active, .mode-fade-leave-active {
-  transition: opacity .5s ease
+  transition: opacity .3s ease-out;
 }
 .mode-fade-enter-from, .mode-fade-leave-to {
-  opacity: 0
+  opacity: 0;
 }
 </style>

@@ -2,12 +2,11 @@
   <app-header :title="mapData.title">
     <serach-box :nameList="nameList" />
     <select-source v-model="type" />
-    <!-- TODO: 增加搜索、配置、下载组件 -->
   </app-header>
   <app-svg :data="mapData" :loading="loading" :style="style" @nameList="setNameList" />
   <config-color v-model="color" />
   <app-footer :uptime="mapData.uptime" :author="mapData.author" />
-  <!-- TODO: 增加加载、提示组件 -->
+  <tip-message :type="type" :version="mapData.version" :introduce="mapData.introduce" />
 </template>
 
 <script lang="ts">
@@ -21,6 +20,7 @@ import AppFooter from './components/AppFooter.vue'
 import SerachBox from './components/SerachBox.vue'
 import SelectSource from './components/SelectSource.vue'
 import ConfigColor from './components/ConfigColor.vue'
+import TipMessage from './components/TipMessage.vue'
 
 export default {
   name: 'App',
@@ -31,6 +31,7 @@ export default {
     SerachBox,
     SelectSource,
     ConfigColor,
+    TipMessage,
   },
   setup () {
     const color = useColorList()
@@ -47,6 +48,7 @@ export default {
     }))
 
     getMapData()
+
     watch(type, getMapData)
 
     async function getMapData() {

@@ -19,8 +19,11 @@ export default {
   props: {
     modelValue: String,
   },
-  setup(props, { emit }) {
-    const { modelValue } = toRefs<{ modelValue: string }>(props)
+  setup(
+    props: { modelValue: string },
+    { emit }: { emit: (event: string, ...args: unknown[]) => void}
+  ) {
+    const { modelValue } = toRefs(props)
 
     function selectItem({ target }: { target: { value: string }}) {
       emit('update:modelValue', target.value)
@@ -38,5 +41,22 @@ export default {
 <style>
 .select-source {
   display: inline-block;
+  padding: 0 10px;
+  width: 120px;
+  height: 30px;
+  border-radius: 15px;
+  border: 2px solid var(--color-text);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  vertical-align: top;
+}
+@media screen and (max-width:500px) {
+  .select-source {
+    width: 30px;
+    transition: width .3s ease-out;
+  }
+  .select-source:focus {
+    width: 120px;
+  }
 }
 </style>

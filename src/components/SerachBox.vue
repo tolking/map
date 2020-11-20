@@ -6,26 +6,30 @@
     </svg>
   </div>
   <teleport to="body">
-    <section v-if="show" class="mask" @click="toggle">
-      <div class="content" @click.stop>
-        <div class="serach-inpit">
-          <input v-model="serach" type="text">
-        </div>
-        <div class="serach-list">
-          <div
-            v-for="(item, index) in serachList"
-            :key="index"
-            class="list-item"
-            @click="move(item.point)"
-          >
-            <span class="name">{{ item.name }}</span>
-            <span class="point">
-              {{ `x: ${item.point.x}, y: ${item.point.y}, z: ${item.point.z}` }}
-            </span>
+    <transition name="mask-zoom">
+      <section v-if="show" class="mask" @click="toggle">
+        <div class="content" @click.stop>
+          <div class="serach-inpit">
+            <input v-model="serach" type="text" class="input">
           </div>
+          <transition name="zoom">
+            <div v-show="serachList.length" class="serach-list">
+              <div
+                v-for="(item, index) in serachList"
+                :key="index"
+                class="list-item"
+                @click="move(item.point)"
+              >
+                <span class="name">{{ item.name }}</span>
+                <span class="point">
+                  {{ `x: ${item.point.x}, y: ${item.point.y}, z: ${item.point.z}` }}
+                </span>
+              </div>
+            </div>
+          </transition>
         </div>
-      </div>
-    </section>
+      </section>
+    </transition>
   </teleport>
 </template>
 
@@ -38,7 +42,7 @@ export default {
   props: {
     nameList: Array,
   },
-  setup(props) {
+  setup(props: { nameList: MapNameItem[] }) {
     const serachList = ref<MapNameItem[]>([])
     const serach = ref('')
     const show = ref(false)
@@ -56,6 +60,7 @@ export default {
     }
 
     function toggle() {
+      serach.value = ''
       serachList.value = []
       show.value = !show.value
     }
@@ -72,28 +77,34 @@ export default {
 </script>
 
 <style>
-.icon-button {
-  display: inline-block;
-  width: 30px;
+.serach-inpit {
+  display: flex;
+}
+.serach-inpit .input {
+  flex: 1;
+  margin: 0;
+  padding: 0 10px;
   height: 30px;
-  fill: var(--color-text);
-}
-.mask {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  background: rgba(0, 0, 0, .3);
-}
-.mask .content {
-  position: relative;
-  z-index: 101;
-  margin: auto;
-  width: 50%;
-  min-width: 300px;
-  height: 80%;
+  border: 1px solid var(--color-text);
+  border-radius: 15px;
   background: var(--color-bg);
+  color: var(--color-text);
+}
+.serach-list {
+  margin-top: 10px;
+  transform-origin: top;
+}
+.serach-list .list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px;
+  cursor: pointer;
+}
+.serach-list .list-item .name {
+  font-size: 18px;
+}
+.serach-list .list-item .point {
+  opacity: .5;
 }
 </style>

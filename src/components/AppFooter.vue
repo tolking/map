@@ -22,11 +22,11 @@ export default {
   position: fixed;
   bottom: 0;
   left: 0;
+  padding: 0 0 10px 10px;
 }
 .footer .text {
   margin-right: 6px;
   font-size: 14px;
-  color: var(--color-text);
 }
 .footer .text:last-child {
   margin-right: 0;
