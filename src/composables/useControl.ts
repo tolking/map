@@ -8,7 +8,7 @@ export function useControl() {
     y: 0,
     s: 1,
     leastWidth: 1,
-    transform: ''
+    transform: '',
   })
 
   onMounted(() => {
@@ -68,5 +68,8 @@ export function useControl() {
     data.transform = `translate3d(${x}px, ${y}px, 0px) scale3d(${s}, ${s}, 1)`
   }
 
-  return toRefs(data)
+  return {
+    ...toRefs(data),
+    setTransform,
+  }
 }

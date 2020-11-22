@@ -1,6 +1,6 @@
 <template>
   <app-header :title="mapData.title">
-    <serach-box :nameList="nameList" />
+    <serach-box :nameList="nameList" @move-map="moveMap" />
     <select-source v-model="type" />
   </app-header>
   <app-svg :data="mapData" :loading="loading" :style="style" @nameList="setNameList" />
@@ -13,7 +13,7 @@
 import { computed, ref, watch } from 'vue'
 import { useColorList, useControl, useMapList } from './composables/index.ts'
 import { get } from './utils/index.ts'
-import { MapData, MapNameItem } from './types/index.d.ts'
+import { MapData, MapNameItem, MapPoint } from './types/index.d.ts'
 import AppHeader from './components/AppHeader.vue'
 import AppSvg from './components/AppSvg.vue'
 import AppFooter from './components/AppFooter.vue'
@@ -40,7 +40,7 @@ export default {
     const loading = ref(true)
     const mapData = ref<MapData>({})
     const nameList = ref<MapNameItem[]>([])
-    const { x, y, s, leastWidth, transform } = useControl()
+    const { x, y, s, leastWidth, transform, setTransform } = useControl()
     const style = computed(() => ({
       ...color.value,
       '--size-stroke': mapData.value.radius / leastWidth.value / s.value,
@@ -65,6 +65,13 @@ export default {
       nameList.value = value
     }
 
+    function moveMap(poit: MapPoint) {
+      const _s = -0.45 * s.value * leastWidth.value / mapData.value.radius
+      x.value = _s * poit.x
+      y.value = _s * poit.z
+      setTransform(x.value, y.value, s.value)
+    }
+
     return {
       type,
       color,
@@ -73,6 +80,7 @@ export default {
       nameList,
       setNameList,
       style,
+      moveMap,
     }
   }
 }
