@@ -1,6 +1,6 @@
 import { onMounted, reactive, toRefs } from "vue"
 import { Manager, Pan, Pinch, Tap } from '@egjs/hammerjs'
-import { direction, getMousePos } from './../utils/index.ts'
+import { direction, getMousePos, throttle } from './../utils/index.ts'
 
 export function useControl() {
   const data = reactive({
@@ -48,13 +48,13 @@ export function useControl() {
       // console.log(ev);
       // TODO: 点击弹窗？
     // })
-    square.onmousewheel = mouseWheel
+    square.onmousewheel = throttle(mouseWheel, 100)
     if (square.addEventListener) {
-      square.addEventListener('DOMMouseScroll', mouseWheel, false)
+      square.addEventListener('DOMMouseScroll', throttle(mouseWheel, 100), false)
     }
 
     function mouseWheel() {
-      direction().then((direction: boolean) => { //TODO: 处理节流
+      direction().then((direction: boolean) => {
         const m = getMousePos()
         data.s *= (direction ? 1.1 : 0.9)
         data.x += (m.x - screeWidth / 2 - data.x) * (direction ? -0.1 : 0.1)
