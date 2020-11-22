@@ -36,3 +36,20 @@ export function direction(event) {
     resolve(direction)
   })
 }
+
+/**
+ * 节流函数
+ * @param fn 执行函数
+ * @param wait 等待时间
+ */
+export function throttle(fn: (...args: unknown[]) => void, wait: number) {
+  let startTime = Date.now()
+  let timer = null
+  return function() {
+    const curTime = Date.now()
+    if (curTime - startTime >= wait) {
+      timer = setTimeout((fn.apply(this, arguments), (timer = undefined)), wait);
+      startTime = curTime
+    }
+  }
+}

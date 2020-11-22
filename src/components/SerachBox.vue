@@ -35,6 +35,7 @@
 
 <script lang="ts">
 import { ref, watch } from 'vue'
+import { throttle } from './../utils/index.ts'
 import { MapNameItem, MapPoint } from './types/index.d.ts'
 
 export default {
@@ -47,12 +48,14 @@ export default {
     const serach = ref('')
     const show = ref(false)
 
-    watch(serach, () => {
+    watch(serach, throttle(getSerachList, 100))
+
+    function getSerachList() {
       serachList.value = props.nameList.filter((item: MapNameItem) => {
         const _serach = serach.value.trim().toLocaleLowerCase()
         return item.name.toLocaleLowerCase().includes(_serach)
       })
-    })
+    }
 
     function move(point: MapPoint) {
       //TODO: 将中心移动到点击地点处，返回需要计算出的`x`与`y`

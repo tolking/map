@@ -30,13 +30,23 @@
         />
       </g>
       <g>
-        <path
-          v-for="(item, index) in dataList"
-          :key="index"
-          :d="setPath(item.points)"
-          :class="item.type"
-          class="path"
-        />
+        <template v-for="(item, index) in dataList">
+          <circle
+            v-if="item.type === 'green'"
+            :key="index"
+            :cx="item.points[0].x + radius - center.x"
+            :cy="item.points[0].z + radius - center.z"
+            :class="item.type"
+            class="path"
+          />
+          <path
+            v-else
+            :key="index"
+            :d="setPath(item.points)"
+            :class="item.type"
+            class="path"
+          />
+        </template>
       </g>
       <g>
         <text
@@ -175,7 +185,8 @@ export default {
   stroke: var(--color-walk, #85144b);
 }
 .svg .path.green {
-  stroke: var(--color-green, #2ECC40);
+  fill: var(--color-green, #2ECC40);
+  r: max(calc(var(--size-stroke) * 3), 1.5);
 }
 .svg .path.frame {
   stroke: var(--color-frame, #AAAAAA);
