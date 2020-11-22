@@ -23,7 +23,7 @@ export default {
     const show = ref(false)
     let mapVersion: { [key: string]: number } | undefined = undefined
 
-    watch(type, checkVersion)
+    watch(version, checkVersion)
 
     onMounted(() => {
       if (!mapVersion) {
@@ -36,12 +36,12 @@ export default {
     function checkVersion() {
       if (!mapVersion![type.value] || mapVersion![type.value] < version.value) {
         show.value = true
-        mapVersion![type.value] = version.value
       }
     }
 
     function close() {
       show.value = false
+      mapVersion![type.value] = version.value
       localStorage.setItem('map-version', JSON.stringify(mapVersion))
     }
 

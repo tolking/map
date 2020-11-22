@@ -48,7 +48,7 @@ export function throttle(fn: (...args: unknown[]) => void, wait: number) {
   return function() {
     const curTime = Date.now()
     if (curTime - startTime >= wait) {
-      timer = setTimeout((fn.apply(this, arguments), (timer = undefined)), wait);
+      timer = setTimeout((fn.apply(this, arguments), (timer = undefined)), wait)
       startTime = curTime
     }
   }
