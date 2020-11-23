@@ -23,7 +23,7 @@ export default {
     const show = ref(false)
     let mapVersion: { [key: string]: number } | undefined = undefined
 
-    watch(version, checkVersion)
+    watch([type, version], checkVersion)
 
     onMounted(() => {
       if (!mapVersion) {
@@ -34,7 +34,8 @@ export default {
     })
 
     function checkVersion() {
-      if (!mapVersion![type.value] || mapVersion![type.value] < version.value) {
+      const oldVersion = mapVersion![type.value]
+      if (version.value && (!oldVersion || oldVersion < version.value)) {
         show.value = true
       }
     }

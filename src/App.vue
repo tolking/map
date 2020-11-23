@@ -57,6 +57,7 @@ export default {
       y.value = 0
       s.value = 1
       transform.value = ''
+      mapData.value = {}
       mapData.value = await get<MapData>(path.value)
     }
 
