@@ -9,10 +9,11 @@ export function useControl() {
     s: 1,
     leastWidth: 1,
     transform: '',
+    deltaTap: <{ x: number, y: number, px: number, pz: number }>undefined,
   })
 
   onMounted(() => {
-    const square = document.getElementById('app') as HTMLElement
+    const square = document.getElementById('app-svg') as HTMLElement
     const screeWidth = square.offsetWidth
     const screeHeight = square.offsetHeight
     const hammer = new Manager(square)
@@ -44,10 +45,13 @@ export function useControl() {
       data.x += (center.x - screeWidth / 2 - data.x) * (1 - scale)
       data.y += (center.y - screeHeight / 2 - data.y) * (1 - scale)
     })
-    // hammer.on('tap', ev => {
-      // console.log(ev);
-      // TODO: 点击弹窗？
-    // })
+    hammer.on('tap', ({ center }) => {
+      data.deltaTap = {
+        ...center,
+        px: ~~(center.x - screeWidth / 2 - data.x),
+        pz: ~~(center.y - screeHeight / 2 - data.y),
+      }
+    })
     square.onmousewheel = throttle(mouseWheel, 100)
     if (square.addEventListener) {
       square.addEventListener('DOMMouseScroll', throttle(mouseWheel, 100), false)
@@ -65,6 +69,7 @@ export function useControl() {
   })
 
   function setTransform(x: number, y: number, s: number) {
+    data.deltaTap = undefined
     data.transform = `translate3d(${x}px, ${y}px, 0px) scale3d(${s}, ${s}, 1)`
   }
 

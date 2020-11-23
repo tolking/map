@@ -7,6 +7,7 @@
   <config-color v-model="color" />
   <app-footer :uptime="mapData.uptime" :author="mapData.author" />
   <tip-message :type="type" :version="mapData.version" :introduce="mapData.introduce" />
+  <tip-point :message="tipPointMessage" :style="tipPointStyle" />
 </template>
 
 <script lang="ts">
@@ -21,6 +22,7 @@ import SerachBox from './components/SerachBox.vue'
 import SelectSource from './components/SelectSource.vue'
 import ConfigColor from './components/ConfigColor.vue'
 import TipMessage from './components/TipMessage.vue'
+import TipPoint from './components/TipPoint.vue'
 
 export default {
   name: 'App',
@@ -32,6 +34,7 @@ export default {
     SelectSource,
     ConfigColor,
     TipMessage,
+    TipPoint,
   },
   setup () {
     const color = useColorList()
@@ -40,7 +43,9 @@ export default {
     const loading = ref(true)
     const mapData = ref<MapData>({})
     const nameList = ref<MapNameItem[]>([])
-    const { x, y, s, leastWidth, transform, setTransform } = useControl()
+    const { x, y, s, leastWidth, transform, setTransform, deltaTap } = useControl()
+    const tipPointMessage = ref('')
+    const tipPointStyle = ref({})
     const style = computed(() => ({
       ...color.value,
       '--size-stroke': mapData.value.radius / leastWidth.value / s.value,
@@ -50,6 +55,7 @@ export default {
     getMapData()
 
     watch(type, getMapData)
+    watch(deltaTap, setTipPoint)
 
     async function getMapData() {
       loading.value = true
@@ -67,10 +73,26 @@ export default {
     }
 
     function moveMap(poit: MapPoint) {
-      const _s = -0.45 * s.value * leastWidth.value / mapData.value.radius
-      x.value = _s * poit.x
-      y.value = _s * poit.z
+      const _s = 0.45 * s.value * leastWidth.value / mapData.value.radius
+      x.value = -(poit.x - mapData.value.center.x) * _s
+      y.value = -(poit.z - mapData.value.center.z) * _s
       setTransform(x.value, y.value, s.value)
+    }
+
+    function setTipPoint() {
+      if (deltaTap.value) {
+        const _s = 0.45 * s.value * leastWidth.value / mapData.value.radius
+        const _x = ~~(deltaTap.value.px / _s + mapData.value.center.x)
+        const _z = ~~(deltaTap.value.pz / _s + mapData.value.center.z)
+        tipPointMessage.value = deltaTap.value ? `x: ${_x}, z: ${_z}` : ''
+        tipPointStyle.value = {
+          left: deltaTap.value.x + 'px',
+          top: deltaTap.value.y + 'px',
+        }
+      } else {
+        tipPointMessage.value = ''
+        tipPointStyle.value = {}
+      }
     }
 
     return {
@@ -82,6 +104,8 @@ export default {
       setNameList,
       style,
       moveMap,
+      tipPointMessage,
+      tipPointStyle,
     }
   }
 }
