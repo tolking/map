@@ -1,66 +1,68 @@
 <template>
-  <transition name="mode-fade" mode="out-in">
-    <div v-if="loading" key="true" class="loading">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-        <path d="M16 0 A16 16 0 0 0 16 32 A16 16 0 0 0 16 0 M16 4 A12 12 0 0 1 16 28 A12 12 0 0 1 16 4" opacity=".25"/>
-        <path d="M16 0 A16 16 0 0 1 32 16 L28 16 A12 12 0 0 0 16 4z">
-          <animateTransform attributeName="transform" type="rotate" from="0 16 16" to="360 16 16" dur="0.8s" repeatCount="indefinite" />
-        </path>
-      </svg>
-    </div>
-    <svg v-else key="flase" :viewBox="viewBox" class="svg" xmlns="http://www.w3.org/2000/svg">
-      <g>
-        <rect
-          v-if="borderstyle === 'square'"
-          :width="radius * 2"
-          :height="radius * 2"
-          class="path border"
-        />
-        <circle
-          v-else-if="borderstyle === 'circles'"
-          :cx="radius"
-          :cy="radius"
-          :r="radius"
-          class="path border"
-        />
-        <path
-          v-else-if="Array.isArray(borderstyle)"
-          :d="setPath(borderstyle)"
-          class="path border"
-        />
-      </g>
-      <g>
-        <template v-for="(item, index) in dataList">
+  <section id="app-svg">
+    <transition name="mode-fade" mode="out-in">
+      <div v-if="loading" key="true" class="loading">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+          <path d="M16 0 A16 16 0 0 0 16 32 A16 16 0 0 0 16 0 M16 4 A12 12 0 0 1 16 28 A12 12 0 0 1 16 4" opacity=".25"/>
+          <path d="M16 0 A16 16 0 0 1 32 16 L28 16 A12 12 0 0 0 16 4z">
+            <animateTransform attributeName="transform" type="rotate" from="0 16 16" to="360 16 16" dur="0.8s" repeatCount="indefinite" />
+          </path>
+        </svg>
+      </div>
+      <svg v-else key="flase" :style="style" :viewBox="viewBox" class="svg" xmlns="http://www.w3.org/2000/svg">
+        <g>
+          <rect
+            v-if="borderstyle === 'square'"
+            :width="radius * 2"
+            :height="radius * 2"
+            class="path border"
+          />
           <circle
-            v-if="item.type === 'green'"
-            :key="index"
-            :cx="item.points[0].x + radius - center.x"
-            :cy="item.points[0].z + radius - center.z"
-            :class="item.type"
-            class="path"
+            v-else-if="borderstyle === 'circles'"
+            :cx="radius"
+            :cy="radius"
+            :r="radius"
+            class="path border"
           />
           <path
-            v-else
-            :key="index"
-            :d="setPath(item.points)"
-            :class="item.type"
-            class="path"
+            v-else-if="Array.isArray(borderstyle)"
+            :d="setPath(borderstyle)"
+            class="path border"
           />
-        </template>
-      </g>
-      <g>
-        <text
-          v-for="(item, index) in nameList"
-          :key="index"
-          :x="item.point.x + radius - center.x"
-          :y="item.point.z + radius - center.z"
-          class="text"
-        >
-          {{ item.name }}
-        </text>
-      </g>
-    </svg>
-  </transition>
+        </g>
+        <g>
+          <template v-for="(item, index) in dataList">
+            <circle
+              v-if="item.type === 'green'"
+              :key="index"
+              :cx="item.points[0].x + radius - center.x"
+              :cy="item.points[0].z + radius - center.z"
+              :class="item.type"
+              class="path"
+            />
+            <path
+              v-else
+              :key="index"
+              :d="setPath(item.points)"
+              :class="item.type"
+              class="path"
+            />
+          </template>
+        </g>
+        <g>
+          <text
+            v-for="(item, index) in nameList"
+            :key="index"
+            :x="item.point.x + radius - center.x"
+            :y="item.point.z + radius - center.z"
+            class="text"
+          >
+            {{ item.name }}
+          </text>
+        </g>
+      </svg>
+    </transition>
+  </section>
 </template>
 
 <script lang="ts">
@@ -72,12 +74,13 @@ export default {
   props: {
     data: Object,
     loading: Boolean,
+    style: Object,
   },
   setup(
-    props: { data: MapData, loading: boolean },
+    props: { data: MapData, loading: boolean, style: object },
     { emit }: { emit: (event: string, ...args: unknown[]) => void}
   ) {
-    const { data, loading } = toRefs(props)
+    const { data, loading, style } = toRefs(props)
     const borderstyle = computed(() => data.value.borderstyle || false)
     const radius = computed(() => data.value.radius || 0)
     const center = computed(() => data.value.center || { x: 0, z: 0 })
@@ -145,6 +148,7 @@ export default {
 
     return {
       loading,
+      style,
       borderstyle,
       radius,
       center,
@@ -158,6 +162,14 @@ export default {
 </script>
 
 <style>
+#app-svg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+  cursor: move;
+}
 .svg {
   width: 90%;
   height: 90%;

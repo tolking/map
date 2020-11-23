@@ -12,7 +12,7 @@
 import { onMounted, ref, toRefs, watch } from 'vue';
 
 export default {
-  name: 'SerachBox',
+  name: 'TipMessage',
   props: {
     type: String,
     version: Number,
