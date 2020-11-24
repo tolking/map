@@ -31,21 +31,23 @@
           />
         </g>
         <g>
-          <template v-for="(item, index) in dataList">
+          <template v-for="item in dataList">
             <circle
               v-if="item.type === 'green'"
-              :key="index"
               :cx="item.points[0].x + radius - center.x"
               :cy="item.points[0].z + radius - center.z"
               :class="item.type"
               class="path"
+              @mouseenter="e => inPath(e, item.notes)"
+              @mouseout="outPath"
             />
             <path
               v-else
-              :key="index"
               :d="setPath(item.points)"
               :class="item.type"
               class="path"
+              @mouseenter="e => inPath(e, item.notes)"
+              @mouseout="outPath"
             />
           </template>
         </g>
@@ -66,7 +68,7 @@
 </template>
 
 <script lang="ts">
-import { computed, toRaw, toRefs, watch } from 'vue';
+import { computed, ref, toRaw, toRefs, watch } from 'vue';
 import { MapData, MapNameItem, MapPoint } from './../types/index.d.ts'
 
 export default {
@@ -81,6 +83,8 @@ export default {
     { emit }: { emit: (event: string, ...args: unknown[]) => void}
   ) {
     const { data, loading, style } = toRefs(props)
+    const pathNotes = ref('')
+    const pathClient = ref({})
     const borderstyle = computed(() => data.value.borderstyle || false)
     const radius = computed(() => data.value.radius || 0)
     const center = computed(() => data.value.center || { x: 0, z: 0 })
@@ -108,6 +112,9 @@ export default {
 
     watch(nameList, () => {
       emit('nameList', nameList.value)
+    })
+    watch(pathClient, () => {
+      emit('overPath', { style: pathClient.value, message: pathNotes.value })
     })
 
     function setPath(points: MapPoint[]) {
@@ -146,6 +153,23 @@ export default {
       return path
     }
 
+    function inPath({ clientX, clientY }: WheelEvent,notes: string) {
+      if (notes) {
+        pathNotes.value = notes
+        pathClient.value = {
+          left: clientX + 'px',
+          top: clientY + 'px',
+        }
+      }
+    }
+
+    function outPath() {
+      pathNotes.value && setTimeout(() => {
+        pathNotes.value = ''
+        pathClient.value = {}
+      }, 300)
+    }
+
     return {
       loading,
       style,
@@ -156,6 +180,8 @@ export default {
       dataList,
       nameList,
       setPath,
+      inPath,
+      outPath,
     }
   }
 }

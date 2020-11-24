@@ -1,13 +1,15 @@
+interface WheelEvent {
+  clientX: number
+  clientY: number
+  wheelDelta: number
+  detail: number
+  preventDefault?: () => void
+}
+
 /** 获取json文件 */
 export async function get<T>(url: string): Promise<T> {
   const res = await fetch(url)
   return res.json()
-}
-
-/** 鼠标坐标 */
-export function getMousePos(event) {
-  const e = event || window.event
-  return { x: e.clientX, y: e.clientY }
 }
 
 /**
@@ -20,20 +22,25 @@ export function getUrlString (key: string) {
   return r !== null ? unescape(r[2]) : null
 }
 
-/** 鼠标滚轮方向 */
-export function direction(event) {
-  return new Promise<boolean>(resolve => {
-    const ev = event || window.event
+/** 鼠标滚轮事件 */
+export function mouseScroll(event?: WheelEvent) {
+  return new Promise<{
+    center: { x: number, y: number },
+    direction: boolean,
+  }>(resolve => {
     let direction = true
-    if (ev.wheelDelta) {
-      direction = ev.wheelDelta > 0
+    if (event.wheelDelta) {
+      direction = event.wheelDelta > 0
     } else {
-      direction = ev.detail < 0
+      direction = event.detail < 0
     }
-    if (ev.preventDefault) {
-      ev.preventDefault()
+    if (event.preventDefault) {
+      event.preventDefault()
     }
-    resolve(direction)
+    resolve({
+      center: { x: event.clientX,y: event.clientY },
+      direction
+    })
   })
 }
 
