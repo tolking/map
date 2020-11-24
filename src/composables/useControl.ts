@@ -1,6 +1,6 @@
 import { onMounted, reactive, toRefs } from "vue"
 import { Manager, Pan, Pinch, Tap } from '@egjs/hammerjs'
-import { direction, getMousePos, throttle } from './../utils/index.ts'
+import { mouseScroll, throttle } from './../utils/index.ts'
 
 export function useControl() {
   const data = reactive({
@@ -52,17 +52,16 @@ export function useControl() {
         pz: ~~(center.y - screeHeight / 2 - data.y),
       }
     })
-    square.onmousewheel = throttle(mouseWheel, 100)
+    square.onmousewheel = throttle(mouseWheel, 50)
     if (square.addEventListener) {
-      square.addEventListener('DOMMouseScroll', throttle(mouseWheel, 100), false)
+      square.addEventListener('DOMMouseScroll', throttle(mouseWheel, 50), false)
     }
 
-    function mouseWheel() {
-      direction().then((direction: boolean) => {
-        const m = getMousePos()
+    function mouseWheel(e: WheelEvent) {
+      mouseScroll(e).then(({ direction, center }) => {
         data.s *= (direction ? 1.1 : 0.9)
-        data.x += (m.x - screeWidth / 2 - data.x) * (direction ? -0.1 : 0.1)
-        data.y += (m.y - screeHeight / 2 - data.y) * (direction ? -0.1 : 0.1)
+        data.x += (center.x - screeWidth / 2 - data.x) * (direction ? -0.1 : 0.1)
+        data.y += (center.y - screeHeight / 2 - data.y) * (direction ? -0.1 : 0.1)
         setTransform(data.x, data.y, data.s)
       })
     }

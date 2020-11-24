@@ -3,7 +3,13 @@
     <serach-box :nameList="nameList" @move-map="moveMap" />
     <select-source v-model="type" />
   </app-header>
-  <app-svg :data="mapData" :loading="loading" :style="style" @nameList="setNameList" />
+  <app-svg
+    :data="mapData"
+    :loading="loading"
+    :style="style"
+    @nameList="setNameList"
+    @over-path="setOverPoint"
+  />
   <config-color v-model="color" />
   <app-footer :uptime="mapData.uptime" :author="mapData.author" />
   <tip-message :type="type" :version="mapData.version" :introduce="mapData.introduce" />
@@ -95,6 +101,11 @@ export default {
       }
     }
 
+    function setOverPoint({ style, message }: { style: object, message: string }) {
+      tipPointMessage.value = message
+      tipPointStyle.value = style
+    }
+
     return {
       type,
       color,
@@ -106,6 +117,7 @@ export default {
       moveMap,
       tipPointMessage,
       tipPointStyle,
+      setOverPoint,
     }
   }
 }
