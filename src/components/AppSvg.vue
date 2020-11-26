@@ -68,28 +68,28 @@
 </template>
 
 <script lang="ts">
-import { computed, ref, toRaw, toRefs, watch } from 'vue';
-import { MapData, MapNameItem, MapPoint } from './../types/index.d.ts'
+import { computed, defineComponent, ref, toRaw, toRefs, watch } from 'vue'
+import { MapData, MapNameItem, MapPoint } from './../types/index'
 
-export default {
+export default defineComponent({
   name: 'AppSvg',
   props: {
-    data: Object,
+    data: {
+      type: Object,
+      required: true,
+    },
     loading: Boolean,
     style: Object,
   },
-  setup(
-    props: { data: MapData, loading: boolean, style: object },
-    { emit }: { emit: (event: string, ...args: unknown[]) => void}
-  ) {
+  setup(props, { emit }) {
     const { data, loading, style } = toRefs(props)
     const pathNotes = ref('')
     const pathClient = ref({})
-    const borderstyle = computed(() => data.value.borderstyle || false)
-    const radius = computed(() => data.value.radius || 0)
-    const center = computed(() => data.value.center || { x: 0, z: 0 })
+    const borderstyle = computed(() => (data.value as MapData).borderstyle || false)
+    const radius = computed(() => (data.value as MapData).radius || 0)
+    const center = computed(() => (data.value as MapData).center || { x: 0, z: 0 })
     const viewBox = computed(() => `0 0 ${radius.value * 2} ${radius.value * 2}`)
-    const dataList = computed(() => data.value.data || [])
+    const dataList = computed(() => (data.value as MapData).data || [])
     const nameList = computed(() => {
       const list = toRaw(dataList.value)
       let nameList: MapNameItem[] = []
@@ -184,7 +184,7 @@ export default {
       outPath,
     }
   }
-}
+})
 </script>
 
 <style>

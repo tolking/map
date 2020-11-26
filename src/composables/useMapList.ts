@@ -1,6 +1,6 @@
 import { ref, watch } from 'vue'
-import { mapList } from './../config.ts'
-import { getUrlString } from './../utils/index.ts'
+import { mapList } from './../config'
+import { getUrlString } from './../utils/index'
 
 export function useMapList() {
   const _default = getPathType() || getLocalType() || getConfigType()
@@ -12,7 +12,7 @@ export function useMapList() {
     return getUrlString('type')
   }
 
-  function getLocalType() {
+  function getLocalType(): string {
     return JSON.parse(localStorage.getItem('map-type'))
   }
 

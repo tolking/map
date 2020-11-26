@@ -5,15 +5,21 @@
       <slot />
     </div>
   </header>
+  <teleport to="title">{{ title }}</teleport>
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from "vue"
+
+export default defineComponent({
   name: 'AppHeader',
   props: {
-    title: String,
+    title: {
+      type: String,
+      default: '',
+    },
   }
-}
+})
 </script>
 
 <style>

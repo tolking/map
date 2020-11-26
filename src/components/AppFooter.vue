@@ -8,13 +8,21 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from "vue"
+
+export default defineComponent({
   name: 'AppFooter',
   props: {
-    uptime: String,
-    author: String,
+    uptime: {
+      type: String,
+      default: '',
+    },
+    author: {
+      type: String,
+      default: '',
+    },
   }
-}
+})
 </script>
 
 <style>

@@ -1,16 +1,7 @@
-interface MapItem {
-  name: string
-  type: string
-}
-
-interface ColorItem {
-  key: string
-  value: string
-  name: string
-}
+import { ConfigMapList, ConfigColorList } from './types/index'
 
 /** 统计地图目录配置 */
-export const mapList: MapItem[] = [
+export const mapList: ConfigMapList = [
   {
     name: '毛线V3—下界交通地图',
     type: 'kedamaV3Nether117'
@@ -42,7 +33,7 @@ export const mapList: MapItem[] = [
 ]
 
 /** 颜色配置 */
-export const colorList: ColorItem[] = [
+export const colorList: ConfigColorList = [
   {
     key: '--color-ice',
     value: '#7FDBFF',

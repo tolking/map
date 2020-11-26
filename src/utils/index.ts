@@ -1,10 +1,4 @@
-interface WheelEvent {
-  clientX: number
-  clientY: number
-  wheelDelta: number
-  detail: number
-  preventDefault?: () => void
-}
+import { WheelEvent } from './../types/index'
 
 /** 获取json文件 */
 export async function get<T>(url: string): Promise<T> {

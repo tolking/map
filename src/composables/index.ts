@@ -1,3 +1,3 @@
-export * from './useColorList.ts'
-export * from './useControl.ts'
-export * from './useMapList.ts'
+export * from './useColorList'
+export * from './useControl'
+export * from './useMapList'
