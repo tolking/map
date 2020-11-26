@@ -11,18 +11,15 @@
 </template>
 
 <script lang="ts">
-import { toRefs } from 'vue'
-import { mapList } from './../config.ts'
+import { defineComponent, toRefs } from 'vue'
+import { mapList } from './../config'
 
-export default {
+export default defineComponent({
   name: 'SelectSource',
   props: {
     modelValue: String,
   },
-  setup(
-    props: { modelValue: string },
-    { emit }: { emit: (event: string, ...args: unknown[]) => void}
-  ) {
+  setup(props, { emit }) {
     const { modelValue } = toRefs(props)
 
     function selectItem({ target }: { target: { value: string }}) {
@@ -35,7 +32,7 @@ export default {
       selectItem,
     }
   }
-}
+})
 </script>
 
 <style>

@@ -1,6 +1,7 @@
 import { onMounted, reactive, toRefs } from "vue"
 import { Manager, Pan, Pinch, Tap } from '@egjs/hammerjs'
-import { mouseScroll, throttle } from './../utils/index.ts'
+import { mouseScroll, throttle } from './../utils/index'
+import { WheelEvent } from './../types/index'
 
 export function useControl() {
   const data = reactive({

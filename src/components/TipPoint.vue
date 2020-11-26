@@ -7,13 +7,15 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from "vue"
+
+export default defineComponent({
   name: 'TipPoint',
   props: {
     message: String,
     style: Object,
   }
-}
+})
 </script>
 
 <style>

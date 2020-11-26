@@ -9,16 +9,19 @@
 </template>
 
 <script lang="ts">
-import { onMounted, ref, toRefs, watch } from 'vue';
+import { defineComponent, onMounted, ref, toRefs, watch } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'TipMessage',
   props: {
-    type: String,
+    type: {
+      type: String,
+      required: true,
+    },
     version: Number,
     introduce: String,
   },
-  setup(props: { type: string, version: number, introduce: string }) {
+  setup(props) {
     const { type, version, introduce } = toRefs(props)
     const show = ref(false)
     let mapVersion: { [key: string]: number } | undefined = undefined
@@ -30,19 +33,19 @@ export default {
         const localVersion = localStorage.getItem('map-version')
         mapVersion = localVersion ? JSON.parse(localVersion) : {}
       }
-      checkVersion()
+      version?.value && checkVersion()
     })
 
     function checkVersion() {
       const oldVersion = mapVersion![type.value]
-      if (version.value && (!oldVersion || oldVersion < version.value)) {
+      if (version!.value && (!oldVersion || oldVersion < version!.value)) {
         show.value = true
       }
     }
 
     function close() {
       show.value = false
-      mapVersion![type.value] = version.value
+      mapVersion![type.value] = version!.value as number
       localStorage.setItem('map-version', JSON.stringify(mapVersion))
     }
 
@@ -52,5 +55,5 @@ export default {
       close,
     }
   }
-}
+})
 </script>

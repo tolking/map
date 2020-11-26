@@ -34,19 +34,19 @@
 </template>
 
 <script lang="ts">
-import { ref, watch } from 'vue'
-import { throttle } from './../utils/index.ts'
-import { MapNameItem, MapPoint } from './types/index.d.ts'
+import { defineComponent, ref, watch } from 'vue'
+import { throttle } from './../utils/index'
+import { MapNameItem, MapPoint } from './../types/index'
 
-export default {
+export default defineComponent({
   name: 'SerachBox',
   props: {
-    nameList: Array,
+    nameList: {
+      type: Array,
+      required: true,
+    },
   },
-  setup(
-    props: { nameList: MapNameItem[] },
-    { emit }: { emit: (event: string, ...args: unknown[]) => void}
-  ) {
+  setup(props, { emit }) {
     const serachList = ref<MapNameItem[]>([])
     const serach = ref('')
     const show = ref(false)
@@ -54,7 +54,7 @@ export default {
     watch(serach, throttle(getSerachList, 100))
 
     function getSerachList() {
-      serachList.value = props.nameList.filter((item: MapNameItem) => {
+      serachList.value = (props.nameList as MapNameItem[]).filter((item: MapNameItem) => {
         const _serach = serach.value.trim().toLocaleLowerCase()
         return item.name.toLocaleLowerCase().includes(_serach)
       })
@@ -79,7 +79,7 @@ export default {
       move,
     }
   }
-}
+})
 </script>
 
 <style>

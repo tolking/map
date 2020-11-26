@@ -8,19 +8,22 @@
 </template>
 
 <script lang="ts">
-import { toRefs } from 'vue'
-import { colorList, ColorItem } from './../config.ts'
-import { Color } from './../composables/index.ts'
+import { defineComponent, toRefs } from 'vue'
+import { colorList } from './../config'
+import { ConfigColorItem } from './../types/index'
 
-export default {
+export default defineComponent({
   name: 'ConfigColor',
   props: {
-    modelValue: Object,
+    modelValue: {
+      type: Object,
+      required: true,
+    },
   },
-  setup(props: { modelValue: Color }) {
+  setup(props) {
     const { modelValue } = toRefs(props)
 
-    function reset(item: ColorItem) {
+    function reset(item: ConfigColorItem) {
       modelValue.value[item.key] = item.value
     }
 
@@ -30,7 +33,7 @@ export default {
       reset,
     }
   }
-}
+})
 </script>
 
 <style>
