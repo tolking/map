@@ -9,12 +9,12 @@
         <section v-if="show" class="mask" @click="toggle">
           <div class="content" @click.stop>
             <div class="serach-inpit">
-              <input v-model="serach" type="text" class="input">
+              <input v-model="keyword" type="text" autofocus class="input">
             </div>
             <transition name="zoom">
-              <div v-show="serachList.length" class="serach-list">
+              <div v-show="list.length" class="serach-list">
                 <div
-                  v-for="(item, index) in serachList"
+                  v-for="(item, index) in list"
                   :key="index"
                   class="list-item"
                   @click="move(item.point)"
@@ -34,9 +34,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
-import { throttle } from './../utils/index'
-import { MapNameItem, MapPoint } from './../types/index'
+import { defineComponent, ref } from 'vue'
+import { useSerach, SerachBoxProps } from './../composables/index'
+import { MapPoint } from './../types/index'
 
 export default defineComponent({
   name: 'SerachBox',
@@ -47,18 +47,8 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    const serachList = ref<MapNameItem[]>([])
-    const serach = ref('')
+    const { keyword, list } = useSerach(props as SerachBoxProps)
     const show = ref(false)
-
-    watch(serach, throttle(getSerachList, 100))
-
-    function getSerachList() {
-      serachList.value = (props.nameList as MapNameItem[]).filter((item: MapNameItem) => {
-        const _serach = serach.value.trim().toLocaleLowerCase()
-        return item.name.toLocaleLowerCase().includes(_serach)
-      })
-    }
 
     function move(point: MapPoint) {
       toggle()
@@ -66,14 +56,13 @@ export default defineComponent({
     }
 
     function toggle() {
-      serach.value = ''
-      serachList.value = []
+      keyword.value = ''
       show.value = !show.value
     }
 
     return {
-      serach,
-      serachList,
+      keyword,
+      list,
       show,
       toggle,
       move,
