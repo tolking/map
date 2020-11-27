@@ -7,7 +7,7 @@
     :data="mapData"
     :loading="loading"
     :style="style"
-    @nameList="setNameList"
+    @name-list="setNameList"
     @over-path="setOverPoint"
   />
   <config-color v-model="color" />
@@ -18,9 +18,9 @@
 
 <script lang="ts">
 import { computed, ref, watch } from 'vue'
-import { useColorList, useControl, useMapList } from './composables/index.ts'
-import { get } from './utils/index.ts'
-import { MapData, MapNameItem, MapPoint } from './types/index.d.ts'
+import { useColorList, useControl, useMapList } from './composables/index'
+import { get } from './utils/index'
+import { MapData, MapNameItem, MapPoint } from './types/index'
 import AppHeader from './components/AppHeader.vue'
 import AppSvg from './components/AppSvg.vue'
 import AppFooter from './components/AppFooter.vue'
@@ -29,6 +29,13 @@ import SelectSource from './components/SelectSource.vue'
 import ConfigColor from './components/ConfigColor.vue'
 import TipMessage from './components/TipMessage.vue'
 import TipPoint from './components/TipPoint.vue'
+
+const defaultMap: MapData = {
+  title: '',
+  radius: 0,
+  center: { x: 0, z: 0 },
+  data: []
+}
 
 export default {
   name: 'App',
@@ -47,7 +54,7 @@ export default {
     const type = useMapList()
     const path = computed(() => `/config/${type.value}.json`)
     const loading = ref(true)
-    const mapData = ref<MapData>({})
+    const mapData = ref(defaultMap)
     const nameList = ref<MapNameItem[]>([])
     const { x, y, s, leastWidth, transform, setTransform, deltaTap } = useControl()
     const tipPointMessage = ref('')
@@ -69,7 +76,7 @@ export default {
       y.value = 0
       s.value = 1
       transform.value = ''
-      mapData.value = {}
+      mapData.value = defaultMap
       mapData.value = await get<MapData>(path.value)
     }
 
