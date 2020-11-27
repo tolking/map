@@ -33,13 +33,15 @@ export default defineComponent({
         const localVersion = localStorage.getItem('map-version')
         mapVersion = localVersion ? JSON.parse(localVersion) : {}
       }
-      version?.value && checkVersion()
+      checkVersion()
     })
 
     function checkVersion() {
-      const oldVersion = mapVersion![type.value]
-      if (version!.value && (!oldVersion || oldVersion < version!.value)) {
-        show.value = true
+      if (version && version.value) {
+        const oldVersion = mapVersion![type.value]
+        if (!oldVersion || oldVersion < version.value) {
+          show.value = true
+        }
       }
     }
 

@@ -1,16 +1,16 @@
 export interface MapData {
   title: string
-  author: string
-  version: number
-  uptime: string
-  introduce: string
+  author?: string
+  version?: number
+  uptime?: string
+  introduce?: string
   center: Pick<MapPoint, 'x' | 'z'>
   radius: number
-  borderstyle: MapBorderstyle
+  borderstyle?: MapBorderstyle
   data: MapDataItem[]
 }
 
-export type MapBorderstyle = 'circles' | 'square' | '' | false | MapPoint[]
+export type MapBorderstyle = 'circles' | 'square' | MapPoint[]
 
 export interface MapDataItem {
   name: string

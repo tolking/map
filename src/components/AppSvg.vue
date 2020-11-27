@@ -153,7 +153,7 @@ export default defineComponent({
       return path
     }
 
-    function inPath({ clientX, clientY }: WheelEvent,notes: string) {
+    function inPath({ clientX, clientY }: WheelEvent, notes: string) {
       if (notes) {
         pathNotes.value = notes
         pathClient.value = {

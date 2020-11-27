@@ -1,9 +1,9 @@
 <template>
   <footer class="footer">
-    <span class="text">更新时间</span>
-    <span class="text">{{ uptime }}</span>
-    <span class="text">数据维护</span>
-    <span class="text">{{ author }}</span>
+    <span v-if="uptime" class="text">更新时间</span>
+    <span v-if="uptime" class="text">{{ uptime }}</span>
+    <span v-if="author" class="text">数据维护</span>
+    <span v-if="author" class="text">{{ author }}</span>
   </footer>
 </template>
 
