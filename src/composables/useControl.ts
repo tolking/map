@@ -1,16 +1,19 @@
-import { onMounted, reactive, toRefs } from "vue"
+import { onMounted, reactive, Ref, toRefs } from "vue"
 import { Manager, Pan, Pinch, Tap } from '@egjs/hammerjs'
 import { mouseScroll, throttle } from './../utils/index'
-import { WheelEvent } from './../types/index'
+import { MapData, WheelEvent } from './../types/index'
 
-export function useControl() {
+export function useControl(mapData: Ref<MapData>) {
   const data = reactive({
     x: 0,
     y: 0,
     s: 1,
     leastWidth: 1,
     transform: '',
-    deltaTap: <{ x: number, y: number, px: number, pz: number }>undefined,
+    tipPoint: {
+      message: '',
+      style: {},
+    },
   })
 
   onMounted(() => {
@@ -47,11 +50,7 @@ export function useControl() {
       data.y += (center.y - screeHeight / 2 - data.y) * (1 - scale)
     })
     hammer.on('tap', ({ center }) => {
-      data.deltaTap = {
-        ...center,
-        px: ~~(center.x - screeWidth / 2 - data.x),
-        pz: ~~(center.y - screeHeight / 2 - data.y),
-      }
+      setTipPoint({ ...center, screeWidth, screeHeight })
     })
     square.onmousewheel = throttle(mouseWheel, 50)
     if (square.addEventListener) {
@@ -69,8 +68,25 @@ export function useControl() {
   })
 
   function setTransform(x: number, y: number, s: number) {
-    data.deltaTap = undefined
     data.transform = `translate3d(${x}px, ${y}px, 0px) scale3d(${s}, ${s}, 1)`
+    data.tipPoint = {
+      message: '',
+      style: {},
+    }
+  }
+
+  function setTipPoint({ x, y, screeWidth, screeHeight }) {
+    const _s = 0.45 * data.s * data.leastWidth / mapData.value.radius
+    const _x = ~~((x - screeWidth / 2 - data.x) / _s + mapData.value.center.x)
+    const _z = ~~((y - screeHeight / 2 - data.y) / _s + mapData.value.center.z)
+
+    data.tipPoint = {
+      message: `x: ${_x}, z: ${_z}`,
+      style: {
+        left: x + 'px',
+        top: y + 'px',
+      },
+    }
   }
 
   return {

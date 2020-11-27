@@ -1,8 +1,8 @@
-import { ref, watch } from 'vue'
+import { Ref, ref, watch } from 'vue'
 import { mapList } from './../config'
 import { getUrlString } from './../utils/index'
 
-export function useMapList() {
+export function useMapList(): Ref<string> {
   const _default = getPathType() || getLocalType() || getConfigType()
   const type = ref(_default)
 

@@ -1,15 +1,16 @@
 <template>
   <teleport to="body">
     <transition name="mask-zoom">
-      <section v-if="show" class="mask" @click="close">
-        <div class="content" v-html="introduce" />
+      <section v-if="introduceInfo" class="mask" @click="close">
+        <div class="content" v-html="introduceInfo" />
       </section>
     </transition>
   </teleport>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, toRefs, watch } from 'vue'
+import { defineComponent } from 'vue'
+import { useParseIntroduce } from './../composables/index'
 
 export default defineComponent({
   name: 'TipMessage',
@@ -22,38 +23,14 @@ export default defineComponent({
     introduce: String,
   },
   setup(props) {
-    const { type, version, introduce } = toRefs(props)
-    const show = ref(false)
-    let mapVersion: { [key: string]: number } | undefined = undefined
-
-    watch([type, version], checkVersion)
-
-    onMounted(() => {
-      if (!mapVersion) {
-        const localVersion = localStorage.getItem('map-version')
-        mapVersion = localVersion ? JSON.parse(localVersion) : {}
-      }
-      checkVersion()
-    })
-
-    function checkVersion() {
-      if (version && version.value) {
-        const oldVersion = mapVersion![type.value]
-        if (!oldVersion || oldVersion < version.value) {
-          show.value = true
-        }
-      }
-    }
+    const introduceInfo = useParseIntroduce(props)
 
     function close() {
-      show.value = false
-      mapVersion![type.value] = version!.value as number
-      localStorage.setItem('map-version', JSON.stringify(mapVersion))
+      introduceInfo.value = ''
     }
 
     return {
-      show,
-      introduce,
+      introduceInfo,
       close,
     }
   }
