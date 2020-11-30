@@ -137,16 +137,16 @@ export default defineComponent({
 }
 .svg .path {
   fill: transparent;
-  stroke-width: max(calc(var(--size-stroke) * 3), 1);
+  stroke-width: max(calc(var(--size-stroke) * 2), 2);
   stroke-linecap: round;
 }
 .svg .path.border {
   stroke: var(--color-frame, #AAAAAA);
-  stroke-dasharray: calc(var(--size-stroke) * 20), calc(var(--size-stroke) * 20);
+  stroke-dasharray: max(calc(var(--size-stroke) * 12), 12), max(calc(var(--size-stroke) * 12), 12);
 }
 .svg .path.ice {
   stroke: var(--color-ice, #7FDBFF);
-  stroke-width: max(calc(var(--size-stroke) * 3), 1.5);
+  stroke-width: max(calc(var(--size-stroke) * 3), 3);
 }
 .svg .path.rail {
   stroke: var(--color-rail, #FFDC00);
@@ -156,14 +156,14 @@ export default defineComponent({
 }
 .svg .path.green {
   fill: var(--color-green, #2ECC40);
-  r: max(calc(var(--size-stroke) * 3), 1.5);
+  r: max(calc(var(--size-stroke) * 4), 4);
 }
 .svg .path.frame {
   stroke: var(--color-frame, #AAAAAA);
 }
 .svg .text {
   fill: var(--color-text);
-  font-size: max(calc(var(--size-stroke) * 28px), 16px);
+  font-size: max(calc(var(--size-stroke) * 16px), 12px);
   stroke-width: 0;
   text-anchor: middle;
   dominant-baseline: middle;

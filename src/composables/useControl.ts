@@ -1,19 +1,21 @@
-import { onMounted, reactive, Ref, toRefs } from "vue"
+import { computed, onMounted, reactive, Ref, toRefs } from "vue"
 import { Manager, Pan, Pinch, Tap } from '@egjs/hammerjs'
 import { mouseScroll, throttle } from './../utils/index'
 import { MapData, WheelEvent } from './../types/index'
 
 export function useControl(mapData: Ref<MapData>) {
   const data = reactive({
-    x: 0,
-    y: 0,
-    s: 1,
+    translateX: 0,
+    translateY: 0,
+    scale: 1,
     leastWidth: 1,
     transform: '',
-    tipPoint: {
-      message: '',
-      style: {},
-    },
+    pointMessage: '',
+    pointStyle: {},
+  })
+
+  const relativeScale = computed(() => {
+    return 0.45 * data.scale * data.leastWidth / mapData.value.radius
   })
 
   onMounted(() => {
@@ -30,24 +32,28 @@ export function useControl(mapData: Ref<MapData>) {
 
     hammer.add([pan, pinch, tap])
     hammer.on('panmove', ({ deltaX, deltaY }) => {
-      setTransform(data.x + deltaX, data.y + deltaY, data.s)
+      setTransform(data.translateX + deltaX, data.translateY + deltaY, data.scale)
     })
     hammer.on('panend', ({ deltaX, deltaY }) => {
-      data.x += deltaX
-      data.y += deltaY
+      data.translateX += deltaX
+      data.translateY += deltaY
     })
     hammer.get('pinch').set({ enable: true })
     hammer.on('pinchmove', ({ scale, center }) => {
-      setTransform(
-        data.x + (center.x - screeWidth / 2 - data.x) * (1 - scale),
-        data.y + (center.y - screeHeight / 2 - data.y) * (1 - scale),
-        data.s * scale
+      const _s = data.scale * scale
+      _s >= .3 && _s <= 50 && setTransform(
+        data.translateX + (center.x - screeWidth / 2 - data.translateX) * (1 - scale),
+        data.translateY + (center.y - screeHeight / 2 - data.translateY) * (1 - scale),
+        data.scale * scale
       )
     })
     hammer.on('pinchend', ({ scale, center }) => {
-      data.s *= scale
-      data.x += (center.x - screeWidth / 2 - data.x) * (1 - scale)
-      data.y += (center.y - screeHeight / 2 - data.y) * (1 - scale)
+      const _s = data.scale * scale
+      data.scale = _s < .3 ? .3 : _s > 50 ? 50 : _s
+      if (_s >= .3 && _s <= 50) {
+        data.translateX += (center.x - screeWidth / 2 - data.translateX) * (1 - scale)
+        data.translateY += (center.y - screeHeight / 2 - data.translateY) * (1 - scale)
+      }
     })
     hammer.on('tap', ({ center }) => {
       setTipPoint({ ...center, screeWidth, screeHeight })
@@ -59,38 +65,37 @@ export function useControl(mapData: Ref<MapData>) {
 
     function mouseWheel(e: WheelEvent) {
       mouseScroll(e).then(({ direction, center }) => {
-        data.s *= (direction ? 1.1 : 0.9)
-        data.x += (center.x - screeWidth / 2 - data.x) * (direction ? -0.1 : 0.1)
-        data.y += (center.y - screeHeight / 2 - data.y) * (direction ? -0.1 : 0.1)
-        setTransform(data.x, data.y, data.s)
+        const _s = data.scale * (direction ? 1.1 : 0.9)
+        data.scale = _s < .3 ? .3 : _s > 50 ? 50 : _s
+        if (_s >= .3 && _s <= 50) {
+          data.translateX += (center.x - screeWidth / 2 - data.translateX) * (direction ? -0.1 : 0.1)
+          data.translateY += (center.y - screeHeight / 2 - data.translateY) * (direction ? -0.1 : 0.1)
+          setTransform(data.translateX, data.translateY, data.scale)
+        }
       })
     }
   })
 
-  function setTransform(x: number, y: number, s: number) {
-    data.transform = `translate3d(${x}px, ${y}px, 0px) scale3d(${s}, ${s}, 1)`
-    data.tipPoint = {
-      message: '',
-      style: {},
-    }
+  function setTransform(translateX: number, translateY: number, scale: number) {
+    data.transform = `translate3d(${translateX}px, ${translateY}px, 0px) scale3d(${scale}, ${scale}, 1)`
+    data.pointMessage = ''
+    data.pointStyle = {}
   }
 
   function setTipPoint({ x, y, screeWidth, screeHeight }) {
-    const _s = 0.45 * data.s * data.leastWidth / mapData.value.radius
-    const _x = ~~((x - screeWidth / 2 - data.x) / _s + mapData.value.center.x)
-    const _z = ~~((y - screeHeight / 2 - data.y) / _s + mapData.value.center.z)
+    const _x = ~~((x - screeWidth / 2 - data.translateX) / relativeScale.value + mapData.value.center.x)
+    const _z = ~~((y - screeHeight / 2 - data.translateY) / relativeScale.value + mapData.value.center.z)
 
-    data.tipPoint = {
-      message: `x: ${_x}, z: ${_z}`,
-      style: {
-        left: x + 'px',
-        top: y + 'px',
-      },
+    data.pointMessage = `x: ${_x}, z: ${_z}`
+    data.pointStyle = {
+      left: x + 'px',
+      top: y + 'px',
     }
   }
 
   return {
     ...toRefs(data),
+    relativeScale,
     setTransform,
   }
 }

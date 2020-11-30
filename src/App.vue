@@ -13,7 +13,7 @@
   <config-color v-model="color" />
   <app-footer :uptime="mapData.uptime" :author="mapData.author" />
   <tip-message :type="type" :version="mapData.version" :introduce="mapData.introduce" />
-  <tip-point :message="tipPoint.message" :style="tipPoint.style" />
+  <tip-point :message="pointMessage" :style="pointStyle" />
 </template>
 
 <script lang="ts">
@@ -45,20 +45,29 @@ export default {
     const color = useColorList()
     const type = useMapList()
     const { loading, mapData } = useLoadMapData(type)
-    const { x, y, s, leastWidth, transform, setTransform, tipPoint } = useControl(mapData)
+    const {
+      translateX,
+      translateY,
+      scale,
+      relativeScale,
+      transform,
+      setTransform,
+      pointMessage,
+      pointStyle
+    } = useControl(mapData)
     const nameList = ref<MapNameItem[]>([])
     const style = computed(() => ({
       ...color.value,
-      '--size-stroke': mapData.value.radius / leastWidth.value / s.value,
+      '--size-stroke': 1 / relativeScale.value,
       transform: transform.value,
     }))
 
     watch(type, refresh)
 
     function refresh() {
-      x.value = 0
-      y.value = 0
-      s.value = 1
+      translateX.value = 0
+      translateY.value = 0
+      scale.value = 1
       transform.value = ''
     }
 
@@ -67,14 +76,14 @@ export default {
     }
 
     function moveMap(poit: MapPoint) {
-      const _s = 0.45 * s.value * leastWidth.value / mapData.value.radius
-      x.value = -(poit.x - mapData.value.center.x) * _s
-      y.value = -(poit.z - mapData.value.center.z) * _s
-      setTransform(x.value, y.value, s.value)
+      translateX.value = -(poit.x - mapData.value.center.x) * relativeScale.value
+      translateY.value = -(poit.z - mapData.value.center.z) * relativeScale.value
+      setTransform(translateX.value, translateY.value, scale.value)
     }
 
-    function setOverPoint(value: { message: string, style: object }) {
-      tipPoint.value = value
+    function setOverPoint({ message, style }: { message: string, style: object }) {
+      pointMessage.value = message
+      pointStyle.value = style
     }
 
     return {
@@ -86,7 +95,8 @@ export default {
       setNameList,
       style,
       moveMap,
-      tipPoint,
+      pointMessage,
+      pointStyle,
       setOverPoint,
     }
   }
