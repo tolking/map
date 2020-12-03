@@ -82,6 +82,7 @@ export default defineComponent({
     loading: Boolean,
     style: Object,
   },
+  emits: ['nameList', 'overPath'],
   setup(props, { emit }) {
     const { data, loading, style } = toRefs(props)
     const {

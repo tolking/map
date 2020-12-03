@@ -46,6 +46,7 @@ export default defineComponent({
       required: true,
     },
   },
+  emits: ['moveMap'],
   setup(props, { emit }) {
     const { keyword, list } = useSerach(props as SerachBoxProps)
     const show = ref(false)

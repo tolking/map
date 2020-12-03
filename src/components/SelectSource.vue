@@ -19,6 +19,7 @@ export default defineComponent({
   props: {
     modelValue: String,
   },
+  emits: ['update:modelValue'],
   setup(props, { emit }) {
     const { modelValue } = toRefs(props)
 
