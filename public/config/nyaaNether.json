@@ -6,7 +6,7 @@
   "introduce": "如果你对收集数据感兴趣欢迎加入<br><a target='_blank' href='https://github.com/tolking/map'>点我去看看源码</a>",
   "center": {"x": 0, "z": 0},
   "radius": 1920,
-  "borderstyle": "circles",
+  "borderstyle": "square",
   "data": [
     {
       "name": "",

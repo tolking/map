@@ -27,6 +27,10 @@ export const mapList: ConfigMapList = [
     type: 'kedamaV2World'
   },
   {
+    name: '喵窝—下界基岩上层交通地图',
+    type: 'nyaaNether129'
+  },
+  {
     name: '喵窝—下界交通地图',
     type: 'nyaaNether'
   },
