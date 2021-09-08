@@ -1,17 +1,12 @@
-import { computed, Ref, ref, toRaw, toRefs } from 'vue'
+import { computed, ref, toRefs } from 'vue'
 import { MapNameItem } from './../types/index'
 
-export type SerachBoxProps = Readonly<{
-  nameList: MapNameItem[]
-}>
-
-export function useSerach(props: SerachBoxProps) {
+export function useSerach(props: Readonly<{ nameList: MapNameItem[]}>) {
   const { nameList } = toRefs(props)
   const keyword = ref('')
   const list = computed(() => {
     if (keyword.value) {
-      const _sourc = toRaw(nameList.value)
-      return _sourc.filter((item: MapNameItem) => {
+      return nameList.value.filter((item: MapNameItem) => {
         const _serach = keyword.value.trim().toLocaleLowerCase()
         return item.name.toLocaleLowerCase().includes(_serach)
       })

@@ -4,7 +4,7 @@ export function useOverPath() {
   const notes = ref('')
   const client = ref({})
 
-  function enterPath({ clientX, clientY }: WheelEvent, value: string) {
+  function enterPath({ clientX, clientY }: MouseEvent, value?: string) {
     if (value) {
       notes.value = value
       client.value = {

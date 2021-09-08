@@ -146,4 +146,9 @@ npm run dev
 yarn build
 # or
 npm run build
+
+4. 预览
+yarn serve
+# or
+npm run serve
 ```

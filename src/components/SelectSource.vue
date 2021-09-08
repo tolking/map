@@ -1,5 +1,9 @@
 <template>
-  <select :value="modelValue" class="select-source" @change="selectItem">
+  <select
+    :value="modelValue"
+    class="select-source"
+    @change="selectItem"
+  >
     <option
       v-for="item in mapList"
       :key="item.type"
@@ -23,8 +27,9 @@ export default defineComponent({
   setup(props, { emit }) {
     const { modelValue } = toRefs(props)
 
-    function selectItem({ target }: { target: { value: string }}) {
-      emit('update:modelValue', target.value)
+    function selectItem(event: Event) {
+      const target = event.target as { value: string } | null
+      emit('update:modelValue', target?.value)
     }
 
     return {

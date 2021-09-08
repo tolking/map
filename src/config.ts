@@ -1,4 +1,4 @@
-import { ConfigMapList, ConfigColorList } from './types/index'
+import type { ConfigMapList, ConfigColorList } from './types/index'
 
 /** 统计地图目录配置 */
 export const mapList: ConfigMapList = [

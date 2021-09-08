@@ -12,16 +12,17 @@ export function useMapList(): Ref<string> {
     return getUrlString('type')
   }
 
-  function getLocalType(): string {
-    return JSON.parse(localStorage.getItem('map-type'))
+  function getLocalType() {
+    const data = localStorage.getItem('map-type')
+    return data ? JSON.parse(data) as string : undefined
+  }
+  
+  function getConfigType() {
+    return mapList[0].type
   }
 
   function setLocalColor() {
     localStorage.setItem('map-type', JSON.stringify(type.value))
-  }
-
-  function getConfigType() {
-    return mapList.length && mapList[0].type
   }
 
   return type

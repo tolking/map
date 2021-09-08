@@ -50,10 +50,3 @@ export type ConfigColorList = ConfigColorItem[]
 export interface LocalColor {
   [key: string]: string
 }
-export interface WheelEvent {
-  clientX: number
-  clientY: number
-  wheelDelta: number
-  detail: number
-  preventDefault?: () => void
-}

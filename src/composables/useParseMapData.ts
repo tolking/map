@@ -1,5 +1,5 @@
 import { computed, Ref, toRaw } from 'vue'
-import { MapData, MapNameItem, MapPoint } from './../types/index'
+import type { MapData, MapNameItem, MapPoint } from './../types/index'
 
 export function useParseMapData(data: Ref<MapData>) {
   const borderstyle = computed(() => data.value.borderstyle || false)
@@ -8,11 +8,10 @@ export function useParseMapData(data: Ref<MapData>) {
   const viewBox = computed(() => `0 0 ${radius.value * 2} ${radius.value * 2}`)
   const dataList = computed(() => data.value.data || [])
   const nameList = computed(() => {
-    const list = toRaw(dataList.value)
     let nameList: MapNameItem[] = []
 
-    for (let i = 0; i < list.length; i++) {
-      const item = list[i]
+    for (let i = 0; i < dataList.value.length; i++) {
+      const item = dataList.value[i]
       if (item.name) {
         nameList.push({
           name: item.name,
@@ -27,11 +26,10 @@ export function useParseMapData(data: Ref<MapData>) {
   })
 
   function parsePath(points: MapPoint[]) {
-    const list = toRaw(points)
     let path = ''
 
-    for (let i = 0; i < list.length; i++) {
-      const item = list[i];
+    for (let i = 0; i < points.length; i++) {
+      const item = points[i];
       const x = item.x + radius.value - center.value.x
       const z = item.z + radius.value - center.value.z
 

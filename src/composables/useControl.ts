@@ -1,7 +1,14 @@
-import { computed, onMounted, reactive, Ref, toRefs } from "vue"
+import { computed, onMounted, reactive, Ref, toRefs } from 'vue'
 import { Manager, Pan, Pinch, Tap } from '@egjs/hammerjs'
 import { mouseScroll, throttle } from './../utils/index'
-import { MapData, WheelEvent } from './../types/index'
+import type { MapData } from './../types/index'
+
+interface TypePoint {
+  x: number
+  y: number
+  screeWidth: number
+  screeHeight: number
+}
 
 export function useControl(mapData: Ref<MapData>) {
   const data = reactive({
@@ -58,10 +65,7 @@ export function useControl(mapData: Ref<MapData>) {
     hammer.on('tap', ({ center }) => {
       setTipPoint({ ...center, screeWidth, screeHeight })
     })
-    square.onmousewheel = throttle(mouseWheel, 50)
-    if (square.addEventListener) {
-      square.addEventListener('DOMMouseScroll', throttle(mouseWheel, 50), false)
-    }
+    square.onwheel = throttle(mouseWheel, 50)
 
     function mouseWheel(e: WheelEvent) {
       mouseScroll(e).then(({ direction, center }) => {
@@ -82,7 +86,7 @@ export function useControl(mapData: Ref<MapData>) {
     data.pointStyle = {}
   }
 
-  function setTipPoint({ x, y, screeWidth, screeHeight }) {
+  function setTipPoint({ x, y, screeWidth, screeHeight }: TypePoint) {
     const _x = ~~((x - screeWidth / 2 - data.translateX) / relativeScale.value + mapData.value.center.x)
     const _z = ~~((y - screeHeight / 2 - data.translateY) / relativeScale.value + mapData.value.center.z)
 

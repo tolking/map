@@ -1,6 +1,6 @@
 import { ref, Ref, watch } from 'vue'
 import { get } from './../utils/index'
-import { MapData } from './../types/index'
+import type { MapData } from './../types/index'
 
 const defaultMap: MapData = {
   title: '',

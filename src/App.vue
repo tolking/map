@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
 import { useColorList, useControl, useLoadMapData, useMapList } from './composables/index'
 import { MapNameItem, MapPoint } from './types/index'
 import AppHeader from './components/AppHeader.vue'
@@ -29,7 +29,7 @@ import ConfigColor from './components/ConfigColor.vue'
 import TipMessage from './components/TipMessage.vue'
 import TipPoint from './components/TipPoint.vue'
 
-export default {
+export default defineComponent({
   name: 'App',
   components: {
     AppHeader,
@@ -100,5 +100,5 @@ export default {
       setOverPoint,
     }
   }
-}
+})
 </script>

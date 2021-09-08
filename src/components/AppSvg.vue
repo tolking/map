@@ -68,15 +68,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, toRefs, watch } from 'vue'
+import { defineComponent, PropType, toRefs, watch } from 'vue'
 import { useParseMapData, useOverPath } from './../composables/index'
-import { MapData } from './../types/index'
+import type { MapData } from './../types/index'
 
 export default defineComponent({
   name: 'AppSvg',
   props: {
     data: {
-      type: Object,
+      type: Object as PropType<MapData>,
       required: true,
     },
     loading: Boolean,
@@ -93,7 +93,7 @@ export default defineComponent({
       dataList,
       nameList,
       parsePath,
-    } = useParseMapData(data as Ref<MapData>)
+    } = useParseMapData(data)
     const { notes, client, enterPath, outPath } = useOverPath()
 
     watch(nameList, () => {

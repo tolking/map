@@ -1,5 +1,3 @@
-import { WheelEvent } from './../types/index'
-
 /** 获取json文件 */
 export async function get<T>(url: string): Promise<T> {
   const res = await fetch(url)
@@ -16,8 +14,12 @@ export function getUrlString (key: string) {
   return r !== null ? unescape(r[2]) : null
 }
 
+interface IWheelEvent extends WheelEvent {
+  wheelDelta?: number
+}
+
 /** 鼠标滚轮事件 */
-export function mouseScroll(event?: WheelEvent) {
+export function mouseScroll(event: IWheelEvent) {
   return new Promise<{
     center: { x: number, y: number },
     direction: boolean,
@@ -43,14 +45,18 @@ export function mouseScroll(event?: WheelEvent) {
  * @param fn 执行函数
  * @param wait 等待时间
  */
-export function throttle(fn: (...args: unknown[]) => void, wait: number) {
-  let startTime = Date.now()
-  let timer = null
-  return function() {
-    const curTime = Date.now()
-    if (curTime - startTime >= wait) {
-      timer = setTimeout((fn.apply(this, arguments), (timer = undefined)), wait)
-      startTime = curTime
+export function throttle<T extends unknown[] = unknown[], Q = void>(
+  fn: (...args: T) => Q,
+  interval: number,
+) {
+  let enterTime = 0
+
+  return function (this: unknown, ...args: T) {
+    const backTime = new Date().getTime()
+
+    if (backTime - enterTime > interval) {
+      fn.call(this, ...args)
+      enterTime = backTime
     }
   }
 }

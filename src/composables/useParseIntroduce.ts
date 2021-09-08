@@ -24,10 +24,10 @@ export function useParseIntroduce(props: TipMessageProps) {
 
   function checkVersion() {
     if (version && version.value) {
-      const oldVersion = mapVersion[type.value]
+      const oldVersion = mapVersion![type.value]
       if (!oldVersion || oldVersion < version.value) {
-        introduceInfo.value = introduce.value
-        mapVersion[type.value] = version.value
+        introduceInfo.value = introduce?.value || ''
+        mapVersion![type.value] = version.value
         localStorage.setItem('map-version', JSON.stringify(mapVersion))
       }
     }

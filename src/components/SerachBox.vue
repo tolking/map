@@ -34,21 +34,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import { useSerach, SerachBoxProps } from './../composables/index'
-import { MapPoint } from './../types/index'
+import { defineComponent, PropType, ref } from 'vue'
+import { useSerach } from './../composables/index'
+import type { MapNameItem, MapPoint } from './../types/index'
 
 export default defineComponent({
   name: 'SerachBox',
   props: {
     nameList: {
-      type: Array,
+      type: Array as PropType<MapNameItem[]>,
       required: true,
     },
   },
   emits: ['moveMap'],
   setup(props, { emit }) {
-    const { keyword, list } = useSerach(props as SerachBoxProps)
+    const { keyword, list } = useSerach(props)
     const show = ref(false)
 
     function move(point: MapPoint) {

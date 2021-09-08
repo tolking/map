@@ -1,6 +1,6 @@
 import { ref, watch } from 'vue'
 import { colorList } from './../config'
-import { ConfigColorItem, LocalColor } from './../types/index'
+import type { ConfigColorItem, LocalColor } from './../types/index'
 
 export function useColorList() {
   const _default = getLocalColor() || getConfigColor()
@@ -9,7 +9,8 @@ export function useColorList() {
   watch(color, setLocalColor, { deep: true })
 
   function getLocalColor(): LocalColor {
-    return JSON.parse(localStorage.getItem('color-list'))
+    const data = localStorage.getItem('color-list')
+    return data ? JSON.parse(data) : undefined
   }
 
   function setLocalColor() {
