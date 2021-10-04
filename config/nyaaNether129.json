@@ -2,7 +2,7 @@
   "title": "喵窝—下界基岩上层交通地图",
   "author": "ououe",
   "version": 0.1,
-  "uptime": "2021-8-22",
+  "uptime": "2021-10-4",
   "introduce": "如果你对收集数据感兴趣欢迎加入<br><a target='_blank' href='https://github.com/tolking/map'>点我去看看源码</a>",
   "center": {"x": 0, "z": 0},
   "radius": 1920,
@@ -96,6 +96,14 @@
       "points": [
         {"x": -313, "y": 129, "z": 0},
         {"x": -313, "y": 129, "z": -93}
+      ]
+    },
+    {
+      "name": "科技特区",
+      "type": "ice",
+      "points": [
+        {"x": -966, "y": 129, "z": 0},
+        {"x": -966, "y": 129, "z": 584}
       ]
     },
     {
