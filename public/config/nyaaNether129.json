@@ -2,7 +2,7 @@
   "title": "喵窝—下界基岩上层交通地图",
   "author": "ououe",
   "version": 0.1,
-  "uptime": "2021-10-4",
+  "uptime": "2022-1-23",
   "introduce": "如果你对收集数据感兴趣欢迎加入<br><a target='_blank' href='https://github.com/tolking/map'>点我去看看源码</a>",
   "center": {"x": 0, "z": 0},
   "radius": 1920,
@@ -55,7 +55,14 @@
         {"x": 35, "y": 129, "z": 47}
       ]
     },
-
+    {
+      "name": "",
+      "type": "ice",
+      "points": [
+        {"x": 1094, "y": 129, "z": 0},
+        {"x": 1094, "y": 129, "z": -25}
+      ]
+    },
     {
       "name": "Akyuu's Home",
       "type": "ice",
@@ -82,11 +89,27 @@
       ]
     },
     {
+      "name": "米米国",
+      "type": "walk",
+      "points": [
+        {"x": 0, "y": 129, "z": 660},
+        {"x": -521, "y": 129, "z": 660}
+      ]
+    },
+    {
       "name": "Akyuu's Home",
       "type": "ice",
       "points": [
         {"x": 0, "y": 129, "z": 959},
         {"x": -40, "y": 129, "z": 959}
+      ]
+    },
+    {
+      "name": "石匠家",
+      "type": "ice",
+      "points": [
+        {"x": 0, "y": 129, "z": 1821},
+        {"x": 400, "y": 129, "z": 1821}
       ]
     },
 
