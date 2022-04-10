@@ -2,6 +2,10 @@ import type { ConfigMapList, ConfigColorList } from './types/index'
 
 /** 统计地图目录配置 */
 export const mapList: ConfigMapList = [
+  // {
+  //   name: '毛线V5—下界交通地图',
+  //   type: 'kedamaV5Nether'
+  // },
   {
     name: '毛线V4—下界交通地图',
     type: 'kedamaV4Nether'
@@ -61,11 +65,11 @@ export const colorList: ConfigColorList = [
     value: '#85144b',
     name: '步道'
   },
-  {
-    key: '--color-green',
-    value: '#2ECC40',
-    name: '通顶'
-  },
+  // {
+  //   key: '--color-green',
+  //   value: '#2ECC40',
+  //   name: '通顶'
+  // },
   {
     key: '--color-frame',
     value: '#AAAAAA',

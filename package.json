@@ -12,13 +12,13 @@
   },
   "dependencies": {
     "@egjs/hammerjs": "^2.0.17",
-    "vue": "^3.2.9"
+    "vue": "^3.2.31"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^1.6.1",
-    "@vue/compiler-sfc": "^3.2.9",
-    "typescript": "^4.4.2",
-    "vite": "^2.5.4",
-    "vue-tsc": "^0.3.0"
+    "@vitejs/plugin-vue": "^2.3.1",
+    "@vue/compiler-sfc": "^3.2.31",
+    "typescript": "^4.6.3",
+    "vite": "^2.9.1",
+    "vue-tsc": "^0.34.1"
   }
 }
