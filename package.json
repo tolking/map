@@ -12,14 +12,14 @@
   },
   "dependencies": {
     "@egjs/hammerjs": "^2.0.17",
-    "vue": "^3.2.31"
+    "vue": "^3.2.39"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^2.3.1",
-    "@vue/compiler-sfc": "^3.2.31",
-    "typescript": "^4.6.3",
-    "vite": "^2.9.1",
-    "vscode-languageserver-protocol": "^3.16.0",
-    "vue-tsc": "^0.34.1"
+    "@vitejs/plugin-vue": "^3.1.0",
+    "@vue/compiler-sfc": "^3.2.39",
+    "typescript": "^4.8.3",
+    "vite": "^3.1.2",
+    "vscode-languageserver-protocol": "^3.17.2",
+    "vue-tsc": "^0.34.17"
   }
 }

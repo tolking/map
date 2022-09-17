@@ -38,7 +38,7 @@
               :cy="item.points[0].z + radius - center.z"
               :class="item.type"
               class="path"
-              @mouseenter="e => enterPath(e, item.notes)"
+              @mouseenter="(e: MouseEvent) => enterPath(e, item.notes)"
               @mouseout="outPath"
             />
             <path
@@ -46,7 +46,7 @@
               :d="parsePath(item.points)"
               :class="item.type"
               class="path"
-              @mouseenter="e => enterPath(e, item.notes)"
+              @mouseenter="(e: MouseEvent) => enterPath(e, item.notes)"
               @mouseout="outPath"
             />
           </template>
