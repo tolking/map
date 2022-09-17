@@ -7,6 +7,10 @@ export const mapList: ConfigMapList = [
     type: 'kedamaV5Nether'
   },
   {
+    name: '毛线V5—主世界交通地图',
+    type: 'kedamaV5World'
+  },
+  {
     name: '毛线V4—下界交通地图',
     type: 'kedamaV4Nether'
   },
