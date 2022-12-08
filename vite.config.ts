@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import solid from 'vite-plugin-solid'
 
 export default defineConfig({
-  plugins: [vue()]
+  plugins: [solid()]
 })

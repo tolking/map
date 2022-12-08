@@ -1,0 +1,55 @@
+#app-svg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+  cursor: move;
+}
+.svg {
+  width: 90%;
+  height: 90%;
+  overflow: visible;
+  background: var(--color-bg);
+  transform-origin: center center;
+}
+.svg .path {
+  fill: transparent;
+  stroke-width: max(calc(var(--size-stroke) * 2), 2);
+  stroke-linecap: round;
+}
+.svg .path.border {
+  stroke: var(--color-frame, #AAAAAA);
+  stroke-dasharray: max(calc(var(--size-stroke) * 12), 12), max(calc(var(--size-stroke) * 12), 12);
+}
+.svg .path.ice {
+  stroke: var(--color-ice, #7FDBFF);
+  stroke-width: max(calc(var(--size-stroke) * 3), 3);
+}
+.svg .path.rail {
+  stroke: var(--color-rail, #FFDC00);
+}
+.svg .path.walk {
+  stroke: var(--color-walk, #85144b);
+}
+.svg .path.green {
+  fill: var(--color-green, #2ECC40);
+  r: max(calc(var(--size-stroke) * 4), 4);
+}
+.svg .path.frame {
+  stroke: var(--color-frame, #AAAAAA);
+}
+.svg .text {
+  fill: var(--color-text);
+  font-size: max(calc(var(--size-stroke) * 16px), 12px);
+  stroke-width: 0;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.mode-fade-enter-active, .mode-fade-leave-active {
+  transition: opacity .3s ease-out;
+}
+.mode-fade-enter-from, .mode-fade-leave-to {
+  opacity: 0;
+}

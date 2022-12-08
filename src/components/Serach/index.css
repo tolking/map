@@ -1,0 +1,35 @@
+.serach-inpit {
+  display: flex;
+}
+.serach-inpit .input {
+  flex: 1;
+  margin: 0;
+  padding: 0 10px;
+  height: 30px;
+  border: 1px solid var(--color-text);
+  border-radius: 15px;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+.serach-list {
+  margin-top: 10px;
+  transform-origin: top;
+}
+.serach-list .list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+.serach-list .list-item .name {
+  font-size: 18px;
+}
+.serach-list .list-item .point {
+  opacity: .5;
+}
+@media screen and (max-width:500px) {
+  .serach-list .list-item {
+    padding: 10px;
+  }
+}
