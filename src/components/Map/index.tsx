@@ -17,11 +17,11 @@ export default function Map(props: Props) {
   const {
     borderstyle,
     radius,
-    center,
     viewBox,
     dataList,
     nameList,
     parsePath,
+    getCoordinate,
   } = useParseMapData(props)
 
   function inPath({ clientX, clientY }: MouseEvent, value?: string) {
@@ -93,8 +93,8 @@ export default function Map(props: Props) {
                 <Switch>
                   <Match when={item.type === 'green'}>
                     <circle
-                      cx={item.points[0].x + radius() - center().x}
-                      cy={item.points[0].z + radius() - center().z}
+                      cx={getCoordinate(item.points[0]).x}
+                      cy={getCoordinate(item.points[0]).y}
                       class={`path ${item.type}`}
                       onMouseEnter={(e: MouseEvent) => inPath(e, item.notes)}
                       onMouseOut={outPath}
@@ -115,11 +115,7 @@ export default function Map(props: Props) {
           <g>
             <For each={nameList()}>
               {(item) => (
-                <text
-                  x={item.point.x + radius() - center().x}
-                  y={item.point.z + radius() - center().z}
-                  class="text"
-                >
+                <text {...getCoordinate(item.point)} class="text">
                   {item.name}
                 </text>
               )}

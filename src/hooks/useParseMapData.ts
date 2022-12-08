@@ -1,4 +1,5 @@
 import { createEffect, createMemo, createSignal } from 'solid-js'
+import { calc } from '../utils/index'
 import type { MapData, MapNameItem, MapPoint } from '../types/index'
 
 const [nameList, setNameList] = createSignal<MapNameItem[]>([])
@@ -31,36 +32,39 @@ export function useParseMapData(props: { data: MapData }) {
     setNameList(nameList)
   })
 
+  function getCoordinate(point: MapPoint) {
+    return calc`${point} + ${radius()} - ${center()}`
+  }
+
   function parsePath(points: MapPoint[]) {
     let path = ''
 
     for (let i = 0; i < points.length; i++) {
-      const item = points[i];
-      const x = item.x + radius() - center().x
-      const z = item.z + radius() - center().z
+      const item = points[i]
+      const { x, y } = getCoordinate(item)
 
       if (i === 0) {
-        path += `M${x} ${z} `
+        path += `M${x} ${y} `
       } else if (item.type) {
-        const before = points[i - 1]
-        const bx = before.x + radius() - center().x
-        const bz = before.z + radius() - center().z
-        const ex = (item.ex || 0) + radius() - center().x
-        const ez = (item.ez || 0) + radius() - center().z
+        const { x: bx, y: by } = getCoordinate(points[i - 1])
+        const { x: ex, y: ey } = getCoordinate({
+          x: item.ex || 0,
+          z: item.ez || 0,
+        })
 
         if (item.type === 'n-w') {
-          path += `Q${x > bx ? bx : x} ${z > bz ? bz: z} ${x} ${z} `
+          path += `Q${x > bx ? bx : x} ${y > by ? by: y} ${x} ${y} `
         } else if (item.type === 'n-e') {
-          path += `Q${x > bx ? x : bx} ${z > bz ? bz: z} ${x} ${z} `
+          path += `Q${x > bx ? x : bx} ${y > by ? by: y} ${x} ${y} `
         } else if (item.type === 's-w') {
-          path += `Q${x > bx ? bx : x} ${z > bz ? z: bz} ${x} ${z} `
+          path += `Q${x > bx ? bx : x} ${y > by ? y: by} ${x} ${y} `
         } else if (item.type === 's-e') {
-          path += `Q${x > bx ? x : bx} ${z > bz ? z: bz} ${x} ${z} `
+          path += `Q${x > bx ? x : bx} ${y > by ? y: by} ${x} ${y} `
         } else {
-          path += `Q${ex} ${ez} ${x} ${z} `
+          path += `Q${ex} ${ey} ${x} ${y} `
         }
       } else {
-        path += `L${x} ${z} `
+        path += `L${x} ${y} `
       }
     }
     return path
@@ -74,5 +78,6 @@ export function useParseMapData(props: { data: MapData }) {
     dataList,
     nameList,
     parsePath,
+    getCoordinate,
   }
 }

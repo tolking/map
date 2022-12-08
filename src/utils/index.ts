@@ -1,3 +1,7 @@
+import { createTag } from 'tagged-operator'
+import type { Precedence, Operator } from 'tagged-operator'
+import type { Coordinate, MapPoint } from '../types/index'
+
 /** 获取json文件 */
 export async function get<T>(url: string): Promise<T> {
   const res = await fetch(url)
@@ -60,3 +64,34 @@ export function throttle<T extends unknown[] = unknown[], Q = void>(
     }
   }
 }
+
+function isObject(value: unknown): value is object {
+  return typeof value === 'object'
+}
+
+type CalcInput = Coordinate | MapPoint | HammerInput | number
+
+const precedence: Precedence = { 1: ['*', '/'] }
+const operator: Operator<CalcInput, Coordinate> = (type, a, b) => {
+  const aX = isObject(a) ? 'deltaX' in a ? a.deltaX : a.x : a
+  const aY = isObject(a) ? 'deltaY' in a ? a.deltaY : 'z' in a ? a.z : a.y : a
+  const bX = isObject(b) ? 'deltaX' in b ? b.deltaX : b.x : b
+  const bY = isObject(b) ? 'deltaY' in b ? b.deltaY : 'z' in b ? b.z : b.y : b
+
+  switch (type) {
+    case '+':
+      return { x: aX + bX, y: aY + bY }
+    case '-':
+      return { x: aX - bX, y: aY - bY }
+    case '*':
+      return { x: aX * bX, y: aY * bY }
+    case '/':
+      return { x: aX / bX, y: aY / bY }
+    default:
+      console.warn(`no operator configured: ${type}`)
+      return a as Coordinate
+  }
+}
+
+/** 通过模拟运算符重载计算坐标值 */
+export const calc = createTag({ operator, precedence })
