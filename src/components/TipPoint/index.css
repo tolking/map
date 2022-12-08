@@ -1,0 +1,8 @@
+.tip-point {
+  position: fixed;
+  padding: 10px 20px;
+  border-radius: 0 20px 20px 20px;
+  background: rgba(0, 0, 0, .5);
+  color: #fefefe;
+  transform-origin: top left;
+}

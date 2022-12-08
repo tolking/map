@@ -1,6 +1,6 @@
 # map
 
-> 基于 `Vue 3` `@egjs/hammerjs` `svg` 制作
+> 基于 `solid-js` `@egjs/hammerjs` `svg` 制作
 
 [在线地址](https://map.ououe.com)
 
