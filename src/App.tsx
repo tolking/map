@@ -35,8 +35,8 @@ export default function App() {
     batch(() => {
       setType(value)
       setData({
-        translateX: 0,
-        translateY: 0,
+        x: 0,
+        y: 0,
         scale: 1,
         transform: '',
       })
@@ -48,7 +48,7 @@ export default function App() {
     const y = -(poit.z - mapData().center.z) * data.relativeScale
 
     batch(() => {
-      setData({ translateX: x, translateY: y })
+      setData({ x, y })
       setTransform(x, y, data.scale)
     })
   }

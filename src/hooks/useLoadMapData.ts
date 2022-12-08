@@ -11,6 +11,7 @@ const initialValue: MapData = {
 }
 
 async function getMapData(type: string) {
+  if (!type) return initialValue
   return await get<MapData>(`/config/${type}.json`)
 }
 

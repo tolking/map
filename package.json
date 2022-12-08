@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "@egjs/hammerjs": "^2.0.17",
-    "solid-js": "^1.6.3"
+    "solid-js": "^1.6.3",
+    "tagged-operator": "^0.0.3"
   },
   "devDependencies": {
     "typescript": "^4.9.4",

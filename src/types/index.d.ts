@@ -27,7 +27,7 @@ export interface MapNameItem {
 
 export interface MapPoint {
   x: number
-  y: number
+  y?: number
   z: number
   type?: 'r' | 'n-w' | 'n-e' | 's-w' | 's-e'
   ex?: number
@@ -49,4 +49,9 @@ export type ConfigColorList = ConfigColorItem[]
 
 export interface LocalColor {
   [key: string]: string
+}
+
+export interface Coordinate {
+  x: number
+  y: number
 }
