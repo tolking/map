@@ -3,6 +3,10 @@ import type { ConfigMapList, ConfigColorList } from './types/index'
 /** 统计地图目录配置 */
 export const mapList: ConfigMapList = [
   {
+    name: '毛线V6—下界交通地图',
+    type: 'kedamaV6Nether'
+  },
+  {
     name: '毛线V5—下界交通地图',
     type: 'kedamaV5Nether'
   },
