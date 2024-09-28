@@ -3,7 +3,7 @@
   "title": "毛线V6—下界交通地图",
   "author": "ououe",
   "version": 0.1,
-  "uptime": "2024-9-17",
+  "uptime": "2024-9-28",
   "introduce": "毛线V6下界基岩上层交通地图<br>如果你对收集数据感兴趣欢迎加入<br><a target='_blank' href='https://github.com/tolking/map'>点我去看看源码</a>",
   "center": {"x": 0, "z": 0},
   "radius": 256,
@@ -51,25 +51,19 @@
       ]
     },
     {
+      "name": "Extra Ghost",
+      "type": "walk",
+      "points": [
+        {"x": -7, "y": 129, "z": -156},
+        {"x": -55, "y": 129, "z": -156}
+      ]
+    },
+    {
       "name": "rchang09&eAbigailZERO",
       "type": "ice",
       "points": [
         {"x": -7, "y": 129, "z": -192},
         {"x": -36, "y": 129, "z": -192}
-      ]
-    },
-    {
-      "name": "Mocchi_00",
-      "type": "ice",
-      "namelist": [
-        {
-          "name": "Border Village",
-          "point": {"x": 33, "y": 129, "z": -233}
-        }
-      ],
-      "points": [
-        {"x": -7, "y": 129, "z": -229},
-        {"x": -36, "y": 129, "z": -229}
       ]
     },
     {
@@ -106,6 +100,21 @@
       ]
     },
     {
+      "name": "Border Village ",
+      "type": "ice",
+      "namelist": [
+        {
+          "name": "Mocchi_00",
+          "point": {"x": 36, "y": 129, "z": -229}
+        }
+      ],
+      "points": [
+        {"x": 78, "y": 129, "z": -12},
+        {"x": 78, "y": 129, "z": -229},
+        {"x": 33, "y": 129, "z": -230}
+      ]
+    },
+    {
       "name": "",
       "type": "walk",
       "points": [
@@ -114,11 +123,21 @@
       ]
     },
     {
-      "name": "",
+      "name": "刷冰厂",
       "type": "ice",
       "points": [
         {"x": 132, "y": 129, "z": -12},
-        {"x": 132, "y": 129, "z": -24}
+        {"x": 132, "y": 129, "z": -21},
+        {"x": 127, "y": 129, "z": -21},
+        {"x": 127, "y": 129, "z": -62}
+      ]
+    },
+    {
+      "name": "苔藓骨粉机",
+      "type": "walk",
+      "points": [
+        {"x": 174, "y": 129, "z": -12},
+        {"x": 174, "y": 129, "z": 46}
       ]
     },
     {
